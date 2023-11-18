@@ -96,8 +96,6 @@ exports.postLogin = async (req, res) => {
                 refeshToken: refreshToken,
             };
 
-            refreshTokens[refreshToken] = payload;
-
             res.json(response);
         } catch (err) {
             res.json({ message: 'Login failed' });
