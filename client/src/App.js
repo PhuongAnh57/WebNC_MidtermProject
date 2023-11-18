@@ -5,9 +5,9 @@ import { publicRoutes, privateRoutes } from 'routes';
 import DefaultLayout from 'layouts';
 
 function App() {
-    localStorage.setItem('isUser', JSON.stringify(true)); // Lưu giá trị boolean vào localStorage
+    localStorage.setItem('isUser', JSON.stringify(false)); // Lưu giá trị boolean vào localStorage
     const user = JSON.parse(localStorage.getItem('isUser')); // Lấy giá trị từ localStorage và chuyển đổi thành boolean
-    
+
     //user = false: chưa đăng nhập
     //user = true: đã đăng nhập
 
@@ -25,8 +25,8 @@ function App() {
                                     path={route.path}
                                     element={
                                         <Layout>
-                                            {(route.path === '/login' || route.path === '/signup') ? (
-                                                <Navigate to='/' replace={true} />
+                                            {route.path === '/login' || route.path === '/signup' ? (
+                                                <Navigate to="/" replace={true} />
                                             ) : (
                                                 <route.component />
                                             )}
@@ -47,8 +47,8 @@ function App() {
                                     path={route.path}
                                     element={
                                         <Layout>
-                                            {(route.path === '/editAccount') ? (
-                                                <Navigate to='/' replace={true} />
+                                            {route.path === '/editAccount' ? (
+                                                <Navigate to="/" replace={true} />
                                             ) : (
                                                 <route.component />
                                             )}
