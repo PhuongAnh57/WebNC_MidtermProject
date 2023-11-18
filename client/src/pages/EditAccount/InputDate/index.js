@@ -12,7 +12,7 @@ export default function InputDate() {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DemoContainer components={['DatePicker', 'DatePicker']}>
         <DatePicker
-          label="Controlled picker"
+          label="Birthday"
           value={value}
           onChange={(newValue) => setValue(newValue)}
         />
