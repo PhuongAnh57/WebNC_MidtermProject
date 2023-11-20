@@ -24,7 +24,7 @@ function App() {
 
                     <Route exact path="/home" element={<Home />} />
 
-                    <Route exact path="/editAccount" element={<EditAccount />} />
+                    <Route exact path="/edit-account" element={<EditAccount />} />
 
                     <Route exact path="/logout" element={<LogOut />} />
 

@@ -134,8 +134,13 @@ export default function LogIn() {
                                 <span>Password is incorrect</span>
                             </>
                         )}
-                        <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
-                        <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+                        <div sx={{ marginBottom: -4 }}>
+                            <FormControlLabel
+                                control={<Checkbox value="remember" color="primary" />}
+                                label="Remember me"
+                            />
+                        </div>
+                        <Button type="submit" fullWidth variant="contained" sx={{ mt: 1, mb: 2 }}>
                             Log In
                         </Button>
                         <Grid container>

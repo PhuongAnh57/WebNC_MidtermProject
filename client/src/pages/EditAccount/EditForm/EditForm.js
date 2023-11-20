@@ -42,7 +42,6 @@ export default function EditForm() {
 
                 if (response.data.message === 'User found') {
                     const userData = response.data.userData;
-                    console.log(userData);
 
                     setFirstName(userData.firstName);
                     setLastName(userData.lastName);
@@ -88,72 +87,85 @@ export default function EditForm() {
             });
     };
 
+    //
+    const handleCancelEdit = (e) => {
+        return <Navigate to="/" />;
+    };
+
     return (
-        <React.Fragment>
-            <Grid container spacing={3}>
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        required
-                        id="firstName"
-                        label="First name"
-                        variant="filled"
-                        fullWidth
-                        value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                    />
+        <>
+            {editResponse !== '' ? <span>{editResponse}</span> : <></>}
+            <React.Fragment>
+                <Grid container spacing={3}>
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            required
+                            id="firstName"
+                            label="First name"
+                            variant="filled"
+                            fullWidth
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            required
+                            id="lastName"
+                            label="Last name"
+                            defaultValue="Anh"
+                            variant="filled"
+                            fullWidth
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <InputDate dayOfBirth={dayOfBirth} changeDate={handleChangeDayOfBirth} />
+                    </Grid>
+                    <Grid item xs={12} sm={6} mt={1}>
+                        <InputSelect gender={gender} changeGender={handleChangeGender} />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            required
+                            id="email"
+                            label="Email"
+                            defaultValue="Your email"
+                            variant="filled"
+                            fullWidth
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            required
+                            id="address"
+                            label="Address"
+                            variant="filled"
+                            fullWidth
+                            value={address}
+                            onChange={(e) => setAddress(e.target.value)}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <Button
+                            variant="contained"
+                            style={{ background: '#d32f2f' }}
+                            fullWidth
+                            onClick={(event) => handleCancelEdit(event)}
+                        >
+                            Cancel
+                        </Button>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <Button variant="contained" fullWidth onClick={handleSubmitProfileEdition}>
+                            Save
+                        </Button>
+                    </Grid>
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        required
-                        id="lastName"
-                        label="Last name"
-                        defaultValue="Anh"
-                        variant="filled"
-                        fullWidth
-                        value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <InputDate dayOfBirth={dayOfBirth} changeDate={handleChangeDayOfBirth} />
-                </Grid>
-                <Grid item xs={12} sm={6} mt={1}>
-                    <InputSelect gender={gender} changeGender={handleChangeGender} />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        required
-                        id="email"
-                        label="Email"
-                        defaultValue="Your email"
-                        variant="filled"
-                        fullWidth
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        required
-                        id="address"
-                        label="Address"
-                        variant="filled"
-                        fullWidth
-                        value={address}
-                        onChange={(e) => setAddress(e.target.value)}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <Button variant="contained" style={{ background: '#d32f2f' }} fullWidth>
-                        Cancel
-                    </Button>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <Button variant="contained" fullWidth onClick={handleSubmitProfileEdition}>
-                        Save
-                    </Button>
-                </Grid>
-            </Grid>
-        </React.Fragment>
+            </React.Fragment>
+        </>
     );
 }
