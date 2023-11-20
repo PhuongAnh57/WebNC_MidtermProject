@@ -6,10 +6,9 @@ const connection = {
     port: '5432',
     user: 'postgres',
     password: '20120275',
-    database: 'ClothingStore',
+    database: 'WebNC',
 };
 
 const db = pgp(connection);
 
 module.exports = db;
-    

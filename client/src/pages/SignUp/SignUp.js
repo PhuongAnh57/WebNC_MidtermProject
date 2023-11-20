@@ -1,5 +1,5 @@
 import { Link, Navigate } from 'react-router-dom';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import Avatar from '@mui/material/Avatar';
@@ -40,11 +40,18 @@ export default function SignUp() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [redirectToLogin, setRedirectToLogin] = useState(false);
+    const [loggedIn, setLoggedIn] = useState(false);
+
+    useEffect(() => {
+        if (localStorage.getItem('token')) {
+            setLoggedIn(true);
+        }
+    }, []);
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-       
+
         const user = {
             firstName: data.get('firstName'),
             lastName: data.get('lastName'),
@@ -70,6 +77,10 @@ export default function SignUp() {
 
     if (redirectToLogin) {
         return <Navigate to="/login" />;
+    }
+
+    if (loggedIn) {
+        return <Navigate to="/" />;
     }
 
     return (

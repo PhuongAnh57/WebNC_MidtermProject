@@ -5,6 +5,7 @@ import SignUp from 'pages/SignUp/SignUp';
 import LogIn from 'pages/LogIn/LogIn';
 import Home from 'pages/Home/Home';
 import EditAccount from 'pages/EditAccount';
+import LogOut from 'pages/Logout/LogOut';
 import PageNotFound from 'pages/PageNotFound/PageNotFound';
 
 function App() {
@@ -23,9 +24,9 @@ function App() {
 
                     <Route exact path="/home" element={<Home />} />
 
-                    <Route exact path="/editAccount" element={<EditAccount />} /> 
+                    <Route exact path="/editAccount" element={<EditAccount />} />
 
-                    {/* <Route exact path="/logout" element={<Logout />} />
+                    <Route exact path="/logout" element={<LogOut />} />
 
                     {/* Nếu người dùng nhập một đường dẫn không khớp, thông báo page not found */}
                     <Route path="*" element={<PageNotFound />} />

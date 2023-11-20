@@ -6,7 +6,8 @@ const { passport } = require('../middlewares/passport');
 router.post('/signup', userController.postSignup);
 router.post('/login', userController.postLogin);
 router.get('/logout', userController.getLogout);
-router.get('/authenticate', passport.authenticate('jwt', { session: false }), userController.getAuthenticate);
+router.get('/edit-profile', passport.authenticate('jwt', { session: false }), userController.getEditProfile);
+router.post('/edit-profile', passport.authenticate('jwt', { session: false }), userController.postEditProfile);
 router.post('/refresh_token', userController.postRefreshToken);
 
 module.exports = router;
