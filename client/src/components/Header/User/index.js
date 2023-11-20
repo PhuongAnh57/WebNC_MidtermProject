@@ -99,33 +99,31 @@ export default function User() {
         return <Navigate to="/" />;
     }
 
-    const menuId = 'primary-search-account-menu';
-    const renderMenu = (
-        <Menu
-            anchorEl={anchorEl}
-            anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
-            id={menuId}
-            keepMounted
-            transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
-            open={isMenuOpen}
-            onClose={handleMenuClose}
-        >
-            <MenuItem onClick={handleMenuClose} style={{ color: 'back' }}>
-                <Link to="/editAccount" style={{ textDecoration: 'none', color: 'inherit' }}>
-                    Edit account
-                </Link>
-            </MenuItem>
-            <MenuItem onClick={handleLogOut} style={{ color: 'back' }}>
-                <Link style={{ textDecoration: 'none', color: 'inherit' }}>Log out</Link>
-            </MenuItem>
-        </Menu>
-    );
+  const menuId = 'primary-search-account-menu';
+  const renderMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      <MenuItem onClick={handleMenuClose} style={{color: 'back'}}>
+        <Link to='/editAccount' style={{ textDecoration: 'none', color: 'inherit' }}>Edit account</Link>
+      </MenuItem>
+      <MenuItem onClick={handleMenuClose} style={{color: 'back'}}>
+        <Link to='/logout' style={{ textDecoration: 'none', color: 'inherit' }}>Log out</Link>
+      </MenuItem>
+    </Menu>
+  );
 
     const mobileMenuId = 'primary-search-account-menu-mobile';
     const renderMobileMenu = (
@@ -177,7 +175,7 @@ export default function User() {
 
   return (
     <Box sx={{ flexGrow: 1, mb: 2 }}>
-      <AppBar position="static">
+      <AppBar position="static" elevation={0}>
         <Toolbar>
           <IconButton
             size="large"
