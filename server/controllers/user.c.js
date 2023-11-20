@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 const userM = require('../models/user.m');
 
-exports.postRegister = async (req, res) => {
+exports.postSignup = async (req, res) => {
     const { firstName, lastName, username, password, email } = req.body.user;
 
     const emailExists = await userM.getUserByEmail(email).catch((err) => {
@@ -91,9 +91,9 @@ exports.postLogin = async (req, res) => {
             });
 
             const response = {
-                status: 'Logged in',
+                message: 'Verification successfully',
                 token: token,
-                refeshToken: refreshToken,
+                refreshToken: refreshToken,
             };
 
             res.json(response);

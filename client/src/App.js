@@ -1,20 +1,22 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { Fragment } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 
 import { publicRoutes, privateRoutes } from 'routes';
 import DefaultLayout from 'layouts';
 
 function App() {
-    localStorage.setItem('isUser', JSON.stringify(false)); // Lưu giá trị boolean vào localStorage
-    const user = JSON.parse(localStorage.getItem('isUser')); // Lấy giá trị từ localStorage và chuyển đổi thành boolean
+    const [token, setToken] = useState(false);
 
-    //user = false: chưa đăng nhập
-    //user = true: đã đăng nhập
+    useEffect(() => {
+        if (localStorage.getItem('token')) {
+            setToken(true);
+        }
+    }, []);
 
     return (
         <BrowserRouter>
             <div className="app">
-                {user ? (
+                {token ? (
                     <Routes>
                         {privateRoutes.map((route, index) => {
                             const Layout = route?.layout === null ? Fragment : DefaultLayout;

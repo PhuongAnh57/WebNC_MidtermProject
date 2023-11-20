@@ -1,5 +1,7 @@
-import { Link } from 'react-router-dom';
-import * as React from 'react';
+import { Link, Navigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import axios from 'axios';
+
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -31,14 +33,44 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+    const [firstName, setFirstName] = useState('');
+    const [alreadyExists, setAlreadyExists] = useState(false);
+    const [lastName, setLastName] = useState('');
+    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [redirectToLogin, setRedirectToLogin] = useState(false);
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
+       
+        const user = {
+            firstName: data.get('firstName'),
+            lastName: data.get('lastName'),
+            username: data.get('username'),
             password: data.get('password'),
+            email: data.get('email'),
+        };
+
+        axios.post('/signup', { user }).then((response) => {
+            if (response.data.message === 'User account created') {
+                setRedirectToLogin(true);
+            }
+            if (response.data.message === 'Username or email already belongs to another user') {
+                setAlreadyExists(true);
+                setFirstName('');
+                setLastName('');
+                setUsername('');
+                setPassword('');
+                setEmail('');
+            }
         });
     };
+
+    if (redirectToLogin) {
+        return <Navigate to="/login" />;
+    }
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -58,6 +90,13 @@ export default function SignUp() {
                     <Typography component="h1" variant="h5">
                         Sign up
                     </Typography>
+
+                    {alreadyExists && (
+                        <>
+                            <span>Username or email already exists!</span>
+                        </>
+                    )}
+
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
@@ -69,6 +108,8 @@ export default function SignUp() {
                                     id="firstName"
                                     label="First Name"
                                     autoFocus
+                                    value={firstName}
+                                    onChange={(event) => setFirstName(event.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
@@ -79,6 +120,8 @@ export default function SignUp() {
                                     label="Last Name"
                                     name="lastName"
                                     autoComplete="family-name"
+                                    value={lastName}
+                                    onChange={(event) => setLastName(event.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -89,6 +132,8 @@ export default function SignUp() {
                                     label="Username"
                                     name="username"
                                     autoComplete="username"
+                                    value={username}
+                                    onChange={(event) => setUsername(event.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -100,6 +145,8 @@ export default function SignUp() {
                                     type="password"
                                     id="password"
                                     autoComplete="new-password"
+                                    value={password}
+                                    onChange={(event) => setPassword(event.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -111,6 +158,8 @@ export default function SignUp() {
                                     type="email"
                                     id="email"
                                     autoComplete="email"
+                                    value={email}
+                                    onChange={(event) => setEmail(event.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12}>

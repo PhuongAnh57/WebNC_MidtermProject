@@ -7,5 +7,5 @@ CREATE TABLE accounts (
 	username VARCHAR ( 50 ) UNIQUE NOT NULL,
 	password VARCHAR ( 100 ) NOT NULL,
 	email VARCHAR ( 255 ) UNIQUE NOT NULL,
-	address VARCHAR ( 255 ) NOT NULL
+	address VARCHAR ( 255 )
 );

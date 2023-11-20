@@ -11,7 +11,7 @@ import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
-import EditForm from './EditForm';
+import EditForm from './EditForm/EditForm';
 
 export default function EditAccount() {
     return (
