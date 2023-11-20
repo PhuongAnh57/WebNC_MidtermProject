@@ -5,12 +5,12 @@ import { publicRoutes, privateRoutes } from 'routes';
 import DefaultLayout from 'layouts';
 
 function App() {
-    localStorage.setItem('isUser', JSON.stringify(true)); // Lưu giá trị boolean vào localStorage
+    localStorage.setItem('isUser', JSON.stringify(false)); // Lưu giá trị boolean vào localStorage
     const user = JSON.parse(localStorage.getItem('isUser')); // Lấy giá trị từ localStorage và chuyển đổi thành boolean
     
     //user = false: chưa đăng nhập
     //user = true: đã đăng nhập
-
+    
     return (
         <BrowserRouter>
             <div className="app">
