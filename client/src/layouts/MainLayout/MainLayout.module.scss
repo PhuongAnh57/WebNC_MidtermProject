@@ -1,0 +1,19 @@
+.content {
+    min-height: 665px;
+    margin-top: -16px;
+
+    .sidebar {
+        height: 100%;
+        padding-left: 28px;
+        border-right: 1px solid #e0e0e0;
+        border-radius: 0px;
+    }
+
+    .main {
+        min-height: 650px;
+        border-left: 1px solid #e0e0e0;
+        border-radius: 0px;
+
+        padding: 24px;
+    }
+}
