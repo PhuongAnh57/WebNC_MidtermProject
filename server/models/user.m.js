@@ -36,7 +36,7 @@ module.exports = {
         return result;
     },
     editUser: async (user) => {
-        const result = await db.one(
+        await db.none(
             'UPDATE accounts SET first_name=$1, last_name=$2, day_of_birth=$3, gender=$4, email=$5, address=$6 WHERE user_id=$7',
             [user.firstName, user.lastName, user.dayOfBirth, user.gender, user.email, user.address, user.userID],
         );

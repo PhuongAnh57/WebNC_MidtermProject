@@ -210,7 +210,7 @@ exports.postEditProfile = async (req, res) => {
             address: userData.address,
         };
 
-        const result = await userM.editUser(userEdit);
+        await userM.editUser(userEdit);
 
         return res.json({ message: 'Update successfully' });
     } catch (err) {
