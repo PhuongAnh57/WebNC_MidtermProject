@@ -23,4 +23,12 @@ const privateRoutes = [
     { path: config.routes.editAccount, component: EditAccountPage },
 ];
 
-export { publicRoutes, privateRoutes };
+const allRoutes = [
+    { path: config.routes.landing, component: LandingPage },
+    { path: config.routes.signup, component: SignUpPage, layout: null },
+    { path: config.routes.login, component: LogInPage, layout: null },
+    { path: config.routes.home, component: HomePage },
+    { path: config.routes.editAccount, component: EditAccountPage },
+];
+
+export { publicRoutes, privateRoutes, allRoutes };

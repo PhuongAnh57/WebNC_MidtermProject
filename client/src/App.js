@@ -1,22 +1,44 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { Fragment, useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import { publicRoutes, privateRoutes } from 'routes';
-import DefaultLayout from 'layouts';
+import Landing from 'pages/Landing/Landing';
+import SignUp from 'pages/SignUp/SignUp';
+import LogIn from 'pages/LogIn/LogIn';
+import Home from 'pages/Home/Home';
+import EditAccount from 'pages/EditAccount';
+import PageNotFound from 'pages/PageNotFound/PageNotFound';
 
 function App() {
-    const [token, setToken] = useState(false);
-
-    useEffect(() => {
-        if (localStorage.getItem('token')) {
-            setToken(true);
-        }
-    }, []);
-
     return (
         <BrowserRouter>
             <div className="app">
-                {token ? (
+                <Routes>
+                    <Route exact path="/" element={<Landing />} />
+                    <Route exact path="/landing" element={<Landing />} />
+
+                    <Route exact path="/signup" element={<SignUp />} />
+                    <Route exact path="/register" element={<SignUp />} />
+
+                    <Route exact path="/login" element={<LogIn />} />
+                    <Route exact path="/signin" element={<LogIn />} />
+
+                    <Route exact path="/home" element={<Home />} />
+
+                    <Route exact path="/editAccount" element={<EditAccount />} /> 
+
+                    {/* <Route exact path="/logout" element={<Logout />} />
+
+                    {/* Nếu người dùng nhập một đường dẫn không khớp, thông báo page not found */}
+                    <Route path="*" element={<PageNotFound />} />
+                </Routes>
+            </div>
+        </BrowserRouter>
+    );
+}
+
+export default App;
+
+{
+    /* {token ? (
                     <Routes>
                         {privateRoutes.map((route, index) => {
                             const Layout = route?.layout === null ? Fragment : DefaultLayout;
@@ -60,10 +82,5 @@ function App() {
                             );
                         })}
                     </Routes>
-                )}
-            </div>
-        </BrowserRouter>
-    );
+                )} */
 }
-
-export default App;
