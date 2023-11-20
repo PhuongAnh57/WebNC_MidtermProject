@@ -179,7 +179,7 @@ export default function User() {
             component="div"
             sx={{ display: { xs: 'none', sm: 'block' } }}
           >
-            Google Classroom
+            <Link to='/home' style={{ textDecoration: 'none', color: 'white' }}>Google Classroom</Link>
           </Typography>
           <Search>
             <SearchIconWrapper>
