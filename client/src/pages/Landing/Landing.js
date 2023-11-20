@@ -1,6 +1,7 @@
 import DefaultLayout from 'layouts/DefaultLayout';
 import { useState, useEffect } from 'react';
 import { Navigate } from 'react-router';
+import { BackgroundLanding } from 'assets/images';
 
 export default function Landing() {
     const [token, setToken] = useState(false);
@@ -18,7 +19,10 @@ export default function Landing() {
     return (
         <DefaultLayout>
             <div>
-                LANDING
+                <img 
+                    src={BackgroundLanding} 
+                    alt='background' 
+                    style={{ width: '100%' }}/>
             </div>
         </DefaultLayout>
     )
