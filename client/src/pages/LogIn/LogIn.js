@@ -113,7 +113,7 @@ export default function LogIn() {
                         />
                         {accountDoesNotExit && (
                             <>
-                                <span>Account does not exits</span>
+                                <span>Account does not exit.</span>
                             </>
                         )}
                         <TextField
@@ -131,7 +131,7 @@ export default function LogIn() {
 
                         {invalidPassword && (
                             <>
-                                <span>Password is incorrect</span>
+                                <span sx={{ color: 'red' }}>Password is incorrect.</span>
                             </>
                         )}
                         <div sx={{ marginBottom: -4 }}>
