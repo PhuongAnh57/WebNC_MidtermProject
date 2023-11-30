@@ -5,6 +5,7 @@ const userM = require('../models/user.m');
 const e = require('express');
 
 exports.postSignup = async (req, res) => {
+    console.log(req.body);
     const { firstName, lastName, username, password, email } = req.body.user;
 
     const emailExists = await userM.getUserByEmail(email).catch((err) => {
