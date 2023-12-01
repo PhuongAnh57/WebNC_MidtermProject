@@ -117,7 +117,7 @@ export default function User() {
             onClose={handleMenuClose}
         >
             <MenuItem onClick={handleMenuClose} style={{ color: 'back' }}>
-                <Link to="/edit-account" style={{ textDecoration: 'none', color: 'inherit' }}>
+                <Link to="/edit-profile" style={{ textDecoration: 'none', color: 'inherit' }}>
                     Edit account
                 </Link>
             </MenuItem>
