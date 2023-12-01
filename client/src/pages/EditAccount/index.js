@@ -9,7 +9,7 @@ import EditForm from './EditForm/EditForm';
 import DefaultLayout from 'layouts/DefaultLayout';
 
 export default function EditAccount() {
-    if (localStorage.getItem('accessToken')) {
+    if (!localStorage.getItem('accessToken')) {
         return <Navigate to="/" />;
     }
 

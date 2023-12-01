@@ -12,7 +12,7 @@ import { Button } from '@mui/material';
 export default function EditForm() {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [dayOfBirth, setDayOfBirth] = useState(dayjs('2022-04-17'));
+    const [dateOfBirth, setDateOfBirth] = useState(dayjs());
     const [gender, setGender] = useState('');
     const [email, setEmail] = useState('');
     const [address, setAddress] = useState('');
@@ -20,9 +20,11 @@ export default function EditForm() {
     const [userExists, setUserExists] = useState(true);
     const [editResponse, setEditResponse] = useState('');
 
-    const handleChangeDayOfBirth = (date) => {
-        setDayOfBirth(date);
+    const handleChangeDateOfBirth = (date) => {
+        setDateOfBirth(date);
     };
+
+    console.log('date after changing ', dateOfBirth.toISOString());
 
     const handleChangeGender = (gender) => {
         setGender(gender);
@@ -30,9 +32,9 @@ export default function EditForm() {
 
     useEffect(() => {
         axios
-            .get('/edit-profile', {
+            .get('/api/edit-profile', {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')} `,
+                    Authorization: `Bearer ${localStorage.getItem('accessToken')} `,
                 },
             })
             .then((response) => {
@@ -45,7 +47,7 @@ export default function EditForm() {
 
                     setFirstName(userData.firstName);
                     setLastName(userData.lastName);
-                    setDayOfBirth(userData.dob);
+                    setDateOfBirth(dayjs(userData.dateOfBirth));
                     setGender(userData.gender);
                     setEmail(userData.email);
                     setAddress(userData.address);
@@ -62,7 +64,7 @@ export default function EditForm() {
         const userData = {
             firstName,
             lastName,
-            dayOfBirth,
+            dateOfBirth: new Date(dateOfBirth),
             gender,
             email,
             address,
@@ -74,7 +76,7 @@ export default function EditForm() {
                 { userData },
                 {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
                     },
                 },
             )
@@ -121,7 +123,7 @@ export default function EditForm() {
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <InputDate dayOfBirth={dayOfBirth} changeDate={handleChangeDayOfBirth} />
+                        <InputDate dateOfBirth={dateOfBirth} changeDate={handleChangeDateOfBirth} />
                     </Grid>
                     <Grid item xs={12} sm={6} mt={1}>
                         <InputSelect gender={gender} changeGender={handleChangeGender} />

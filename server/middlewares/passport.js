@@ -15,8 +15,9 @@ const applyPassportStrategy = (passport) => {
         }),
     );
 
-    passport.serializeUser((user, done) => {
+    passport.serializeUser((user, done, next) => {
         done(null, user);
+        next();
     });
 
     // passport.deserializeUser((user, done) => {

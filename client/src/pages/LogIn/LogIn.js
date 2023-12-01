@@ -55,7 +55,7 @@ export default function LogIn() {
             password: data.get('password'),
         };
 
-        axios.post('/login', { user }).then((response) => {
+        axios.post('/api/login', { user }).then((response) => {
             if (response.data.message === 'Verification successfully') {
                 dispatch({ type: LOGIN, payload: response.data });
             }

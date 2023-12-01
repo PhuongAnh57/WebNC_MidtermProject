@@ -40,13 +40,6 @@ export default function SignUp() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [redirectToLogin, setRedirectToLogin] = useState(false);
-    const [loggedIn, setLoggedIn] = useState(false);
-
-    useEffect(() => {
-        if (localStorage.getItem('token')) {
-            setLoggedIn(true);
-        }
-    }, []);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -60,7 +53,7 @@ export default function SignUp() {
             email: data.get('email'),
         };
 
-        axios.post('/signup', { user }).then((response) => {
+        axios.post('/api/signup', { user }).then((response) => {
             if (response.data.message === 'User account created') {
                 setRedirectToLogin(true);
             }
@@ -79,7 +72,7 @@ export default function SignUp() {
         return <Navigate to="/login" />;
     }
 
-    if (loggedIn) {
+    if (localStorage.getItem('accessToken')) {
         return <Navigate to="/" />;
     }
 
