@@ -17,19 +17,19 @@ export default function MainLayout({ children }) {
             <Header />
 
             <div className={cx('content')}>
-                <Container maxWidth="xl" style={{padding: 0 }}>
+                <Container maxWidth="xl" style={{ padding: 0 }}>
                     <Grid container spacing={3}>
                         {/* Sidebar */}
-                        <Grid item xs={3} style={{paddingLeft: 0, paddingTop: '8px'}}>
+                        <Grid item xs={3} style={{ paddingLeft: 0, paddingTop: '8px' }}>
                             <Paper elevation={0} className={cx('sidebar')}>
                                 <SideBar />
                             </Paper>
                         </Grid>
 
                         {/* Main Content */}
-                        <Grid item xs={9} style={{paddingRight: 0, paddingTop: '8px'}}>
+                        <Grid item xs={9} style={{ paddingRight: 0, paddingTop: '8px' }}>
                             <Paper elevation={0} className={cx('main')}>
-                                <Main children={children}/>
+                                <Main children={children} />
                             </Paper>
                         </Grid>
                     </Grid>

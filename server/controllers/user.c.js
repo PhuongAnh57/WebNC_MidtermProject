@@ -95,7 +95,11 @@ exports.postLogin = async (req, res) => {
 
             const response = {
                 message: 'Verification successfully',
-                token: token,
+                user: {
+                    uid: userDB.user_id,
+                    lastName: userDB.last_name,
+                },
+                accessToken: token,
                 refreshToken: refreshToken,
             };
 
