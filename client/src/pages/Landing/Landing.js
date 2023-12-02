@@ -1,29 +1,20 @@
 import DefaultLayout from 'layouts/DefaultLayout';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Navigate } from 'react-router';
 import { BackgroundLanding } from 'assets/images';
 
+import { AuthContext } from 'context/AuthProvider';
+
 export default function Landing() {
-    const [token, setToken] = useState(false);
-
-    useEffect(() => {
-        if (localStorage.getItem('token')) {
-            setToken(true);
-        }
-    }, []);
-
-    if (token) {
-        return <Navigate to='/home' replace={true}></Navigate>
+    if (localStorage.getItem('accessToken')) {
+        return <Navigate to="/home" />;
     }
 
     return (
         <DefaultLayout>
             <div>
-                <img 
-                    src={BackgroundLanding} 
-                    alt='background' 
-                    style={{ width: '100%' }}/>
+                <img src={BackgroundLanding} alt="background" style={{ width: '100%' }} />
             </div>
         </DefaultLayout>
-    )
+    );
 }

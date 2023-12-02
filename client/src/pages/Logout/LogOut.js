@@ -1,10 +1,11 @@
-import { Navigate } from 'react-router-dom';
+// import { AuthContext } from 'context/AuthProvider';
+// import { useContext } from 'react';
+// import { Navigate } from 'react-router-dom';
 
-function LogOut() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('refreshToken');
+// function LogOut() {
+//     const { dispatch } = useContext(AuthContext);
 
-    return <Navigate to="/" />;
-}
+//     return <Navigate to="/" />;
+// }
 
-export default LogOut;
+// export default LogOut;

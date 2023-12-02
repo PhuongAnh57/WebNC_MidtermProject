@@ -1,5 +1,5 @@
 import { Link, Navigate } from 'react-router-dom';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from 'axios';
 
 import { styled, alpha } from '@mui/material/styles';
@@ -18,6 +18,8 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
+import { AuthContext } from 'context/AuthProvider';
+import { LOGOUT } from 'utils/constants';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -60,9 +62,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function User() {
+    const { dispatch } = useContext(AuthContext);
     const [anchorEl, setAnchorEl] = useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
-    const [loggedOut, setLoggedOut] = useState(false);
 
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -85,17 +87,16 @@ export default function User() {
     };
 
     const handleLogOut = () => {
-        axios.get('/logout').then((response) => {
+        console.log('logout');
+        axios.get('/api/logout').then((response) => {
             if (response.data.message === 'Logging out') {
-                localStorage.removeItem('token');
-                localStorage.removeItem('refreshToken');
-                setLoggedOut(true);
+                dispatch({ type: LOGOUT });
             }
         });
         handleMobileMenuClose();
     };
 
-    if (loggedOut) {
+    if (!localStorage.getItem('accessToken')) {
         return <Navigate to="/" />;
     }
 
