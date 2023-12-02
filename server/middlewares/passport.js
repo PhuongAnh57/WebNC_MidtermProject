@@ -14,10 +14,9 @@ const applyPassportStrategy = (passport) => {
             return done(null, jwt_payload);
         }),
     );
-
-    passport.serializeUser((user, done, next) => {
+        
+    passport.serializeUser((user, done) => {
         done(null, user);
-        next();
     });
 
     // passport.deserializeUser((user, done) => {

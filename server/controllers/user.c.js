@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const userM = require('../models/user.m');
-const pendingUserM = require('../models/pending_user.m');
+// const pendingUserM = require('../models/pending_user.m');
 
 exports.postSignup = async (req, res) => {
     const { firstName, lastName, username, password, email } = req.body.user;
@@ -11,15 +11,15 @@ exports.postSignup = async (req, res) => {
         const emailUser = await userM.getUserByEmail(email);
         const usernameUser = await userM.getUserByUsername(username);
 
-        const emailPending = await pendingUserM.getUserByEmail(email);
-        const usernamePending = await pendingUserM.getUserByUsername(username);
+        // const emailPending = await pendingUserM.getUserByEmail(email);
+        // const usernamePending = await pendingUserM.getUserByUsername(username);
 
-        if (emailUser || usernameUser || emailPending || usernamePending) {
+        if (emailUser || usernameUser) {
             res.status(400).json({ message: 'Username or email already belongs to another user' });
             console.log('Username or email already belongs to another user');
         }
 
-        if (!emailExists && !usernameExists && !emailPending && !usernamePending) {
+        if (!emailExists && !usernameExists) {
             const users = await userM.getAllUsers();
 
             let id;
@@ -45,7 +45,7 @@ exports.postSignup = async (req, res) => {
                         dob: undefined,
                     };
 
-                    const result = await pendingUserM.addNewUser(newUser);
+                    const result = await userM.addNewUser(newUser);
 
                     if (!result) {
                         console.log('Error occurred when trying to create user');
@@ -213,6 +213,8 @@ exports.postEditProfile = async (req, res) => {
             email: userData.email,
             address: userData.address,
         };
+
+        console.log('sf');
 
         await userM.editUser(userEdit);
 
