@@ -2,63 +2,62 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const userM = require('../models/user.m');
-const e = require('express');
+const pendingUserM = require('../models/pending_user.m');
 
 exports.postSignup = async (req, res) => {
-    console.log(req.body);
     const { firstName, lastName, username, password, email } = req.body.user;
 
-    const emailExists = await userM.getUserByEmail(email).catch((err) => {
-        console.log(err);
-    });
+    try {
+        const emailUser = await userM.getUserByEmail(email);
+        const usernameUser = await userM.getUserByUsername(username);
 
-    const usernameExists = await userM.getUserByUsername(username).catch((err) => {
-        console.log(err);
-    });
+        const emailPending = await pendingUserM.getUserByEmail(email);
+        const usernamePending = await pendingUserM.getUserByUsername(username);
 
-    if (emailExists || usernameExists) {
-        res.json({ message: 'Username or email already belongs to another user' });
-        console.log('Username or email already belongs to another user');
-    }
-
-    if (!emailExists && !usernameExists) {
-        const users = await userM.getAllUsers();
-
-        let id;
-        if (!users || !users?.length) {
-            id = 0;
-        } else {
-            id = users[users.length - 1].user_id + 1;
+        if (emailUser || usernameUser || emailPending || usernamePending) {
+            res.status(400).json({ message: 'Username or email already belongs to another user' });
+            console.log('Username or email already belongs to another user');
         }
 
-        const saltRounds = 10;
+        if (!emailExists && !usernameExists && !emailPending && !usernamePending) {
+            const users = await userM.getAllUsers();
 
-        bcrypt.hash(password, saltRounds, async (err, hash) => {
-            if (err) {
-                console.log(err);
+            let id;
+            if (!users || !users?.length) {
+                id = 0;
             } else {
-                const newUser = {
-                    id,
-                    firstName,
-                    lastName,
-                    username,
-                    password: hash,
-                    email,
-                    address: undefined,
-                    gender: undefined,
-                    dob: undefined,
-                };
-
-                const result = await userM.addNewUser(newUser);
-
-                if (!result) {
-                    console.log('Error occurred when trying to create user');
-                } else {
-                    res.json({ message: 'User account created' });
-                    console.log('User account created');
-                }
+                id = users[users.length - 1].user_id + 1;
             }
-        });
+
+            bcrypt.hash(password, 10, async (err, hash) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    const newUser = {
+                        id,
+                        firstName,
+                        lastName,
+                        username,
+                        password: hash,
+                        email,
+                        address: undefined,
+                        gender: undefined,
+                        dob: undefined,
+                    };
+
+                    const result = await pendingUserM.addNewUser(newUser);
+
+                    if (!result) {
+                        console.log('Error occurred when trying to create user');
+                    } else {
+                        res.json({ message: 'User account created' });
+                        console.log('User account created');
+                    }
+                }
+            });
+        }
+    } catch (err) {
+        console.log(err);
     }
 };
 

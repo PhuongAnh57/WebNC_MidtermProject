@@ -6,7 +6,9 @@ const cors = require('cors');
 
 const router = require('./router/router.r');
 const { applyPassportStrategy, passport } = require('./middlewares/passport');
+const bodyParser = require('body-parser');
 
+app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../client/build')));
