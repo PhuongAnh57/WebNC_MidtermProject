@@ -2,59 +2,62 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const userM = require('../models/user.m');
+// const pendingUserM = require('../models/pending_user.m');
 
 exports.postSignup = async (req, res) => {
     const { firstName, lastName, username, password, email } = req.body.user;
 
-    const emailExists = await userM.getUserByEmail(email).catch((err) => {
-        console.log(err);
-    });
+    try {
+        const emailUser = await userM.getUserByEmail(email);
+        const usernameUser = await userM.getUserByUsername(username);
 
-    const usernameExists = await userM.getUserByUsername(username).catch((err) => {
-        console.log(err);
-    });
+        // const emailPending = await pendingUserM.getUserByEmail(email);
+        // const usernamePending = await pendingUserM.getUserByUsername(username);
 
-    if (emailExists || usernameExists) {
-        res.json({ message: 'Username or email already belongs to another user' });
-        console.log('Username or email already belongs to another user');
-    }
-
-    if (!emailExists && !usernameExists) {
-        const users = await userM.getAllUsers();
-
-        let id;
-        if (!users || !users?.length) {
-            id = 0;
-        } else {
-            id = users[users.length - 1].user_id + 1;
+        if (emailUser || usernameUser) {
+            res.status(400).json({ message: 'Username or email already belongs to another user' });
+            console.log('Username or email already belongs to another user');
         }
 
-        const saltRounds = 10;
+        if (!emailExists && !usernameExists) {
+            const users = await userM.getAllUsers();
 
-        bcrypt.hash(password, saltRounds, async (err, hash) => {
-            if (err) {
-                console.log(err);
+            let id;
+            if (!users || !users?.length) {
+                id = 0;
             } else {
-                const newUser = {
-                    id,
-                    firstName,
-                    lastName,
-                    username,
-                    password: hash,
-                    email,
-                    address: undefined,
-                };
-
-                const result = await userM.addNewUser(newUser);
-
-                if (!result) {
-                    console.log('Error occurred when trying to create user');
-                } else {
-                    res.json({ message: 'User account created' });
-                    console.log('User account created');
-                }
+                id = users[users.length - 1].user_id + 1;
             }
-        });
+
+            bcrypt.hash(password, 10, async (err, hash) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    const newUser = {
+                        id,
+                        firstName,
+                        lastName,
+                        username,
+                        password: hash,
+                        email,
+                        address: undefined,
+                        gender: undefined,
+                        dob: undefined,
+                    };
+
+                    const result = await userM.addNewUser(newUser);
+
+                    if (!result) {
+                        console.log('Error occurred when trying to create user');
+                    } else {
+                        res.json({ message: 'User account created' });
+                        console.log('User account created');
+                    }
+                }
+            });
+        }
+    } catch (err) {
+        console.log(err);
     }
 };
 
@@ -66,9 +69,8 @@ exports.postLogin = async (req, res) => {
     });
 
     if (!userDB) {
-        res.json({ message: 'This account does not exist' });
         console.log('This account does not exist');
-        return;
+        return res.json({ message: 'This account does not exist' });
     }
 
     const passwordMatch = await bcrypt.compare(password, userDB.password);
@@ -92,7 +94,11 @@ exports.postLogin = async (req, res) => {
 
             const response = {
                 message: 'Verification successfully',
-                token: token,
+                user: {
+                    uid: userDB.user_id,
+                    lastName: userDB.last_name,
+                },
+                accessToken: token,
                 refreshToken: refreshToken,
             };
 
@@ -111,7 +117,7 @@ exports.postRefreshToken = async (req, res) => {
     const { refreshToken } = req.body;
 
     try {
-        await jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decodedValue) => {
+        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decodedValue) => {
             if (err) {
                 res.json({ message: 'Verification failed' });
             }
@@ -134,6 +140,87 @@ exports.postRefreshToken = async (req, res) => {
 };
 
 // authentication test with jwt
-exports.getAuthenticate = (req, res) => {
-    res.json({ message: 'connect' });
+exports.getEditProfile = async (req, res) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader.split(' ')[1];
+
+    if (!token) {
+        return res.json({ message: 'Unauthorization' });
+    }
+
+    const userID = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodeValue) => {
+        if (err) {
+            res.json({ message: 'Invalid token' });
+        } else {
+            return decodeValue.id;
+        }
+    });
+
+    try {
+        const user = await userM.getUserByID(userID);
+
+        if (!user) {
+            res.json({ message: 'User not found' });
+        } else {
+            const userData = {
+                firstName: user.first_name,
+                lastName: user.last_name,
+                dateOfBirth: user.day_of_birth,
+                gender: user.gender,
+                email: user.email,
+                address: user.address,
+            };
+
+            res.json({ message: 'User found', userData });
+        }
+    } catch (err) {
+        console.log(err);
+        res.json({ message: 'Something went wrong' });
+    }
+};
+
+exports.postEditProfile = async (req, res) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader.split(' ')[1];
+    const userData = req.body.userData;
+
+    if (!token) {
+        res.json({ message: 'Unauthorization' });
+        return;
+    }
+
+    const userID = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodeValue) => {
+        if (err) {
+            res.json({ message: 'Invalid token' });
+        } else {
+            return decodeValue.id;
+        }
+    });
+
+    try {
+        const user = await userM.getUserByID(userID);
+
+        if (!user) {
+            return res.json({ message: 'User does not exist' });
+        }
+
+        const userEdit = {
+            userID: userID,
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            gender: userData.gender,
+            dayOfBirth: userData.dateOfBirth,
+            email: userData.email,
+            address: userData.address,
+        };
+
+        console.log('sf');
+
+        await userM.editUser(userEdit);
+
+        return res.json({ message: 'Update successfully' });
+    } catch (err) {
+        console.log(err);
+        res.json({ message: 'Something went wrong' });
+    }
 };

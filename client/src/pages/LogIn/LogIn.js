@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -14,6 +14,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { AuthContext } from 'context/AuthProvider';
+import { LOGIN } from 'utils/constants';
 
 function Copyright(props) {
     return (
@@ -35,19 +37,14 @@ const defaultTheme = createTheme();
 export default function LogIn() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [loggedIn, setLoggedIn] = useState(false);
     const [accountDoesNotExit, setAccountDoesNotExist] = useState(false);
     const [invalidPassword, setInvalidPassword] = useState(false);
 
-    // handle get login if user has been authenticated
-    useEffect(() => {
-        if (localStorage.getItem('token')) {
-            setLoggedIn(true);
-        }
-    }, []);
+    const { dispatch } = useContext(AuthContext);
 
-    if (loggedIn) {
-        return <Navigate to="/" />;
+
+    if (localStorage.getItem('accessToken')) {
+        return <Navigate to="/home" />;
     }
 
     const handleSubmit = (event) => {
@@ -58,11 +55,9 @@ export default function LogIn() {
             password: data.get('password'),
         };
 
-        axios.post('/login', { user }).then((response) => {
+        axios.post('/api/login', { user }).then((response) => {
             if (response.data.message === 'Verification successfully') {
-                localStorage.setItem('token', response.data.token);
-                localStorage.setItem('refreshToken', response.data.refreshToken);
-                setLoggedIn(true);
+                dispatch({ type: LOGIN, payload: response.data });
             }
 
             if (response.data.message === 'This account does not exist') {
@@ -113,7 +108,7 @@ export default function LogIn() {
                         />
                         {accountDoesNotExit && (
                             <>
-                                <span>Account does not exits</span>
+                                <span>Account does not exit.</span>
                             </>
                         )}
                         <TextField
@@ -131,11 +126,16 @@ export default function LogIn() {
 
                         {invalidPassword && (
                             <>
-                                <span>Password is incorrect</span>
+                                <span sx={{ color: 'red' }}>Password is incorrect.</span>
                             </>
                         )}
-                        <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
-                        <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+                        <div sx={{ marginBottom: -4 }}>
+                            <FormControlLabel
+                                control={<Checkbox value="remember" color="primary" />}
+                                label="Remember me"
+                            />
+                        </div>
+                        <Button type="submit" fullWidth variant="contained" sx={{ mt: 1, mb: 2 }}>
                             Log In
                         </Button>
                         <Grid container>

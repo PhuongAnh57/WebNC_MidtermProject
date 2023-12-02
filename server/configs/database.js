@@ -12,4 +12,3 @@ const connection = {
 const db = pgp(connection);
 
 module.exports = db;
-    

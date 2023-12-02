@@ -6,7 +6,9 @@ const cors = require('cors');
 
 const router = require('./router/router.r');
 const { applyPassportStrategy, passport } = require('./middlewares/passport');
+const bodyParser = require('body-parser');
 
+app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../client/build')));
@@ -35,3 +37,5 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
 });
+
+module.exports = app;

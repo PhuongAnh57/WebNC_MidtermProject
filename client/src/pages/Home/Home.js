@@ -1,15 +1,12 @@
 import { Navigate } from 'react-router';
 
 import MainLayout from 'layouts/MainLayout';
-import CourseCard from './CourseCard'
+import CourseCard from './CourseCard';
 
 export default function Home() {
-    // const [loggedIn, setLoggedIn] = useState(true);
-
-    const isLoggedIn = localStorage.getItem('token');
-    if (!isLoggedIn) {
+    if (!localStorage.getItem('accessToken')) {
         // redirect to landing page
-        return <Navigate to="/" replace={true}></Navigate>;
+        return <Navigate to="/" />;
     }
 
     return (

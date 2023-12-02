@@ -5,13 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-export default function InputSelect() {
-    const [gender, setGender] = React.useState('');
-
-    const handleChange = (event) => {
-        setGender(event.target.value);
-    };
-
+export default function InputSelect({ gender, changeGender }) {
     return (
         <Box sx={{ minWidth: 120 }}>
             <FormControl fullWidth>
@@ -21,7 +15,7 @@ export default function InputSelect() {
                     id="demo-simple-select"
                     value={gender}
                     label="Gender"
-                    onChange={handleChange}
+                    onChange={(e) => changeGender(e.target.value)}
                 >
                     <MenuItem value={'male'}>Male</MenuItem>
                     <MenuItem value={'female'}>Female</MenuItem>
