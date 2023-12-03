@@ -110,6 +110,9 @@ exports.postLogin = async (req, res) => {
 };
 
 exports.getLogout = (req, res) => {
+    // Xóa cookie
+    res.clearCookie('accessToken');
+    res.clearCookie('user');
     res.json({ message: 'Logging out' });
 };
 

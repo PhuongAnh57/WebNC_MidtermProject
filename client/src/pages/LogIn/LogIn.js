@@ -13,6 +13,8 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import GoogleIcon from '@mui/icons-material/Google';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AuthContext } from 'context/AuthProvider';
 import { LOGIN } from 'utils/constants';
@@ -41,7 +43,6 @@ export default function LogIn() {
     const [invalidPassword, setInvalidPassword] = useState(false);
 
     const { dispatch } = useContext(AuthContext);
-
 
     if (localStorage.getItem('accessToken')) {
         return <Navigate to="/home" />;
@@ -135,8 +136,48 @@ export default function LogIn() {
                                 label="Remember me"
                             />
                         </div>
-                        <Button type="submit" fullWidth variant="contained" sx={{ mt: 1, mb: 2 }}>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 1, mb: 0, background: '#000000' }}
+                        >
                             Log In
+                        </Button>
+
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{
+                                mt: 1,
+                                mb: 0,
+                                background: '#3f579d',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'flex-start',
+                            }}
+                        >
+                            <FacebookIcon sx={{ fontSize: '1.8rem' }} />
+                            <span style={{ marginLeft: 'auto', marginRight: 'auto' }}>Log In with Facebook</span>
+                        </Button>
+
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{
+                                mt: 1,
+                                mb: 2,
+                                background: '#c73413',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'flex-start',
+                            }}
+                            onClick={() => window.open('http://localhost:5000/auth/google', '_self')}
+                        >
+                            <GoogleIcon sx={{ fontSize: '1.8rem' }} />
+                            <span style={{ marginLeft: 'auto', marginRight: 'auto' }}>Log In with google</span>
                         </Button>
                         <Grid container>
                             <Grid item xs>

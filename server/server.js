@@ -3,10 +3,23 @@ const app = express();
 const path = require('path');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const session = require('express-session');
 
 const router = require('./router/router.r');
+
+const passportGoogleOauth20 = require('./middlewares/passport-google');
+
 const { applyPassportStrategy, passport } = require('./middlewares/passport');
 const bodyParser = require('body-parser');
+
+app.use(
+    session({
+        secret: 'session secret',
+        resave: false,
+        saveUninitialized: false,
+        cookie: { secure: false },
+    }),
+);
 
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
@@ -26,6 +39,35 @@ dotenv.config();
 app.use(passport.initialize());
 app.use(passport.session());
 applyPassportStrategy(passport);
+
+//----------------------------------------------------------------
+router.get('/auth/google', passport.authenticate('google', { scope: ['email', 'profile'] }));
+// router.get('/auth/google/callback', passport.authenticate('google', {
+//     successRedirect: 'http://localhost:3000/home',
+//     failureRedirect: 'http://localhost:3000/login'
+// }));
+
+router.get('/auth/google/callback', (req, res, next) => {
+    passport.authenticate('google', (err, user, info) => {
+        if (err) {
+            return next(err);
+        }
+
+        if (!user) {
+            return res.redirect('/http://localhost:3000/login');
+        }
+
+        // Xử lý xác thực thành công
+        const { accessToken, refreshToken, u } = user;
+
+        res.cookie('accessToken', accessToken);
+        res.cookie('user', JSON.stringify(u));
+        
+        return res.redirect('http://localhost:3000/home');
+    })(req, res, next);
+});
+//----------------------------------------------------------------
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
