@@ -31,6 +31,8 @@ exports.postSignup = async (req, res) => {
                 id = pendingUsers[pendingUsers.length - 1].user_id + 1;
             }
 
+            console.log(id);
+
             bcrypt.hash(password, 10, async (err, hash) => {
                 if (err) {
                     console.log(err);
