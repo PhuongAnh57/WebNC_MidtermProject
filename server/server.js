@@ -42,20 +42,20 @@ app.use(passport.session());
 applyPassportStrategy(passport);
 
 //----------------------------------------------------------------
-router.get('/auth/google', passport.authenticate('google', { scope: ['email', 'profile'] }));
+app.get('/auth/google', passport.authenticate('google', { scope: ['email', 'profile'] }));
 // router.get('/auth/google/callback', passport.authenticate('google', {
 //     successRedirect: 'http://localhost:3000/home',
 //     failureRedirect: 'http://localhost:3000/login'
 // }));
 
-router.get('/auth/google/callback', (req, res, next) => {
+app.get('/auth/google/callback', (req, res, next) => {
     passport.authenticate('google', (err, user, info) => {
         if (err) {
             return next(err);
         }
 
         if (!user) {
-            return res.redirect('/http://localhost:3000/login');
+            return res.redirect('http://localhost:3000/login');
         }
 
         // Xử lý xác thực thành công
