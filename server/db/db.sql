@@ -24,3 +24,17 @@ CREATE TABLE pending_users (
 	email VARCHAR ( 255 ) UNIQUE NOT NULL,
 	verify_token VARCHAR ( 255 ) UNIQUE NOT NULL
 );
+
+DROP TABLE IF EXISTS access_tokens;
+
+CREATE TABLE access_tokens (
+	user_id INT PRIMARY KEY,
+	token VARCHAR ( 255 ) UNIQUE NOT NULL
+);
+
+
+ALTER TABLE access_tokens ADD CONSTRAINT "FK_access_tokens_accounts" FOREIGN KEY (user_id) REFERENCES accounts (user_id);
+	
+	
+-- delete from access_tokens where user_id = 0
+

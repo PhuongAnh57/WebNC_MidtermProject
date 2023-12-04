@@ -43,7 +43,10 @@ module.exports = {
     editUser: async (user) => {
         await db.none(
             'UPDATE accounts SET first_name=$1, last_name=$2, day_of_birth=$3, gender=$4, email=$5, address=$6 WHERE user_id=$7',
-            [user.firstName, user.lastName, user.dayOfBirth, user.gender, user.email, user.address, user.userID],
+            [user.first_name, user.last_name, user.date_of_birth, user.gender, user.email, user.address, user.user_id],
         );
+    },
+    editPassword: async (user) => {
+        await db.none('UPDATE accounts SET password=$1 WHERE user_id=$2', [user.password, user.user_id]);
     },
 };

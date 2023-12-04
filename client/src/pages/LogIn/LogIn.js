@@ -139,7 +139,7 @@ export default function LogIn() {
                         </Button>
                         <Grid container>
                             <Grid item xs>
-                                <Link href="#" variant="body2" style={{ color: '#1976d2' }}>
+                                <Link to="/forgot-password" variant="body2" style={{ color: '#1976d2' }}>
                                     Forgot password?
                                 </Link>
                             </Grid>

@@ -30,7 +30,7 @@ module.exports = {
             html: `
             <h3>Hello ${user.username}</h3>
             <p>Thank you for registering into our application. Click on the link below to verify your email: </p>
-            <a href="${process.env.BASE_URL}/api/users/${user.id}/email-confirm/${token}"> Activate Account Link </a>
+            <a href="${process.env.BASE_URL}/api/user/email-confirm/${token}"> Activate Account Link </a>
             <p>Best,</p>
             <p>Your Classroom Team</p>
             `,
@@ -39,15 +39,15 @@ module.exports = {
         return sendEmail(message);
     },
 
-    sendResetPasswordEmail: (user, hash) => {
+    sendResetPasswordEmail: (user, token) => {
         const message = {
             from: process.env.USER,
             to: user.email,
             subject: 'Reset your Classroom password',
             html: `
-            <h3>Hello ${toUser.username} </h3>
+            <h3>Hello ${user.username} </h3>
             <p>Click on the link below to reset your password: </p>
-            <a target="_" href="${process.env.BASE_URL}/api/reset-password/${hash}">Reset Password Link</a>
+            <a target="_" href="${process.env.BASE_URL}/api/user/password-reset/${token}">Reset Password Link</a>
             <p>Best,</p>
             <p>Your Classroom Team</p>`,
         };

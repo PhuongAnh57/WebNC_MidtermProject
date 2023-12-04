@@ -18,7 +18,7 @@ function EmailActivated() {
     useEffect(() => {
         const handleEmailActivation = async () => {
             try {
-                const response = await axios.get(`/api/users/${params.id}/email-confirm/${params.token}`);
+                const response = await axios.get(`/api/user/email-confirm/${params.token}`);
                 console.log(response.status);
                 if (response.status === 200) {
                     setValidUrl(true);
