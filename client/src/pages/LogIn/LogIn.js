@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -41,7 +41,6 @@ export default function LogIn() {
     const [invalidPassword, setInvalidPassword] = useState(false);
 
     const { dispatch } = useContext(AuthContext);
-
 
     if (localStorage.getItem('accessToken')) {
         return <Navigate to="/home" />;
@@ -108,7 +107,7 @@ export default function LogIn() {
                         />
                         {accountDoesNotExit && (
                             <>
-                                <span>Account does not exits</span>
+                                <span style={{ color: 'red' }}>Account does not exits</span>
                             </>
                         )}
                         <TextField
@@ -126,7 +125,7 @@ export default function LogIn() {
 
                         {invalidPassword && (
                             <>
-                                <span>Password is incorrect</span>
+                                <span style={{ color: 'red' }}>Password is incorrect</span>
                             </>
                         )}
                         <div sx={{ marginBottom: -4 }}>

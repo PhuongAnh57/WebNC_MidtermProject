@@ -1,5 +1,5 @@
 import { Link, Navigate } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 
 import Avatar from '@mui/material/Avatar';
@@ -14,6 +14,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { EmailActivationNotification } from '../../assets/images/';
 
 function Copyright(props) {
     return (
@@ -39,9 +40,9 @@ export default function SignUp() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [redirectToLogin, setRedirectToLogin] = useState(false);
+    const [emailActivation, setEmailActivation] = useState(false);
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
 
@@ -53,9 +54,9 @@ export default function SignUp() {
             email: data.get('email'),
         };
 
-        axios.post('/api/signup', { user }).then((response) => {
+        await axios.post('/api/signup', { user }).then((response) => {
             if (response.data.message === 'User account created') {
-                setRedirectToLogin(true);
+                setEmailActivation(true);
             }
             if (response.data.message === 'Username or email already belongs to another user') {
                 setAlreadyExists(true);
@@ -67,10 +68,6 @@ export default function SignUp() {
             }
         });
     };
-
-    if (redirectToLogin) {
-        return <Navigate to="/login" />;
-    }
 
     if (localStorage.getItem('accessToken')) {
         return <Navigate to="/" />;
@@ -88,104 +85,119 @@ export default function SignUp() {
                         alignItems: 'center',
                     }}
                 >
-                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Sign up
-                    </Typography>
-
-                    {alreadyExists && (
+                    {!emailActivation ? (
                         <>
-                            <span>Username or email already exists!</span>
-                        </>
-                    )}
+                            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                                <LockOutlinedIcon />
+                            </Avatar>
+                            <Typography component="h1" variant="h5">
+                                Sign up
+                            </Typography>
 
-                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    autoComplete="given-name"
-                                    name="firstName"
-                                    required
-                                    fullWidth
-                                    id="firstName"
-                                    label="First Name"
-                                    autoFocus
-                                    value={firstName}
-                                    onChange={(event) => setFirstName(event.target.value)}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="lastName"
-                                    label="Last Name"
-                                    name="lastName"
-                                    autoComplete="family-name"
-                                    value={lastName}
-                                    onChange={(event) => setLastName(event.target.value)}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="username"
-                                    label="Username"
-                                    name="username"
-                                    autoComplete="username"
-                                    value={username}
-                                    onChange={(event) => setUsername(event.target.value)}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    name="password"
-                                    label="Password"
-                                    type="password"
-                                    id="password"
-                                    autoComplete="new-password"
-                                    value={password}
-                                    onChange={(event) => setPassword(event.target.value)}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    name="email"
-                                    label="Email"
-                                    type="email"
-                                    id="email"
-                                    autoComplete="email"
-                                    value={email}
-                                    onChange={(event) => setEmail(event.target.value)}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <FormControlLabel
-                                    control={<Checkbox value="allowExtraEmails" color="primary" />}
-                                    label="I agree to the Terms and Conditions"
-                                />
-                            </Grid>
-                        </Grid>
-                        <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-                            Sign Up
-                        </Button>
-                        <Grid container justifyContent="flex-end">
-                            <Grid item>
-                                <Link to="/login" variant="body2" style={{ color: '#1976d2' }}>
-                                    Already have an account? Log in
-                                </Link>
-                            </Grid>
-                        </Grid>
-                    </Box>
+                            {alreadyExists && (
+                                <>
+                                    <span style={{ color: 'red' }}>Username or email already exists!</span>
+                                </>
+                            )}
+
+                            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField
+                                            autoComplete="given-name"
+                                            name="firstName"
+                                            required
+                                            fullWidth
+                                            id="firstName"
+                                            label="First Name"
+                                            autoFocus
+                                            value={firstName}
+                                            onChange={(event) => setFirstName(event.target.value)}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField
+                                            required
+                                            fullWidth
+                                            id="lastName"
+                                            label="Last Name"
+                                            name="lastName"
+                                            autoComplete="family-name"
+                                            value={lastName}
+                                            onChange={(event) => setLastName(event.target.value)}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            required
+                                            fullWidth
+                                            id="username"
+                                            label="Username"
+                                            name="username"
+                                            autoComplete="username"
+                                            value={username}
+                                            onChange={(event) => setUsername(event.target.value)}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            required
+                                            fullWidth
+                                            name="password"
+                                            label="Password"
+                                            type="password"
+                                            id="password"
+                                            autoComplete="new-password"
+                                            value={password}
+                                            onChange={(event) => setPassword(event.target.value)}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            required
+                                            fullWidth
+                                            name="email"
+                                            label="Email"
+                                            type="email"
+                                            id="email"
+                                            autoComplete="email"
+                                            value={email}
+                                            onChange={(event) => setEmail(event.target.value)}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <FormControlLabel
+                                            control={<Checkbox value="allowExtraEmails" color="primary" />}
+                                            label="I agree to the Terms and Conditions"
+                                        />
+                                    </Grid>
+                                </Grid>
+                                <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+                                    Sign Up
+                                </Button>
+                                <Grid container justifyContent="flex-end">
+                                    <Grid item>
+                                        <Link to="/login" variant="body2" style={{ color: '#1976d2' }}>
+                                            Already have an account? Log in
+                                        </Link>
+                                    </Grid>
+                                </Grid>
+                            </Box>
+                            <Copyright sx={{ mt: 5 }} />
+                        </>
+                    ) : (
+                        <div style={{ textAlign: 'center' }}>
+                            <img
+                                src={EmailActivationNotification}
+                                alt="email activation"
+                                style={{
+                                    width: 'auto',
+                                    height: '300px',
+                                }}
+                            />
+                        </div>
+                    )}
                 </Box>
-                <Copyright sx={{ mt: 5 }} />
             </Container>
         </ThemeProvider>
     );
