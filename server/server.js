@@ -11,7 +11,6 @@ const router = require('./router/router.r');
 const passportGoogleOauth20 = require('./middlewares/passport-google');
 
 const { applyPassportStrategy, passport } = require('./middlewares/passport');
-const bodyParser = require('body-parser');
 
 app.use(
     session({
@@ -64,12 +63,11 @@ router.get('/auth/google/callback', (req, res, next) => {
 
         res.cookie('accessToken', accessToken);
         res.cookie('user', JSON.stringify(u));
-        
+
         return res.redirect('http://localhost:3000/home');
     })(req, res, next);
 });
 //----------------------------------------------------------------
-
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
