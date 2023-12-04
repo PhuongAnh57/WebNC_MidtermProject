@@ -53,21 +53,34 @@ export default function SignUp() {
             password: data.get('password'),
             email: data.get('email'),
         };
-
-        await axios.post('/api/signup', { user }).then((response) => {
-            if (response.data.message === 'User account created') {
-                setEmailActivation(true);
-            }
-            if (response.data.message === 'Username or email already belongs to another user') {
-                setAlreadyExists(true);
-                setFirstName('');
-                setLastName('');
-                setUsername('');
-                setPassword('');
-                setEmail('');
-            }
-        });
+        try {
+            await axios.post('/api/signup', { user }).then((response) => {
+                console.log(response.status);
+                if (response.data.message === 'User account created') {
+                    setEmailActivation(true);
+                }
+                if (response.data.message === 'Username or email already belongs to another user') {
+                    setEmailActivation(false);
+                    setAlreadyExists(true);
+                }
+                if (response.status === 400) {
+                    setEmailActivation(false);
+                }
+            });
+        } catch (err) {
+            console.log(err);
+        }
     };
+
+    if (alreadyExists) {
+        setFirstName('');
+        setLastName('');
+        setUsername('');
+        setPassword('');
+        setEmail('');
+    }
+
+    console.log(alreadyExists);
 
     if (localStorage.getItem('accessToken')) {
         return <Navigate to="/" />;
@@ -165,6 +178,7 @@ export default function SignUp() {
                                             onChange={(event) => setEmail(event.target.value)}
                                         />
                                     </Grid>
+
                                     <Grid item xs={12}>
                                         <FormControlLabel
                                             control={<Checkbox value="allowExtraEmails" color="primary" />}
