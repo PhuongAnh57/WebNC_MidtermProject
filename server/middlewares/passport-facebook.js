@@ -1,15 +1,16 @@
 const passport = require('passport');
-var GoogleStrategy = require('passport-google-oauth20').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
 
-const GOOGLE_CLIENT_ID = '991610570349-jpimmhk1l5mao8nnm3o1clfjp74vpkks.apps.googleusercontent.com';
-const GOOGLE_CLIENT_SECRET = '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';
+const FACEBOOK_APP_ID = '1376278673012967';
+const FACEBOOK_APP_SECRET = '55ac5b57db04eb5d1d5c62d864c9673d';
 
 passport.use(
-    new GoogleStrategy(
+    new FacebookStrategy(
         {
-            clientID: GOOGLE_CLIENT_ID,
-            clientSecret: GOOGLE_CLIENT_SECRET,
-            callbackURL: '/auth/google/callback',
+            clientID: FACEBOOK_APP_ID,
+            clientSecret: FACEBOOK_APP_SECRET,
+            callbackURL: '/auth/facebook/callback',
+            profileFields: ['id', 'displayName', 'name', 'gender', 'profileUrl', 'emails', 'photos'],
         },
         function (accessToken, refreshToken, profile, done) {
             const payload = {

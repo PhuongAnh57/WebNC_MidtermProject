@@ -157,6 +157,7 @@ export default function LogIn() {
                                 alignItems: 'center',
                                 justifyContent: 'flex-start',
                             }}
+                            onClick={() => window.open('http://localhost:5000/auth/facebook', '_self')}
                         >
                             <FacebookIcon sx={{ fontSize: '1.8rem' }} />
                             <span style={{ marginLeft: 'auto', marginRight: 'auto' }}>Log In with Facebook</span>

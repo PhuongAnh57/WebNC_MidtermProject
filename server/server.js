@@ -5,10 +5,12 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const cookieParser = require('cookie-parser');
 
 const router = require('./router/router.r');
 
-const  = require('./middlewares/passport-google');
+const passportGoogleOauth20 = require('./middlewares/passport-google');
+const passportFacebook = require('./middlewares/passport-facebook');
 
 const { applyPassportStrategy, passport } = require('./middlewares/passport');
 
@@ -31,6 +33,7 @@ app.use(
         methods: ['GET', 'POST'],
     }),
 );
+app.use(cookieParser());
 app.use(router);
 
 dotenv.config();
@@ -42,31 +45,33 @@ app.use(passport.session());
 applyPassportStrategy(passport);
 
 //----------------------------------------------------------------
-app.get('/auth/google', passport.authenticate('google', { scope: ['email', 'profile'] }));
-// router.get('/auth/google/callback', passport.authenticate('google', {
-//     successRedirect: 'http://localhost:3000/home',
-//     failureRedirect: 'http://localhost:3000/login'
-// }));
+app.get('/auth/google', passport.authenticate('google', { scope: ['email', 'profile'], prompt: 'consent' }));
 
-app.get('/auth/google/callback', (req, res, next) => {
-    passport.authenticate('google', (err, user, info) => {
-        if (err) {
-            return next(err);
-        }
+app.get(
+    '/auth/google/callback',
+    passport.authenticate('google', { failureRedirect: 'http://localhost:3000/login' }),
+    (req, res) => {
+        //console.log(req.user);
+        res.cookie('accessToken', req.user.accessToken);
+        res.cookie('user', JSON.stringify(req.user.u));
 
-        if (!user) {
-            return res.redirect('http://localhost:3000/login');
-        }
+        res.redirect('http://localhost:3000/home');
+    },
+);
+//----------------------------------------------------------------
+app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['public_profile'] }));
 
-        // Xử lý xác thực thành công
-        const { accessToken, refreshToken, u } = user;
+app.get(
+    '/auth/facebook/callback',
+    passport.authenticate('facebook', { failureRedirect: 'http://localhost:3000/login' }),
+    (req, res) => {
+        // console.log(req.user);
+        res.cookie('accessToken', req.user.accessToken);
+        res.cookie('user', JSON.stringify(req.user.u));
 
-        res.cookie('accessToken', accessToken);
-        res.cookie('user', JSON.stringify(u));
-
-        return res.redirect('http://localhost:3000/home');
-    })(req, res, next);
-});
+        res.redirect('http://localhost:3000/home');
+    },
+);
 //----------------------------------------------------------------
 
 // catch 404 and forward to error handler
