@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken');
 const userM = require('../models/user.m');
 const pendingUserM = require('../models/pending_user.m');
 const mailer = require('../utils/mailer');
+const access_tokenM = require('../models/access_token.m');
+const { any } = require('../configs/database');
 
 exports.postSignup = async (req, res) => {
     const { firstName, lastName, username, password, email } = req.body.user;
@@ -65,13 +67,13 @@ exports.postSignup = async (req, res) => {
 };
 
 exports.getEmailActivationConfirmation = async (req, res) => {
-    const { id, token } = req.params;
+    const { token } = req.params;
 
     try {
         const userExists = await userM.getUserByToken(token).catch((err) => {});
 
         if (userExists) {
-            return res.status(200).json({ message: `User ${id} has been activated` });
+            return res.status(200).json({ message: `User ${userExists.username} has been activated` });
         }
 
         const pendingUserExists = await pendingUserM.getUserByToken(token).catch((err) => {});
@@ -100,7 +102,7 @@ exports.getEmailActivationConfirmation = async (req, res) => {
         await userM.addNewUser(newUser);
         await pendingUserM.removeUser(id);
 
-        res.status(200).json({ message: `User ${id} has been activated` });
+        res.status(200).json({ message: `User ${userExists.username} has been activated` });
     } catch (err) {
         console.log(err);
         res.status(400).json({ message: 'User cannot be activated' });
@@ -171,8 +173,80 @@ exports.postResetPassword = async (req, res) => {
         if (!userExists) {
             return res.status(400).json({ message: 'Account does not exist' });
         }
+
+        const hasToken = await access_tokenM.getTokenByID(userExists.user_id).catch((err) => {});
+
+        if (hasToken) {
+            console.log('hastoken');
+            return res.json({ message: 'Email to reset password was already sent!' });
+        }
+
+        const newToken = {
+            user_id: userExists.user_id,
+            token: jwt.sign({ id: userExists.user_id }, process.env.RESET_PASSWORD_KEY, { expiresIn: '20m' }),
+        };
+
+        await access_tokenM.addNewToken(newToken);
+        await mailer.sendResetPasswordEmail(userExists, newToken.token);
+
+        return res.status(200).json({ message: 'Please check your email to reset your password!' });
     } catch (err) {
         console.log(err);
+        return res.status(400).json({ message: 'Something went wrong!' });
+    }
+};
+
+exports.postResetPasswordConfirmation = async (req, res) => {
+    const { token, password } = req.body.data;
+
+    try {
+        jwt.verify(token, process.env.RESET_PASSWORD_KEY, async (err, decodedValue) => {
+            if (err) {
+                return res.status(400).json({ message: 'Verification failed!' });
+            }
+
+            if (decodedValue) {
+                console.log(decodedValue);
+
+                const id = decodedValue.id;
+
+                const tokenExists = await access_tokenM.getTokenByToken(token);
+                console.log(tokenExists);
+
+                if (!tokenExists) {
+                    return res.status(400).json({ message: 'Cannot reset a password!' });
+                }
+
+                const userExists = await userM.getUserByID(id);
+
+                if (!userExists) {
+                    return res.status(400).json({ message: 'Cannot reset a password!' });
+                }
+
+                bcrypt.hash(password, 10, async (err, hash) => {
+                    if (err) {
+                        console.log(err);
+                        return res.status(400).json({ message: 'Something went wrong!' });
+                    }
+
+                    const newUser = {
+                        ...userExists,
+                        password: hash,
+                    };
+
+                    console.log(newUser);
+
+                    await userM.editPassword(newUser);
+                    await access_tokenM.removeToken(id);
+
+                    res.status(200).json({ message: 'Password has been reseted!' });
+                    console.log('Password has been reseted!');
+                });
+            }
+        });
+    } catch (err) {
+        console.log(err);
+        return res.status(400).json({ message: 'Something went wrong!' });
     }
 };
 
@@ -252,7 +326,7 @@ exports.postEditProfile = async (req, res) => {
         return;
     }
 
-    const userID = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodeValue) => {
+    const user_id = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodeValue) => {
         if (err) {
             res.json({ message: 'Invalid token' });
         } else {
@@ -261,18 +335,18 @@ exports.postEditProfile = async (req, res) => {
     });
 
     try {
-        const user = await userM.getUserByID(userID);
+        const user = await userM.getUserByID(user_id);
 
         if (!user) {
             return res.json({ message: 'User does not exist' });
         }
 
         const userEdit = {
-            userID: userID,
-            firstName: userData.firstName,
-            lastName: userData.lastName,
+            user_id,
+            first_name: userData.firstName,
+            last_name: userData.lastName,
             gender: userData.gender,
-            dayOfBirth: userData.dateOfBirth,
+            date_of_birth: userData.dateOfBirth,
             email: userData.email,
             address: userData.address,
         };
