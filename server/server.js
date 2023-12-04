@@ -11,7 +11,7 @@ const router = require('./router/router.r');
 const passportGoogleOauth20 = require('./middlewares/passport-google');
 const passportFacebook = require('./middlewares/passport-facebook');
 
-const { applyPassportStrategy, passpassportGoogleOauth20port } = require('./middlewares/passport');
+const { applyPassportStrategy, passport } = require('./middlewares/passport');
 const bodyParser = require('body-parser');
 
 app.use(
