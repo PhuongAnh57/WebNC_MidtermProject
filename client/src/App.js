@@ -30,9 +30,6 @@ function App() {
 
                         <Route exact path="/logout" element={<LogOut />} />
 
-                        <Route exact path="/login/success" element={<></>} />
-
-
                         {/* Nếu người dùng nhập một đường dẫn không khớp, thông báo page not found */}
                         <Route path="*" element={<PageNotFound />} />
                     </Routes>
