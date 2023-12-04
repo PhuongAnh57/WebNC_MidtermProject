@@ -8,12 +8,14 @@ import HomePage from 'pages/Home/Home';
 import SignUpPage from 'pages/SignUp/SignUp';
 import LogInPage from 'pages/LogIn/LogIn';
 import EditAccountPage from 'pages/EditAccount';
+import EmailActivated from 'pages/EmailActivated/EmailActivated';
 
 const publicRoutes = [
     { path: config.routes.landing, component: LandingPage },
     { path: config.routes.editAccount },
     { path: config.routes.signup, component: SignUpPage, layout: null },
     { path: config.routes.login, component: LogInPage, layout: null },
+    { path: config.routes.emailActivated, component: EmailActivated, layout: null },
 ];
 
 const privateRoutes = [

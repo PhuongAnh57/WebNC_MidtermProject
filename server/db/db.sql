@@ -8,8 +8,9 @@ CREATE TABLE accounts (
 	last_name VARCHAR ( 50 )  NOT NULL,
 	gender VARCHAR ( 5 ),
 	email VARCHAR ( 255 ) UNIQUE NOT NULL,
-	day_of_birth date,
-	address VARCHAR ( 255 )
+	date_of_birth date,
+	address VARCHAR ( 255 ),
+	verify_token VARCHAR (100) UNIQUE NOT NULL
 );
 
 DROP TABLE IF EXISTS pending_users;
@@ -20,8 +21,6 @@ CREATE TABLE pending_users (
 	password VARCHAR ( 100 ) NOT NULL,
 	first_name VARCHAR ( 50 )  NOT NULL,
 	last_name VARCHAR ( 50 )  NOT NULL,
-	gender VARCHAR ( 5 ),
 	email VARCHAR ( 255 ) UNIQUE NOT NULL,
-	date_of_birth date,
-	address VARCHAR ( 255 )
+	verify_token VARCHAR ( 255 ) UNIQUE NOT NULL
 );

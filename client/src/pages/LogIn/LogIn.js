@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -109,7 +109,7 @@ export default function LogIn() {
                         />
                         {accountDoesNotExit && (
                             <>
-                                <span>Account does not exit.</span>
+                                <span style={{ color: 'red' }}>Account does not exits</span>
                             </>
                         )}
                         <TextField
@@ -127,7 +127,7 @@ export default function LogIn() {
 
                         {invalidPassword && (
                             <>
-                                <span sx={{ color: 'red' }}>Password is incorrect.</span>
+                                <span style={{ color: 'red' }}>Password is incorrect</span>
                             </>
                         )}
                         <div sx={{ marginBottom: -4 }}>

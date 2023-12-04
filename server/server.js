@@ -3,6 +3,7 @@ const app = express();
 const path = require('path');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 const session = require('express-session');
 
 const router = require('./router/router.r');
@@ -36,6 +37,7 @@ app.use(router);
 dotenv.config();
 
 // use middlewares
+app.use(session({ resave: false, saveUninitialized: true, secret: 'SECRET' }));
 app.use(passport.initialize());
 app.use(passport.session());
 applyPassportStrategy(passport);

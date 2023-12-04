@@ -1,32 +1,34 @@
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
 const userM = require('../models/user.m');
-// const pendingUserM = require('../models/pending_user.m');
+const pendingUserM = require('../models/pending_user.m');
+const mailer = require('../utils/mailer');
 
 exports.postSignup = async (req, res) => {
     const { firstName, lastName, username, password, email } = req.body.user;
 
     try {
-        const emailUser = await userM.getUserByEmail(email);
-        const usernameUser = await userM.getUserByUsername(username);
+        const users = await userM.getAllUsers();
+        const pendingUsers = await pendingUserM.getAllUsers();
 
-        // const emailPending = await pendingUserM.getUserByEmail(email);
-        // const usernamePending = await pendingUserM.getUserByUsername(username);
+        const userExists = users.find((user) => user.username === username || user.email === email);
+        const pendingUserExists = pendingUsers.find(
+            (pendingUser) => pendingUser.username === username || pendingUser.email === email,
+        );
 
-        if (emailUser || usernameUser) {
+        if (userExists || pendingUserExists) {
             res.status(400).json({ message: 'Username or email already belongs to another user' });
             console.log('Username or email already belongs to another user');
         }
 
-        if (!emailExists && !usernameExists) {
-            const users = await userM.getAllUsers();
-
+        if (!userExists && !pendingUserExists) {
             let id;
-            if (!users || !users?.length) {
+            if (!pendingUsers || !pendingUsers?.length) {
                 id = 0;
             } else {
-                id = users[users.length - 1].user_id + 1;
+                id = pendingUsers[pendingUsers.length - 1].user_id + 1;
             }
 
             bcrypt.hash(password, 10, async (err, hash) => {
@@ -40,24 +42,66 @@ exports.postSignup = async (req, res) => {
                         username,
                         password: hash,
                         email,
-                        address: undefined,
-                        gender: undefined,
-                        dob: undefined,
+                        verifyToken: crypto.randomBytes(32).toString('hex'),
                     };
 
-                    const result = await userM.addNewUser(newUser);
+                    const result = await pendingUserM.addNewUser(newUser);
+                    await mailer.sendConfirmationEmail(newUser, newUser.verifyToken);
 
                     if (!result) {
                         console.log('Error occurred when trying to create user');
                     } else {
-                        res.json({ message: 'User account created' });
-                        console.log('User account created');
+                        res.json({ message: 'Pending user account created' });
+                        console.log('Pending User account created');
                     }
                 }
             });
         }
     } catch (err) {
         console.log(err);
+    }
+};
+
+exports.getEmailActivationConfirmation = async (req, res) => {
+    const { id, token } = req.params;
+
+    try {
+        const userExists = await userM.getUserByToken(token).catch((err) => {});
+
+        if (userExists) {
+            return res.status(200).json({ message: `User ${id} has been activated` });
+        }
+
+        const pendingUserExists = await pendingUserM.getUserByToken(token).catch((err) => {});
+
+        if (!pendingUserExists && !userExists) {
+            return res.status(400).json({ message: 'User cannot be activated' });
+        }
+
+        const users = await userM.getAllUsers();
+
+        let newID;
+        if (!users || !users?.length) {
+            newID = 0;
+        } else {
+            newID = users[users.length - 1].user_id + 1;
+        }
+
+        const newUser = {
+            ...pendingUserExists,
+            id: newID,
+            gender: null,
+            dateOfBirth: null,
+            address: null,
+        };
+
+        await userM.addNewUser(newUser);
+        await pendingUserM.removeUser(id);
+
+        res.status(200).json({ message: `User ${id} has been activated` });
+    } catch (err) {
+        console.log(err);
+        res.status(400).json({ message: 'User cannot be activated' });
     }
 };
 
@@ -114,6 +158,20 @@ exports.getLogout = (req, res) => {
     res.clearCookie('accessToken');
     res.clearCookie('user');
     res.json({ message: 'Logging out' });
+};
+
+exports.postResetPassword = async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const userExists = await userM.getUserByEmail(email);
+
+        if (!userExists) {
+            return res.status(400).json({ message: 'Account does not exist' });
+        }
+    } catch (err) {
+        console.log(err);
+    }
 };
 
 exports.postRefreshToken = async (req, res) => {
