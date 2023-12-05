@@ -7,9 +7,11 @@ const FACEBOOK_APP_SECRET = '55ac5b57db04eb5d1d5c62d864c9673d';
 passport.use(
     new FacebookStrategy(
         {
-            clientID: FACEBOOK_APP_ID,
-            clientSecret: FACEBOOK_APP_SECRET,
-            callbackURL: '/auth/facebook/callback',
+            // clientID: FACEBOOK_APP_ID,
+            // clientSecret: FACEBOOK_APP_SECRET,
+            clientID: '361328676474790',
+            clientSecret: '241f20d9715fd3c288c97e709b845deb',
+            callbackURL: 'http://localhost:5000/auth/facebook/callback',
             profileFields: ['id', 'displayName', 'name', 'gender', 'profileUrl', 'emails', 'photos']
         },
         function (accessToken, refreshToken, profile, done) {

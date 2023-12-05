@@ -78,21 +78,6 @@ app.get(
 );
 //----------------------------------------------------------------
 app.get('/auth/facebook', passport.authenticate('facebook', { scope: ["public_profile"] }));
-//     passport.authenticate('facebook', (err, user, info) => {
-//         if (err) {
-//             return next(err);
-//         }
-
-//         if (!user) {
-//             return res.redirect('http://localhost:3000/login');
-//         }
-
-//         res.cookie('accessToken', accessToken);
-//         res.cookie('user', JSON.stringify(u));
-
-//         return res.redirect('http://localhost:3000/home');
-//     })(req, res, next);
-// });
 
 app.get(
     '/auth/facebook/callback',
