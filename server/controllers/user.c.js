@@ -6,7 +6,6 @@ const userM = require('../models/user.m');
 const pendingUserM = require('../models/pending_user.m');
 const mailer = require('../utils/mailer');
 const access_tokenM = require('../models/access_token.m');
-const { any } = require('../configs/database');
 
 exports.postSignup = async (req, res) => {
     const { firstName, lastName, username, password, email } = req.body.user;
@@ -100,7 +99,7 @@ exports.getEmailActivationConfirmation = async (req, res) => {
         };
 
         await userM.addNewUser(newUser);
-        await pendingUserM.removeUser(id);
+        await pendingUserM.removeUser(pendingUserExists.user_id);
 
         res.status(200).json({ message: `User ${userExists.username} has been activated` });
     } catch (err) {

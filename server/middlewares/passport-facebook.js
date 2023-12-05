@@ -4,6 +4,9 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 const FACEBOOK_APP_ID = '1376278673012967';
 const FACEBOOK_APP_SECRET = '55ac5b57db04eb5d1d5c62d864c9673d';
 
+// clientID: '361328676474790',
+//             clientSecret: '241f20d9715fd3c288c97e709b845deb',
+
 passport.use(
     new FacebookStrategy(
         {
