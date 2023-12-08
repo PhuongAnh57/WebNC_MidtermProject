@@ -12,7 +12,7 @@ function CreateClass({ open, onClose }) {
     return (
         <div>
             <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Create class</DialogTitle>
+                <DialogTitle id="form-dialog-title">Tạo lớp học</DialogTitle>
                 <DialogContent>
                     {/* <DialogContentText>
                         Enter the name of class and we will create a classroom for you!
