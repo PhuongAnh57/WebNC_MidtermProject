@@ -54,7 +54,7 @@ exports.postSignup = async (req, res) => {
                     if (!result) {
                         console.log('Error occurred when trying to create user');
                     } else {
-                        res.json({ message: 'Pending user account created' });
+                        res.status(200).json({ message: 'Pending user account created' });
                         console.log('Pending User account created');
                     }
                 }

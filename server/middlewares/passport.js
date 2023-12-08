@@ -19,9 +19,9 @@ const applyPassportStrategy = (passport) => {
         done(null, user);
     });
 
-   // passport.deserializeUser((user, done) => {
-    //     done(null, user);
-    // }); 
+    passport.deserializeUser((user, done) => {
+        done(null, user);
+    });
 };
 
 module.exports = { applyPassportStrategy, passport };
