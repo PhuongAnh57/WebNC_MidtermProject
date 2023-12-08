@@ -14,22 +14,13 @@ const passportFacebook = require('./middlewares/passport-facebook');
 
 const { applyPassportStrategy, passport } = require('./middlewares/passport');
 
-app.use(
-    session({
-        secret: 'session secret',
-        resave: false,
-        saveUninitialized: false,
-        cookie: { secure: false },
-    }),
-);
-
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../client/build')));
 app.use(
     cors({
-        origin: 'http://localhost:3000',
+        origin: `${process.env.CLIENT_URL}`,
         methods: ['GET', 'POST'],
     }),
 );
@@ -39,7 +30,14 @@ app.use(router);
 dotenv.config();
 
 // use middlewares
-app.use(session({ resave: false, saveUninitialized: true, secret: 'SECRET' }));
+app.use(
+    session({
+        secret: 'session secret',
+        resave: false,
+        saveUninitialized: false,
+        cookie: { secure: false },
+    }),
+);
 app.use(passport.initialize());
 app.use(passport.session());
 applyPassportStrategy(passport);
@@ -49,13 +47,13 @@ app.get('/auth/google', passport.authenticate('google', { scope: ['email', 'prof
 
 app.get(
     '/auth/google/callback',
-    passport.authenticate('google', { failureRedirect: 'http://localhost:3000/login' }),
+    passport.authenticate('google', { failureRedirect: `${process.env.CLIENT_URL}/login` }),
     (req, res) => {
         //console.log(req.user);
         res.cookie('accessToken', req.user.accessToken);
         res.cookie('user', JSON.stringify(req.user.u));
 
-        res.redirect('http://localhost:3000/home');
+        res.redirect(`${process.env.CLIENT_URL}/home`);
     },
 );
 //----------------------------------------------------------------
@@ -63,13 +61,13 @@ app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['public_pr
 
 app.get(
     '/auth/facebook/callback',
-    passport.authenticate('facebook', { failureRedirect: 'http://localhost:3000/login' }),
+    passport.authenticate('facebook', { failureRedirect: `${process.env.CLIENT_URL}/login` }),
     (req, res) => {
         // console.log(req.user);
         res.cookie('accessToken', req.user.accessToken);
         res.cookie('user', JSON.stringify(req.user.u));
 
-        res.redirect('http://localhost:3000/home');
+        res.redirect(`${process.env.CLIENT_URL}/home`);
     },
 );
 //----------------------------------------------------------------

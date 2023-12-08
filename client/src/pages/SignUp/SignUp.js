@@ -53,18 +53,17 @@ export default function SignUp() {
             password: data.get('password'),
             email: data.get('email'),
         };
+
         try {
             await axios.post('/api/signup', { user }).then((response) => {
                 console.log(response.status);
-                if (response.data.message === 'User account created') {
-                    setEmailActivation(true);
+                if (response.status === 200) {
+                    return setEmailActivation(true);
                 }
+
+                setEmailActivation(false);
                 if (response.data.message === 'Username or email already belongs to another user') {
-                    setEmailActivation(false);
                     setAlreadyExists(true);
-                }
-                if (response.status === 400) {
-                    setEmailActivation(false);
                 }
             });
         } catch (err) {
@@ -79,8 +78,6 @@ export default function SignUp() {
         setPassword('');
         setEmail('');
     }
-
-    console.log(alreadyExists);
 
     if (localStorage.getItem('accessToken')) {
         return <Navigate to="/" />;
@@ -200,7 +197,7 @@ export default function SignUp() {
                             <Copyright sx={{ mt: 5 }} />
                         </>
                     ) : (
-                        <div style={{ textAlign: 'center' }}>
+                        <Box style={{ textAlign: 'center' }}>
                             <img
                                 src={EmailActivationNotification}
                                 alt="email activation"
@@ -209,7 +206,7 @@ export default function SignUp() {
                                     height: '300px',
                                 }}
                             />
-                        </div>
+                        </Box>
                     )}
                 </Box>
             </Container>

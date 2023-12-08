@@ -17,7 +17,7 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import GoogleIcon from '@mui/icons-material/Google';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AuthContext } from 'context/AuthProvider';
-import { LOGIN } from 'utils/constants';
+import { LOGIN, SERVER_URL } from 'utils/constants';
 
 function Copyright(props) {
     return (
@@ -48,8 +48,13 @@ export default function LogIn() {
         return <Navigate to="/home" />;
     }
 
-    const handleSubmit = (event) => {
+    const handleSubmit = (event, type = '') => {
         event.preventDefault();
+
+        if (type !== '') {
+            return window.open(`${SERVER_URL}/auth/${type}`, '_self');
+        }
+
         const data = new FormData(event.currentTarget);
         const user = {
             username: data.get('username'),
@@ -94,7 +99,7 @@ export default function LogIn() {
                     <Typography component="h1" variant="h5">
                         Log in
                     </Typography>
-                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                    <Box component="form" onSubmit={(event) => handleSubmit(event)} noValidate sx={{ mt: 1 }}>
                         <TextField
                             margin="normal"
                             required
@@ -140,10 +145,14 @@ export default function LogIn() {
                             type="submit"
                             fullWidth
                             variant="contained"
-                            sx={{ mt: 1, mb: 0, background: '#000000' }}
+                            sx={{ mt: 1, mb: 0, padding: 1, background: '#000000' }}
                         >
                             Log In
                         </Button>
+
+                        <div style={{ textAlign: 'center', color: '#6c757dff' }}>
+                            <p>Or log in with</p>
+                        </div>
 
                         <Button
                             type="submit"
@@ -152,12 +161,12 @@ export default function LogIn() {
                             sx={{
                                 mt: 1,
                                 mb: 0,
-                                background: '#3f579d',
+                                background: '#507cc0',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'flex-start',
                             }}
-                            onClick={() => window.open('http://localhost:5000/auth/facebook', '_self')}
+                            onClick={(event) => handleSubmit(event, 'facebook')}
                         >
                             <FacebookIcon sx={{ fontSize: '1.8rem' }} />
                             <span style={{ marginLeft: 'auto', marginRight: 'auto' }}>Log In with Facebook</span>
@@ -170,12 +179,12 @@ export default function LogIn() {
                             sx={{
                                 mt: 1,
                                 mb: 2,
-                                background: '#c73413',
+                                background: '#df4930',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'flex-start',
                             }}
-                            onClick={() => window.open('http://localhost:5000/auth/google', '_self')}
+                            onClick={(event) => handleSubmit(event, 'google')}
                         >
                             <GoogleIcon sx={{ fontSize: '1.8rem' }} />
                             <span style={{ marginLeft: 'auto', marginRight: 'auto' }}>Log In with google</span>
