@@ -354,3 +354,33 @@ exports.postEditProfile = async (req, res) => {
         res.json({ message: 'Something went wrong' });
     }
 };
+
+// invite students
+
+exports.postInviteStudents = async (req, res) => {
+    const { emails, classID } = req.body.data;
+
+    if (!classID || !emails || !emails?.length) {
+        console.log('Invalid class ID or emails!');
+        return res.status(400).json({ message: 'Invalid class ID or emails!' });
+    }
+
+    // mock class data
+    const classInfo = {
+        classID,
+        className: 'abc',
+        token: 'dsfa',
+    };
+    try {
+        emails.map(async (email) => {
+            await mailer.sendClassInvitaion(email, classInfo);
+        });
+
+        res.status(200).json({ message: 'Invitations have been sent successfully' });
+    } catch (err) {
+        console.log(err);
+        return res.status(400).json({ message: 'Something went wrong!' });
+    }
+};
+
+// https://classroom.google.com/u/1/invite/accept_token/NjQ1MTQwOTM2MDM2?role=3&t=a3doo5l7gy6bbnq4&pli=1

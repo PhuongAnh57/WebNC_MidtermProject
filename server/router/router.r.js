@@ -1,16 +1,19 @@
 const express = require('express');
 const router = express.Router();
-const userController = require('../controllers/user.c');
+const controller = require('../controllers/controller.c');
 const { passport } = require('../middlewares/passport');
 
-router.post('/api/signup', userController.postSignup);
-router.get('/api/user/email-confirm/:token', userController.getEmailActivationConfirmation);
-router.post('/api/login', userController.postLogin);
-router.get('/api/logout', userController.getLogout);
-router.post('/api/user/password-reset', userController.postResetPassword);
-router.post('/api/user/password-reset/confirmation', userController.postResetPasswordConfirmation)
-router.get('/api/edit-profile', passport.authenticate('jwt', { session: false }), userController.getEditProfile);
-router.post('/api/edit-profile', passport.authenticate('jwt', { session: false }), userController.postEditProfile);
-router.post('/api/refresh_token', userController.postRefreshToken);
+router.post('/api/signup', controller.postSignup);
+router.get('/api/user/email-confirm/:token', controller.getEmailActivationConfirmation);
+router.post('/api/login', controller.postLogin);
+router.get('/api/logout', controller.getLogout);
+router.post('/api/user/password-reset', controller.postResetPassword);
+router.post('/api/user/password-reset/confirmation', controller.postResetPasswordConfirmation);
+router.get('/api/edit-profile', passport.authenticate('jwt', { session: false }), controller.getEditProfile);
+router.post('/api/edit-profile', passport.authenticate('jwt', { session: false }), controller.postEditProfile);
+router.post('/api/refresh_token', controller.postRefreshToken);
+
+// invite student
+router.post('/api/class/invite-students', controller.postInviteStudents);
 
 module.exports = router;
