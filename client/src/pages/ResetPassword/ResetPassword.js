@@ -35,7 +35,6 @@ const defaultTheme = createTheme();
 const ResetPassword = () => {
     const [email, setEmail] = useState();
     const [success, setSuccess] = useState();
-    console.log(success);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -53,7 +52,6 @@ const ResetPassword = () => {
 
     return (
         <>
-            {' '}
             <ThemeProvider theme={defaultTheme}>
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />
@@ -92,7 +90,6 @@ const ResetPassword = () => {
                             {success && <p style={{ color: '#1976D2' }}>{success}</p>}
                         </Box>
                     </Box>
-                    <Copyright sx={{ mt: 8, mb: 4 }} />
                 </Container>
             </ThemeProvider>
         </>

@@ -176,7 +176,6 @@ exports.postResetPassword = async (req, res) => {
         const hasToken = await access_tokenM.getTokenByID(userExists.user_id).catch((err) => {});
 
         if (hasToken) {
-            console.log('hastoken');
             return res.json({ message: 'Email to reset password was already sent!' });
         }
 
@@ -196,21 +195,18 @@ exports.postResetPassword = async (req, res) => {
 };
 
 exports.postResetPasswordConfirmation = async (req, res) => {
-    const { token, password } = req.body.data;
-
     try {
+        const { token, password } = req.body.data;
+
         jwt.verify(token, process.env.RESET_PASSWORD_KEY, async (err, decodedValue) => {
             if (err) {
                 return res.status(400).json({ message: 'Verification failed!' });
             }
 
             if (decodedValue) {
-                console.log(decodedValue);
-
                 const id = decodedValue.id;
 
                 const tokenExists = await access_tokenM.getTokenByToken(token);
-                console.log(tokenExists);
 
                 if (!tokenExists) {
                     return res.status(400).json({ message: 'Cannot reset a password!' });
@@ -233,12 +229,10 @@ exports.postResetPasswordConfirmation = async (req, res) => {
                         password: hash,
                     };
 
-                    console.log(newUser);
-
                     await userM.editPassword(newUser);
                     await access_tokenM.removeToken(id);
 
-                    res.status(200).json({ message: 'Password has been reseted!' });
+                    res.status(200).json({ message: 'Password has been updated!' });
                     console.log('Password has been reseted!');
                 });
             }

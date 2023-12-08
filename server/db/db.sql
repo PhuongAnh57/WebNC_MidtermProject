@@ -35,8 +35,9 @@ CREATE TABLE access_tokens (
 
 ALTER TABLE access_tokens ADD CONSTRAINT "FK_access_tokens_accounts" FOREIGN KEY (user_id) REFERENCES accounts (user_id);
 	
--- delete from access_tokens where user_id = 0
+delete from access_tokens where user_id = 0
 	
--- delete from accounts where user_id = 0
+delete from accounts where user_id = 0
 
+delete from pending_users where user_id = 0
 
