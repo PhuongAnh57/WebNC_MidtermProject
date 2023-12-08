@@ -1,0 +1,1 @@
+export { publicRoutes, privateRoutes, allRoutes } from './routes'
