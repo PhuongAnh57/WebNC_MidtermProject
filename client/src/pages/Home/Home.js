@@ -2,11 +2,16 @@ import { Navigate } from 'react-router';
 
 import MainLayout from 'layouts/MainLayout';
 import CourseCard from './CourseCard';
-import * as React from 'react';
+import React, {useState} from 'react';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
+import CreateClass from 'components/CreateClass';
 
 export default function Home() {
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false)
+
     // Đọc thông tin người dùng từ cookie
     if (document.cookie) {
         const accessToken = document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*\=\s*([^;]*).*$)|^.*$/, '$1');
@@ -26,9 +31,11 @@ export default function Home() {
 
     return (
         <MainLayout>
-            <Button style={{ float:'right' }} variant="outlined" startIcon={<AddIcon />}>
-                create class
+            <Button style={{ float: 'right' }} variant="outlined" startIcon={<AddIcon />}
+            onClick={handleOpen}>
+                tạo lớp học
             </Button>
+            <CreateClass open={open} onClose={handleClose}/>
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                 <CourseCard />
                 <CourseCard />
