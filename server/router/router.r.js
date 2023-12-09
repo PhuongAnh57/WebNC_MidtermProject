@@ -14,6 +14,10 @@ router.post('/api/edit-profile', passport.authenticate('jwt', { session: false }
 router.post('/api/refresh_token', controller.postRefreshToken);
 
 // invite student
-router.post('/api/class/invite-students', controller.postInviteStudents);
+router.post(
+    '/api/class/invite-students',
+    passport.authenticate('jwt', { session: false }),
+    controller.postInviteStudents,
+);
 
 module.exports = router;

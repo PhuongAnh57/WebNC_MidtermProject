@@ -20,8 +20,8 @@ exports.postSignup = async (req, res) => {
         );
 
         if (userExists || pendingUserExists) {
-            res.status(400).json({ message: 'Username or email already belongs to another user' });
             console.log('Username or email already belongs to another user');
+            return res.status(400).json({ message: 'Username or email already belongs to another user' });
         }
 
         if (!userExists && !pendingUserExists) {
@@ -31,8 +31,6 @@ exports.postSignup = async (req, res) => {
             } else {
                 id = pendingUsers[pendingUsers.length - 1].user_id + 1;
             }
-
-            console.log(id);
 
             bcrypt.hash(password, 10, async (err, hash) => {
                 if (err) {

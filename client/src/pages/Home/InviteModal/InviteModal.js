@@ -1,18 +1,21 @@
 import { useState } from 'react';
+import { Navigate } from 'react-router';
 import classNames from 'classnames/bind';
-import { Modal, Box, FormControl, Chip } from '@mui/material';
-// import { makeStyles } from '@mui/material/styles';
-import Button from '@mui/material/Button';
-
-import styles from './InviteModal.module.scss';
 import axios from 'axios';
+
+import { Modal, Box, FormControl, Chip } from '@mui/material';
+import Button from '@mui/material/Button';
+import styles from './InviteModal.module.scss';
 
 const cx = classNames.bind(styles);
 
 function InviteModal({ open, handleClose }) {
     const [values, setValues] = useState([]);
-    // const [inviteStates, setInviteStates] = useState([]);
     const [currentValue, setCurrentValue] = useState('');
+
+    if (!localStorage.getItem('accessToken')) {
+        return <Navigate to="/" />;
+    }
 
     const handleKeyUp = (e) => {
         if (e.keyCode === 13) {
@@ -44,7 +47,15 @@ function InviteModal({ open, handleClose }) {
         };
 
         try {
-            const response = axios.post('/api/class/invite-students', { data });
+            const response = axios.post(
+                '/api/class/invite-students',
+                { data },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                    },
+                },
+            );
 
             if (response.status === 200) {
                 console.log('Invited');

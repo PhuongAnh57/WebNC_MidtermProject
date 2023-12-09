@@ -56,7 +56,6 @@ export default function SignUp() {
 
         try {
             await axios.post('/api/signup', { user }).then((response) => {
-                console.log(response.status);
                 if (response.status === 200) {
                     return setEmailActivation(true);
                 }
@@ -67,17 +66,10 @@ export default function SignUp() {
                 }
             });
         } catch (err) {
-            console.log(err);
+            console.log('err', err);
+            setAlreadyExists(true);
         }
     };
-
-    if (alreadyExists) {
-        setFirstName('');
-        setLastName('');
-        setUsername('');
-        setPassword('');
-        setEmail('');
-    }
 
     if (localStorage.getItem('accessToken')) {
         return <Navigate to="/" />;
