@@ -14,14 +14,14 @@ const applyPassportStrategy = (passport) => {
             return done(null, jwt_payload);
         }),
     );
-        
+
     passport.serializeUser((user, done) => {
         done(null, user);
     });
 
-    // passport.deserializeUser((user, done) => {
-    //     done(null, user);
-    // });
+    passport.deserializeUser((user, done) => {
+        done(null, user);
+    });
 };
 
 module.exports = { applyPassportStrategy, passport };

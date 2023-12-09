@@ -17,19 +17,24 @@ module.exports = {
         const result = await db.one('SELECT * FROM accounts WHERE username=$1', [username]);
         return result;
     },
+    getUserByToken: async (token) => {
+        const result = await db.one('SELECT * FROM accounts WHERE verify_token=$1', [token]);
+        return result;
+    },
     addNewUser: async (user) => {
         const result = await db.one(
-            'INSERT INTO accounts(user_id,  username, password, first_name, last_name, gender, email, day_of_birth, address) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
+            'INSERT INTO accounts(user_id,  username, password, first_name, last_name, gender, email, date_of_birth, address, verify_token) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *',
             [
                 user.id,
                 user.username,
                 user.password,
-                user.firstName,
-                user.lastName,
+                user.first_name,
+                user.last_name,
                 user.gender,
                 user.email,
-                user.dob,
+                user.dateOfBirth,
                 user.address,
+                user.verify_token,
             ],
         );
 
@@ -38,7 +43,10 @@ module.exports = {
     editUser: async (user) => {
         await db.none(
             'UPDATE accounts SET first_name=$1, last_name=$2, day_of_birth=$3, gender=$4, email=$5, address=$6 WHERE user_id=$7',
-            [user.firstName, user.lastName, user.dayOfBirth, user.gender, user.email, user.address, user.userID],
+            [user.first_name, user.last_name, user.date_of_birth, user.gender, user.email, user.address, user.user_id],
         );
+    },
+    editPassword: async (user) => {
+        await db.none('UPDATE accounts SET password=$1 WHERE user_id=$2', [user.password, user.user_id]);
     },
 };

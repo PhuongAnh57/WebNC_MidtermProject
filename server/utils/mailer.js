@@ -13,10 +13,10 @@ const sendEmail = async (message) => {
             },
         });
 
-        const result = await transporter.sendMail(message);
+        await transporter.sendMail(message);
         console.log('Email sent successfully!');
-        console.log(result);
     } catch (err) {
+        console.log(err);
         console.log('Email cannot be sent. Something went wrong!');
     }
 };
@@ -26,13 +26,14 @@ module.exports = {
         const message = {
             from: process.env.USER,
             to: user.email,
-            subject: 'Activate your Classroom account',
+            subject: 'Activate Your Classroom Account',
             html: `
             <h3>Hello ${user.username}</h3>
             <p>Thank you for registering into our application. Click on the link below to verify your email: </p>
-            <a target="_" href="${process.env.BASE_URL}/api/email-confirm/${token.token}>Activate Account Link</a>
+            <a href="${process.env.CLIENT_URL}/api/user/email-confirm/${token}"> Activate Account Link </a>
             <p>Best,</p>
-            <p>Your Classroom Team</p>`,
+            <p>Your Classroom Team</p>
+            `,
         };
 
         return sendEmail(message);
@@ -44,9 +45,9 @@ module.exports = {
             to: user.email,
             subject: 'Reset your Classroom password',
             html: `
-            <h3>Hello ${toUser.username} </h3>
+            <h3>Hello ${user.username} </h3>
             <p>Click on the link below to reset your password: </p>
-            <a target="_" href="${process.env.BASE_URL}/api/reset-password/${token.token}">Reset Password Link</a>
+            <a target="_" href="${process.env.CLIENT_URL}/api/user/password-reset/${token}">Reset Password Link</a>
             <p>Best,</p>
             <p>Your Classroom Team</p>`,
         };

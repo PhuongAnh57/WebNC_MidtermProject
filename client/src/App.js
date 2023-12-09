@@ -8,6 +8,9 @@ import EditAccount from 'pages/EditAccount';
 import LogOut from 'pages/Logout/LogOut';
 import PageNotFound from 'pages/PageNotFound/PageNotFound';
 import AuthProvider from 'context/AuthProvider';
+import EmailActivated from 'pages/EmailActivated/EmailActivated';
+import ResetPassword from 'pages/ResetPassword/ResetPassword';
+import NewPassword from 'pages/NewPassword/NewPassword';
 
 function App() {
     return (
@@ -20,6 +23,11 @@ function App() {
 
                         <Route exact path="/signup" element={<SignUp />} />
                         <Route exact path="/register" element={<SignUp />} />
+
+                        <Route exact path="/api/user/email-confirm/:token" element={<EmailActivated />} />
+
+                        <Route exact path="/forgot-password" element={<ResetPassword />} />
+                        <Route exact path="/api/user/password-reset/:token" element={<NewPassword />} />
 
                         <Route exact path="/login" element={<LogIn />} />
                         <Route exact path="/signin" element={<LogIn />} />

@@ -1,33 +1,38 @@
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
 const userM = require('../models/user.m');
-// const pendingUserM = require('../models/pending_user.m');
+const pendingUserM = require('../models/pending_user.m');
+const mailer = require('../utils/mailer');
+const access_tokenM = require('../models/access_token.m');
 
 exports.postSignup = async (req, res) => {
     const { firstName, lastName, username, password, email } = req.body.user;
 
     try {
-        const emailUser = await userM.getUserByEmail(email);
-        const usernameUser = await userM.getUserByUsername(username);
+        const users = await userM.getAllUsers();
+        const pendingUsers = await pendingUserM.getAllUsers();
 
-        // const emailPending = await pendingUserM.getUserByEmail(email);
-        // const usernamePending = await pendingUserM.getUserByUsername(username);
+        const userExists = users.find((user) => user.username === username || user.email === email);
+        const pendingUserExists = pendingUsers.find(
+            (pendingUser) => pendingUser.username === username || pendingUser.email === email,
+        );
 
-        if (emailUser || usernameUser) {
+        if (userExists || pendingUserExists) {
             res.status(400).json({ message: 'Username or email already belongs to another user' });
             console.log('Username or email already belongs to another user');
         }
 
-        if (!emailExists && !usernameExists) {
-            const users = await userM.getAllUsers();
-
+        if (!userExists && !pendingUserExists) {
             let id;
-            if (!users || !users?.length) {
+            if (!pendingUsers || !pendingUsers?.length) {
                 id = 0;
             } else {
-                id = users[users.length - 1].user_id + 1;
+                id = pendingUsers[pendingUsers.length - 1].user_id + 1;
             }
+
+            console.log(id);
 
             bcrypt.hash(password, 10, async (err, hash) => {
                 if (err) {
@@ -40,24 +45,66 @@ exports.postSignup = async (req, res) => {
                         username,
                         password: hash,
                         email,
-                        address: undefined,
-                        gender: undefined,
-                        dob: undefined,
+                        verifyToken: crypto.randomBytes(32).toString('hex'),
                     };
 
-                    const result = await userM.addNewUser(newUser);
+                    const result = await pendingUserM.addNewUser(newUser);
+                    await mailer.sendConfirmationEmail(newUser, newUser.verifyToken);
 
                     if (!result) {
                         console.log('Error occurred when trying to create user');
                     } else {
-                        res.json({ message: 'User account created' });
-                        console.log('User account created');
+                        res.status(200).json({ message: 'Pending user account created' });
+                        console.log('Pending User account created');
                     }
                 }
             });
         }
     } catch (err) {
         console.log(err);
+    }
+};
+
+exports.getEmailActivationConfirmation = async (req, res) => {
+    const { token } = req.params;
+
+    try {
+        const userExists = await userM.getUserByToken(token).catch((err) => {});
+
+        if (userExists) {
+            return res.status(200).json({ message: `User ${userExists.username} has been activated` });
+        }
+
+        const pendingUserExists = await pendingUserM.getUserByToken(token).catch((err) => {});
+
+        if (!pendingUserExists && !userExists) {
+            return res.status(400).json({ message: 'User cannot be activated' });
+        }
+
+        const users = await userM.getAllUsers();
+
+        let newID;
+        if (!users || !users?.length) {
+            newID = 0;
+        } else {
+            newID = users[users.length - 1].user_id + 1;
+        }
+
+        const newUser = {
+            ...pendingUserExists,
+            id: newID,
+            gender: null,
+            dateOfBirth: null,
+            address: null,
+        };
+
+        await userM.addNewUser(newUser);
+        await pendingUserM.removeUser(pendingUserExists.user_id);
+
+        res.status(200).json({ message: `User ${userExists.username} has been activated` });
+    } catch (err) {
+        console.log(err);
+        res.status(400).json({ message: 'User cannot be activated' });
     }
 };
 
@@ -114,6 +161,86 @@ exports.getLogout = (req, res) => {
     res.clearCookie('accessToken');
     res.clearCookie('user');
     res.json({ message: 'Logging out' });
+};
+
+exports.postResetPassword = async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const userExists = await userM.getUserByEmail(email);
+
+        if (!userExists) {
+            return res.status(400).json({ message: 'Account does not exist' });
+        }
+
+        const hasToken = await access_tokenM.getTokenByID(userExists.user_id).catch((err) => {});
+
+        if (hasToken) {
+            return res.json({ message: 'Email to reset password was already sent!' });
+        }
+
+        const newToken = {
+            user_id: userExists.user_id,
+            token: jwt.sign({ id: userExists.user_id }, process.env.RESET_PASSWORD_KEY, { expiresIn: '20m' }),
+        };
+
+        await access_tokenM.addNewToken(newToken);
+        await mailer.sendResetPasswordEmail(userExists, newToken.token);
+
+        return res.status(200).json({ message: 'Please check your email to reset your password!' });
+    } catch (err) {
+        console.log(err);
+        return res.status(400).json({ message: 'Something went wrong!' });
+    }
+};
+
+exports.postResetPasswordConfirmation = async (req, res) => {
+    try {
+        const { token, password } = req.body.data;
+
+        jwt.verify(token, process.env.RESET_PASSWORD_KEY, async (err, decodedValue) => {
+            if (err) {
+                return res.status(400).json({ message: 'Verification failed!' });
+            }
+
+            if (decodedValue) {
+                const id = decodedValue.id;
+
+                const tokenExists = await access_tokenM.getTokenByToken(token);
+
+                if (!tokenExists) {
+                    return res.status(400).json({ message: 'Cannot reset a password!' });
+                }
+
+                const userExists = await userM.getUserByID(id);
+
+                if (!userExists) {
+                    return res.status(400).json({ message: 'Cannot reset a password!' });
+                }
+
+                bcrypt.hash(password, 10, async (err, hash) => {
+                    if (err) {
+                        console.log(err);
+                        return res.status(400).json({ message: 'Something went wrong!' });
+                    }
+
+                    const newUser = {
+                        ...userExists,
+                        password: hash,
+                    };
+
+                    await userM.editPassword(newUser);
+                    await access_tokenM.removeToken(id);
+
+                    res.status(200).json({ message: 'Password has been updated!' });
+                    console.log('Password has been reseted!');
+                });
+            }
+        });
+    } catch (err) {
+        console.log(err);
+        return res.status(400).json({ message: 'Something went wrong!' });
+    }
 };
 
 exports.postRefreshToken = async (req, res) => {
@@ -192,7 +319,7 @@ exports.postEditProfile = async (req, res) => {
         return;
     }
 
-    const userID = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodeValue) => {
+    const user_id = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodeValue) => {
         if (err) {
             res.json({ message: 'Invalid token' });
         } else {
@@ -201,18 +328,18 @@ exports.postEditProfile = async (req, res) => {
     });
 
     try {
-        const user = await userM.getUserByID(userID);
+        const user = await userM.getUserByID(user_id);
 
         if (!user) {
             return res.json({ message: 'User does not exist' });
         }
 
         const userEdit = {
-            userID: userID,
-            firstName: userData.firstName,
-            lastName: userData.lastName,
+            user_id,
+            first_name: userData.firstName,
+            last_name: userData.lastName,
             gender: userData.gender,
-            dayOfBirth: userData.dateOfBirth,
+            date_of_birth: userData.dateOfBirth,
             email: userData.email,
             address: userData.address,
         };
