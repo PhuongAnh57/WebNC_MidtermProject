@@ -61,24 +61,28 @@ export default function LogIn() {
             password: data.get('password'),
         };
 
-        axios.post('/api/login', { user }).then((response) => {
-            if (response.data.message === 'Verification successfully') {
-                dispatch({ type: LOGIN, payload: response.data });
-            }
+        try {
+            axios.post('/api/login', { user }).then((response) => {
+                if (response.data.message === 'Verification successfully') {
+                    dispatch({ type: LOGIN, payload: response.data });
+                }
 
-            if (response.data.message === 'This account does not exist') {
-                setAccountDoesNotExist(true);
-                setInvalidPassword(false);
-                setUsername('');
-                setPassword('');
-            }
+                if (response.data.message === 'This account does not exist') {
+                    setAccountDoesNotExist(true);
+                    setInvalidPassword(false);
+                    setUsername('');
+                    setPassword('');
+                }
 
-            if (response.data.message === 'Password is invalid') {
-                setInvalidPassword(true);
-                setAccountDoesNotExist(false);
-                setPassword('');
-            }
-        });
+                if (response.data.message === 'Password is invalid') {
+                    setInvalidPassword(true);
+                    setAccountDoesNotExist(false);
+                    setPassword('');
+                }
+            });
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     return (
