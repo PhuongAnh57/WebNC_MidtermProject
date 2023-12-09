@@ -49,8 +49,7 @@ CREATE TABLE class_members (
 	id INT PRIMARY KEY,
 	class_id INT NOT NULL,
 	member_id INT NOT NULL,
-	role VARCHAR(10) NOT NULL,
-	accept_token VARCHAR ( 100 )  NOT NULL
+	role VARCHAR(10) NOT NULL
 );
 
 DROP TABLE IF EXISTS invitations;
