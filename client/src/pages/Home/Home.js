@@ -31,12 +31,13 @@ export default function Home() {
 
     return (
         <MainLayout>
-            <Button style={{ float: 'right' }} variant="outlined" startIcon={<AddIcon />}
+            <Button style={{ float: 'right', marginBottom: '20px' }} variant="outlined" startIcon={<AddIcon />}
             onClick={handleOpen}>
                 tạo lớp học
             </Button>
             <CreateClass open={open} onClose={handleClose}/>
-            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+            
+            <div style={{ display: 'flex', flexWrap: 'wrap', clear: 'both'}}>
                 <CourseCard />
                 <CourseCard />
                 <CourseCard />
