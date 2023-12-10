@@ -71,15 +71,15 @@ module.exports = {
         return sendEmail(message);
     },
 
-    sendClassInvitaion: (email, classInfo) => {
+    sendClassInvitaion: (email, classInfo, token) => {
         const message = {
             from: process.env.USER,
             to: email,
             subject: `Joining Mail`,
             html: `
-            <h3>You are invited to join ${classInfo.name}</h3>
+            <h3>You are invited to join ${classInfo.class_name}</h3>
             <p>Click on the link below to enter the class: </p>
-            <a target="_" href="${process.env.CLIENT_URL}/api/class/${classInfo.classID}/invite/accept_token/${classInfo.token}">Join in</a>`,
+            <a target="_" href="${process.env.CLIENT_URL}/api/class/${classInfo.class_id}/invite/accept-token/${token}">Join in</a>`,
         };
 
         return sendEmail(message);

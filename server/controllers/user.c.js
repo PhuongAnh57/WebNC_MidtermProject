@@ -268,7 +268,7 @@ exports.postRefreshToken = async (req, res) => {
 };
 
 // authentication test with jwt
-exports.getEditProfile = async (req, res) => {
+exports.getProfile = async (req, res) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader.split(' ')[1];
 
@@ -291,9 +291,11 @@ exports.getEditProfile = async (req, res) => {
             res.json({ message: 'User not found' });
         } else {
             const userData = {
+                id: user.user_id,
+                username: user.username,
                 firstName: user.first_name,
                 lastName: user.last_name,
-                dateOfBirth: user.day_of_birth,
+                dateOfBirth: user.date_of_birth,
                 gender: user.gender,
                 email: user.email,
                 address: user.address,
@@ -353,32 +355,50 @@ exports.postEditProfile = async (req, res) => {
     }
 };
 
-// invite students
+exports.checkInvitation = async (req, res) => {
+    const { accept_token } = req.body.data;
 
-exports.postInviteStudents = async (req, res) => {
-    const { emails, classID } = req.body.data;
+    const authHeader = req.headers['authorization'];
+    const accessToken = authHeader.split(' ')[1];
 
-    if (!classID || !emails || !emails?.length) {
-        console.log('Invalid class ID or emails!');
-        return res.status(400).json({ message: 'Invalid class ID or emails!' });
+    if (!accessToken) {
+        return res.json({ message: 'Unauthorization' });
     }
 
-    // mock class data
-    const classInfo = {
-        classID,
-        className: 'abc',
-        token: 'dsfa',
-    };
     try {
-        emails.map(async (email) => {
-            await mailer.sendClassInvitaion(email, classInfo);
+        const inviteEmail = jwt.verify(accept_token, process.env.INVITE_KEY, (err, decodedValue) => {
+            if (err) {
+                return res.status(400).json({ message: 'Something went wrong' });
+            } else {
+                return decodedValue.email;
+            }
         });
 
-        res.status(200).json({ message: 'Invitations have been sent successfully' });
+        const userID = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (err, decodeValue) => {
+            if (err) {
+                res.json({ message: 'Invalid token' });
+            } else {
+                return decodeValue.id;
+            }
+        });
+
+        const user = await userM.getUserByID(userID);
+
+        const userData = {
+            user_id: user.user_id,
+            username: user.username,
+            email: user.email,
+        };
+
+        if (user.email === inviteEmail) {
+            console.log('User invited');
+            return res.status(200).json({ message: 'User invited', userData });
+        } else {
+            console.log('User not invited');
+            return res.status(200).json({ message: 'User not invited', userData });
+        }
     } catch (err) {
         console.log(err);
-        return res.status(400).json({ message: 'Something went wrong!' });
+        res.status(400).json({ message: 'Something went wrong' });
     }
 };
-
-// https://classroom.google.com/u/1/invite/accept_token/NjQ1MTQwOTM2MDM2?role=3&t=a3doo5l7gy6bbnq4&pli=1

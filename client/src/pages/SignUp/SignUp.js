@@ -44,14 +44,13 @@ export default function SignUp() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
 
         const user = {
-            firstName: data.get('firstName'),
-            lastName: data.get('lastName'),
-            username: data.get('username'),
-            password: data.get('password'),
-            email: data.get('email'),
+            firstName,
+            lastName,
+            username,
+            password,
+            email,
         };
 
         try {

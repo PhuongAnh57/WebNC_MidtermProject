@@ -11,6 +11,8 @@ import AuthProvider from 'context/AuthProvider';
 import EmailActivated from 'pages/EmailActivated/EmailActivated';
 import ResetPassword from 'pages/ResetPassword/ResetPassword';
 import NewPassword from 'pages/NewPassword/NewPassword';
+import JoinClass from 'pages/JoinClass/JoinClass';
+import ClassDetail from 'pages/ClassDetail/ClassDetail';
 
 function App() {
     return (
@@ -37,6 +39,10 @@ function App() {
                         <Route exact path="/edit-account" element={<EditAccount />} />
 
                         <Route exact path="/logout" element={<LogOut />} />
+
+                        <Route exact path="/class/:classID" element={<ClassDetail />} />
+
+                        <Route exact path="/api/class/:classID/invite/accept-token/:token" element={<JoinClass />} />
 
                         {/* Nếu người dùng nhập một đường dẫn không khớp, thông báo page not found */}
                         <Route path="*" element={<PageNotFound />} />

@@ -30,7 +30,7 @@ export default function EditForm() {
 
     useEffect(() => {
         axios
-            .get('/api/edit-profile', {
+            .get('/api/get-profile', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('accessToken')} `,
                 },
@@ -74,7 +74,7 @@ export default function EditForm() {
 
         axios
             .post(
-                '/edit-profile',
+                '/api/edit-profile',
                 { userData },
                 {
                     headers: {
