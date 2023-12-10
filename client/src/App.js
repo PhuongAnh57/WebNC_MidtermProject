@@ -11,8 +11,8 @@ import AuthProvider from 'context/AuthProvider';
 import EmailActivated from 'pages/EmailActivated/EmailActivated';
 import ResetPassword from 'pages/ResetPassword/ResetPassword';
 import NewPassword from 'pages/NewPassword/NewPassword';
-import JoinClass from 'pages/JoinClass/JoinClass';
-import ClassDetail from 'pages/ClassDetail/ClassDetail';
+import JoinClass from 'pages/JoinClass';
+import ClassDetail from 'pages/ClassDetail';
 
 function App() {
     return (
@@ -37,6 +37,8 @@ function App() {
                         <Route exact path="/home" element={<Home />} />
 
                         <Route exact path="/edit-account" element={<EditAccount />} />
+
+                        <Route exact path="/class-detail" element={<ClassDetail />} />
 
                         <Route exact path="/logout" element={<LogOut />} />
 

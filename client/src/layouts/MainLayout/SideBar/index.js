@@ -13,6 +13,7 @@ import SchoolIcon from '@mui/icons-material/School';
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import SettingsIcon from '@mui/icons-material/Settings';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 
 export default function BasicList() {
     return (
@@ -34,6 +35,21 @@ export default function BasicList() {
                                 <CalendarMonthIcon />
                             </ListItemIcon>
                             <ListItemText primary="Lịch" />
+                        </ListItemButton>
+                    </ListItem>
+                </List>
+            </nav>
+
+            <Divider />
+
+            <nav aria-label="main mailbox folders">
+                <List>
+                    <ListItem disablePadding>
+                        <ListItemButton>
+                            <ListItemIcon>
+                                <PeopleAltIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Giảng dạy" />
                         </ListItemButton>
                     </ListItem>
                 </List>

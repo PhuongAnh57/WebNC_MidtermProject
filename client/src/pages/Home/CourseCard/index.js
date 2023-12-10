@@ -5,41 +5,35 @@ import { useState } from 'react';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import InviteModal from '../InviteModal/InviteModal';
+import Background from '../../../assets/images/classroom.jpg';
+import IconButton from '@mui/material/IconButton';
+import FolderIcon from '@mui/icons-material/Folder';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import { Link } from 'react-router-dom';
 
 export default function MediaCard() {
-    const [openModal, setOpenModal] = useState(false);
-
-    const handleModalOpen = () => {
-        setOpenModal(true);
-    };
-
-    const handleModalClose = () => {
-        setOpenModal(false);
-    };
-
     return (
-        <Card sx={{ maxWidth: 345 }} style={{ marginRight: '16px', marginBottom: '16px' }}>
-            <CardMedia sx={{ height: 140 }} image="" title="image" />
-            <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                    Lizard
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                    Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all
-                    continents except Antarctica
-                </Typography>
-
-                <InviteModal open={openModal} handleClose={handleModalClose} />
-            </CardContent>
-            <CardActions>
-                <Button size="small">Share</Button>
-                <Button onClick={handleModalOpen} size="small">
-                    Learn More
-                </Button>
-            </CardActions>
-        </Card>
+        <Link to="/class-detail" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Card sx={{ width: 345 }} style={{ marginRight: '16px', marginBottom: '16px' }}>
+                <CardMedia sx={{ height: 140 }} image={Background} title="image" />
+                <CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
+                        Tên lớp học
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        Phần
+                    </Typography>
+                </CardContent>
+                <CardActions style={{ float: 'right' }}>
+                    <IconButton color="primary" aria-label="add to shopping cart">
+                        <AssignmentIcon />
+                    </IconButton>
+                    <IconButton color="primary" aria-label="add to shopping cart">
+                        <FolderIcon />
+                    </IconButton>
+                </CardActions>
+            </Card>
+        </Link>
     );
 }
