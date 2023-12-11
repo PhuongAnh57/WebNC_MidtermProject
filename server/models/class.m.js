@@ -12,5 +12,9 @@ module.exports = {
         );
 
         return result;
-    }
+    },
+    getClassByID: async (class_id) => {
+        const result = await db.one('SELECT * FROM classes WHERE class_id=$1', [class_id]);
+        return result;
+    },
 }
