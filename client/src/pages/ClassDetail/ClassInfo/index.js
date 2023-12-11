@@ -1,6 +1,6 @@
 import * as React from 'react';
 import axios from 'axios';
-
+import { useState, useEffect } from 'react';
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -48,7 +48,6 @@ export default function FullScreenDialog({ open, onClose }) {
                 setPart(classDetail.part);
                 setTopic(classDetail.topic);
                 setRoom(classDetail.room);
-                // setClassInfo(response.data.Class);
             });
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -70,7 +69,7 @@ export default function FullScreenDialog({ open, onClose }) {
                         </Button>
                     </Toolbar>
                 </AppBar>
-                <Box sx={{ width: '50%', mx: 'auto', marginTop: '20px' }}>
+                <Box sx={{ width: '50%', mx: 'auto', marginTop: '20px' }} />
                 <Box sx={{ width: '50%', mx: 'auto', marginTop: '20px' }}>
                     <Stack spacing={2}>
                         <Item>
