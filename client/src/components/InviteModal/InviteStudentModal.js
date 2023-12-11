@@ -3,13 +3,14 @@ import { Navigate } from 'react-router';
 import classNames from 'classnames/bind';
 import axios from 'axios';
 
-import { Modal, Box, FormControl, Chip, responsiveFontSizes } from '@mui/material';
+import { Modal, Box, FormControl, Chip } from '@mui/material';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Button from '@mui/material/Button';
 import styles from './InviteModal.module.scss';
 
 const cx = classNames.bind(styles);
 
-function InviteModal({ url, open, handleClose }) {
+function InviteStudentModal({ url, open, handleClose }) {
     const [values, setValues] = useState([]);
     const [currentValue, setCurrentValue] = useState('');
 
@@ -34,9 +35,13 @@ function InviteModal({ url, open, handleClose }) {
         // let tempStates = [...inviteStates];
         tempValues.splice(index, 1);
         // tempStates.splice(index, 1);
-        console.log(item);
+
         setValues(tempValues);
         // setInviteStates(tempStates);
+    };
+
+    const handleCopyToClipboard = () => {
+        navigator.clipboard.writeText(url);
     };
 
     const handleInvite = async (e) => {
@@ -81,13 +86,15 @@ function InviteModal({ url, open, handleClose }) {
             >
                 <Box className={cx('modal-box')}>
                     <h3 id="child-modal-title" style={{ fontSize: '18px', margin: '16px 0' }}>
-                        Invite Students
+                        Mời học sinh?
                     </h3>
                     <div style={{ margin: 0, padding: '8px 0' }}>
-                        <h6 style={{ margin: 0, fontSize: '16px' }}>Invite Link</h6>
-                        <div className={cx('modal-content')}>
+                        <h6 style={{ margin: 0, fontSize: '16px' }}>Liên kết</h6>
+                        <div className={cx('modal-link')}>
                             <p id="child-modal-description">{url}</p>
-                            <Button>Copy</Button>
+                            <Button onClick={handleCopyToClipboard}>
+                                <ContentCopyIcon />
+                            </Button>
                         </div>
                         <FormControl className={cx('form-control')}>
                             <div className={cx('container')}>
@@ -96,7 +103,7 @@ function InviteModal({ url, open, handleClose }) {
                                 ))}
                             </div>
                             <input
-                                placeholder="Type an email"
+                                placeholder="Nhập email"
                                 variant="standard"
                                 value={currentValue}
                                 onChange={handleChange}
@@ -106,10 +113,10 @@ function InviteModal({ url, open, handleClose }) {
                     </div>
                     <div className={cx('modal-button')}>
                         <Button className={cx('cancel-btn')} onClick={handleClose}>
-                            Cancel
+                            Hủy
                         </Button>
                         <Button type="submit" onClick={handleInvite}>
-                            Invite
+                            Mời
                         </Button>
                     </div>
                 </Box>
@@ -118,4 +125,4 @@ function InviteModal({ url, open, handleClose }) {
     );
 }
 
-export default InviteModal;
+export default InviteStudentModal;

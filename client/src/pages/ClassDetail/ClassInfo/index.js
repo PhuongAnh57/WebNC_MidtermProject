@@ -15,8 +15,6 @@ import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
-import { Navigate } from 'react-router-dom';
-
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -40,17 +38,23 @@ export default function FullScreenDialog({ open, onClose }) {
     const classID = currentURL.split('/').pop();
 
     useEffect(() => {
-        if(open) {
-            axios.get(`/api/class/${classID}`).then((response) => {
-                const classDetail = response.data.Class;
-                
-                setName(classDetail.class_name);
-                setPart(classDetail.part);
-                setTopic(classDetail.topic);
-                setRoom(classDetail.room);
-            });
+        if (open) {
+            axios
+                .get(`/api/class/${classID}`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                    },
+                })
+                .then((response) => {
+                    const classDetail = response.data.Class;
+
+                    setName(classDetail.class_name);
+                    setPart(classDetail.part);
+                    setTopic(classDetail.topic);
+                    setRoom(classDetail.room);
+                });
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [open]);
 
     return (

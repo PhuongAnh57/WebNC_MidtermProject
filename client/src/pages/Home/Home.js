@@ -11,19 +11,26 @@ import CreateClass from 'components/CreateClass';
 
 export default function Home() {
     const [open, setOpen] = useState(false);
+    const [classes, setClasses] = useState([]);
+
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    const [classes, setClasses] = useState([]);
     useEffect(() => {
-        axios
-            .get('/api/all-classes', {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('accessToken')} `,
-                },
-            })
-            .then((response) => setClasses(response.data.classesData));
+        try {
+            axios
+                .get('/api/all-classes', {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('accessToken')} `,
+                    },
+                })
+                .then((response) => setClasses(response.data.classesData));
+        } catch (err) {
+            console.log(err);
+        }
     }, []);
+
+    console.log(classes);
 
     // Đọc thông tin người dùng từ cookie
     if (document.cookie) {
@@ -55,9 +62,7 @@ export default function Home() {
             <CreateClass open={open} onClose={handleClose} />
 
             <div style={{ display: 'flex', flexWrap: 'wrap', clear: 'both' }}>
-                {classes && classes.map(Class => (
-                    <CourseCard key={Class.class_id} Class={Class} />
-                ))}
+                {classes && classes.map((Class) => <CourseCard key={Class.class_id} Class={Class} />)}
             </div>
         </MainLayout>
     );

@@ -19,8 +19,6 @@ function JoinClassViaLink() {
         localStorage.setItem('storedLink', storedLink);
     }
 
-    console.log(user);
-
     useEffect(() => {
         const loadAllData = async () => {
             try {
@@ -30,19 +28,12 @@ function JoinClassViaLink() {
                     },
                 });
 
-                // if (loadUser.data.message === 'User not found') {
-                //     // check if user email is equal to email in invitation
-                //     // setIsInvited(false);
-                //     // setLoading(false);
-                //     // return;
-                // }
-
                 if (loadUser.data.message === 'User found') {
                     setUser(loadUser.data.userData);
                 }
 
                 const loadClass = await axios.get(
-                    `/api/check-user-class/${classID}/user/${loadUser.data.userData.user_id}`,
+                    `/api/check-user-class/${classID}/user/${loadUser.data.userData.id}`,
                     {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem('accessToken')} `,
@@ -52,6 +43,7 @@ function JoinClassViaLink() {
 
                 if (loadClass.status === 200) {
                     setClassData(loadClass.data.classData);
+                    console.log(loadClass.data.classData.joined);
 
                     if (loadClass.data.classData.joined) {
                         setJoined(true);
@@ -79,7 +71,7 @@ function JoinClassViaLink() {
     if (joined) {
         localStorage.removeItem('classID');
         localStorage.removeItem('acceptToken');
-        return <Navigate to={`/class/${classData.class_id}/detail`} />;
+        return <Navigate to={`/class/${classData.class_id}`} />;
     }
 
     const handleAddIntoClass = () => {
@@ -132,9 +124,10 @@ function JoinClassViaLink() {
             >
                 <Card sx={{ maxWidth: 400, textAlign: 'center' }}>
                     <CardContent>
-                        <h3 style={{ margin: 0, textAlign: 'left', fontWeight: 400 }}>Join Class?</h3>
+                        <h3 style={{ margin: 0, textAlign: 'left', fontWeight: 400 }}>Tham gia lớp học này?</h3>
                         <Typography style={{ margin: 0, marginTop: 8 }}>
-                            You are joining in <strong>{classData.class_name}</strong> class as a student. You're signed in as
+                            Bạn sẽ tham gia lớp <strong>{classData.class_name}</strong> với tư cách học sinh. Bạn đang
+                            đăng nhập với tài khoản
                             <strong>
                                 {' '}
                                 {user.username} ({user.email})
@@ -144,7 +137,7 @@ function JoinClassViaLink() {
                     </CardContent>
                     <CardActions sx={{ justifyContent: 'center', paddingBottom: 2, paddingTop: 0 }}>
                         <Button variant="contained" onClick={handleAddIntoClass}>
-                            Join
+                            Tham gia
                         </Button>
                     </CardActions>
                 </Card>

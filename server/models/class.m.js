@@ -5,13 +5,27 @@ module.exports = {
         const result = await db.any('SELECT * FROM classes ORDER BY class_id ASC');
         return result;
     },
+    getOwnedClasses: async (userID) => {
+        const result = await db.any(
+            'SELECT * FROM class_members cm JOIN classes c ON cm.class_id = c.class_id WHERE member_id=$1 and role=$2 ',
+            [userID, '2'],
+        );
+        return result;
+    },
+    getJoinedClasses: async (userID) => {
+        const result = await db.any(
+            'SELECT * FROM class_members cm JOIN classes c ON cm.class_id = c.class_id WHERE member_id=$1 and role=$2 ',
+            [userID, '3'],
+        );
+        return result;
+    },
     getClassByID: async (id) => {
         const result = await db.one('SELECT * FROM classes WHERE class_id=$1', [id]);
         return result;
     },
     addNewClass: async (classData) => {
         const result = await db.one(
-            'INSERT INTO classes(class_id, lecturer_id, class_name, part, topic, room) VALUES VALUES($1, $2, $3, $4, $5, $6) RETURNING *',
+            'INSERT INTO classes(class_id, lecturer_id, class_name, part, topic, room) VALUES($1, $2, $3, $4, $5, $6) RETURNING *',
             [
                 classData.class_id,
                 classData.lecturer_id,
@@ -49,12 +63,8 @@ module.exports = {
     addNewClass_Member: async (class_member) => {
         const result = await db.one(
             'INSERT INTO class_members(id, class_id,  member_id, role) VALUES($1, $2, $3, $4) RETURNING *',
-            [ class_member.id, class_member.class_id,  class_member.member_id, class_member.role ]
+            [class_member.id, class_member.class_id, class_member.member_id, class_member.role],
         );
         return result;
     },
-
-    // removeToken: async (id) => {
-    //     await db.none('DELETE FROM access_tokens WHERE user_id=$1', [id]);
-    // },
 };

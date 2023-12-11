@@ -40,11 +40,9 @@ function App() {
 
                         <Route exact path="/edit-account" element={<EditAccount />} />
 
-                        <Route exact path="/class/:classID/detail" element={<ClassDetail />} />
-
                         <Route exact path="/logout" element={<LogOut />} />
 
-                        <Route exact path="/class/detail" element={<ClassDetail />} />
+                        <Route exact path="/class/:classID" element={<ClassDetail />} />
 
                         <Route
                             exact

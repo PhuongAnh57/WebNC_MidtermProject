@@ -30,7 +30,7 @@ const Item = styled(Paper)(({ theme }) => ({
     marginBottom: '10px',
 }));
 
-export default function BasicGrid() {
+export default function BasicGrid({ classDetail }) {
     return (
         <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
@@ -45,8 +45,8 @@ export default function BasicGrid() {
                                     loading="lazy"
                                 />
                                 <ImageListItemBar
-                                    title="Tên lớp học"
-                                    subtitle="Phần"
+                                    title={classDetail.class_name}
+                                    subtitle={classDetail.part}
                                     actionIcon={
                                         <IconButton
                                             sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
@@ -62,7 +62,7 @@ export default function BasicGrid() {
                 </Grid>
                 <Grid item xs={3}>
                     <Grid item>
-                        <Card sx={{ marginBottom: '10px' }} >
+                        <Card sx={{ marginBottom: '10px' }}>
                             <CardContent>
                                 <Typography variant="h6" component="div">
                                     Sắp đến hạn

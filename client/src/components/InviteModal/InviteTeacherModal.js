@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { Navigate } from 'react-router';
 import classNames from 'classnames/bind';
 import axios from 'axios';
@@ -9,7 +9,7 @@ import styles from './InviteModal.module.scss';
 
 const cx = classNames.bind(styles);
 
-function InviteModal({ open, handleClose }) {
+function InviteTeacherModal({ open, handleClose }) {
     const [values, setValues] = useState([]);
     const [currentValue, setCurrentValue] = useState('');
 
@@ -79,7 +79,7 @@ function InviteModal({ open, handleClose }) {
             >
                 <Box className={cx('modal-box')}>
                     <h3 id="child-modal-title" style={{ fontSize: '18px', margin: '16px 0' }}>
-                        Invite Teachers
+                        Mời giáo viên?
                     </h3>
                     <div style={{ margin: 0, padding: '8px 0' }}>
                         <FormControl className={cx('form-control')}>
@@ -89,7 +89,7 @@ function InviteModal({ open, handleClose }) {
                                 ))}
                             </div>
                             <input
-                                placeholder="Type an email"
+                                placeholder="Nhập email"
                                 variant="standard"
                                 value={currentValue}
                                 onChange={handleChange}
@@ -99,10 +99,10 @@ function InviteModal({ open, handleClose }) {
                     </div>
                     <div className={cx('modal-button')}>
                         <Button className={cx('cancel-btn')} onClick={handleClose}>
-                            Cancel
+                            Thoát
                         </Button>
                         <Button type="submit" onClick={handleInvite}>
-                            Invite
+                            Mời
                         </Button>
                     </div>
                 </Box>
@@ -111,4 +111,4 @@ function InviteModal({ open, handleClose }) {
     );
 }
 
-export default InviteModal;
+export default memo(InviteTeacherModal);

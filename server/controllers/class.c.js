@@ -21,12 +21,19 @@ exports.getAllClasses = async (req, res) => {
     });
 
     try {
-        const classes = await classM.getAllClasses();
-        const hasCourse = classes.find((c) => c.lecturer_id === userID);
-        if (!hasCourse) {
+        // const classes = await classM.getAllClasses();
+
+        // const hasClass = classes.find((c) => c.lecturer_id === userID);
+
+        const ownedClasses = await classM.getOwnedClasses(userID);
+        const joinedClasses = await classM.getJoinedClasses(userID);
+
+        if (!ownedClasses && !joinedClasses) {
             res.json({ message: 'User does not have any courses' });
         } else {
-            const classesData = classes.filter((c) => c.lecturer_id === userID);
+            // const classesData = classes.filter((c) => c.lecturer_id === userID);
+            const classesData = [...ownedClasses, ...joinedClasses];
+
             res.json({ message: 'Classes', classesData });
         }
     } catch (error) {
@@ -81,7 +88,7 @@ exports.postCreateClass = async (req, res) => {
             id,
             class_id,
             member_id: lecturer_id,
-            role: 'teacher',
+            role: '2',
         };
         const nClass_Lecturer = await classM.addNewClass_Member(newClass_Lecturer);
         res.json({ message: 'class_id', class_id });
@@ -91,10 +98,11 @@ exports.postCreateClass = async (req, res) => {
 };
 
 exports.getClassDetail = async (req, res) => {
-    const classID = req.params.classID;
+    const { classID } = req.params;
 
     try {
         const classes = await classM.getAllClasses();
+
         const Class = classes.find((c) => c.class_id === +classID);
         res.json({ message: 'class-detail', Class });
     } catch (error) {
@@ -131,6 +139,8 @@ exports.postInviteMembers = async (req, res) => {
 
 exports.getCheckUserExistInClass = async (req, res) => {
     const { classID, userID } = req.params;
+
+    console.log(classID, userID);
 
     if (!classID) {
         console.log('Undefined class id');
@@ -172,6 +182,7 @@ exports.getCheckUserExistInClass = async (req, res) => {
 
 exports.postAddMemberToClass = async (req, res) => {
     const { classData, user, role } = req.body.data;
+    console.log(user);
 
     try {
         if (!classData || !user || !role) {
@@ -179,14 +190,14 @@ exports.postAddMemberToClass = async (req, res) => {
             return res.status(400).json({ message: 'Invalid data sent' });
         }
 
-        const allMembers = await classM.getAllMembersInClass();
+        const allMembers = await classM.getAllMembersInClass(classData.class_id);
 
         if (!allMembers) {
             console.log('something went wrong');
         }
 
         let id;
-        if (allMembers.length === 0) {
+        if (!allMembers || !allMembers?.length) {
             id = 0;
         } else {
             id = allMembers[allMembers.length - 1].id + 1;
@@ -195,9 +206,11 @@ exports.postAddMemberToClass = async (req, res) => {
         const data = {
             id,
             ...classData,
-            member_id: user.user_id,
+            member_id: user.user_id || user.id,
             role,
         };
+
+        console.log(data);
 
         await classM.addStudentIntoClass(data);
         await invitationM.removeInvitation(user.email);

@@ -95,7 +95,7 @@ function JoinClassViaEmail() {
     if (joined) {
         localStorage.removeItem('classID');
         localStorage.removeItem('acceptToken');
-        return <Navigate to={`/class/${classData.class_id}/detail`} />;
+        return <Navigate to={`/class/${classData.class_id}`} />;
     }
 
     const handleAddIntoClass = () => {
@@ -148,9 +148,10 @@ function JoinClassViaEmail() {
             >
                 <Card sx={{ maxWidth: 400, textAlign: 'center' }}>
                     <CardContent>
-                        <h3 style={{ margin: 0, textAlign: 'left', fontWeight: 400 }}>Join Class?</h3>
+                        <h3 style={{ margin: 0, textAlign: 'left', fontWeight: 400 }}>Tham gia lớp học?</h3>
                         <Typography style={{ margin: 0, marginTop: 8 }}>
-                            You've been invited to join <strong>{classData.class_name}</strong>. You're signed in as
+                            Bạn được mời tham gia lớp <strong>{classData.class_name}</strong>. Bạn đang đăng nhập với
+                            tài khoản
                             <strong>
                                 {' '}
                                 {user.username} ({user.email})
@@ -160,7 +161,7 @@ function JoinClassViaEmail() {
                     </CardContent>
                     <CardActions sx={{ justifyContent: 'center', paddingBottom: 2, paddingTop: 0 }}>
                         <Button variant="contained" onClick={handleAddIntoClass}>
-                            Join
+                            Tham gia
                         </Button>
                     </CardActions>
                 </Card>

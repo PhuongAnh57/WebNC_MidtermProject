@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useEffect } from 'react';
 import { Navigate } from 'react-router';
 import axios from 'axios';
 
@@ -22,10 +22,10 @@ const Demo = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
 }));
 
-export default function InteractiveList({ classID }) {
-    const [openStudentModal, setOpenStudentModal] = React.useState(false);
-    const [openTeacherModal, setOpenTeacherModal] = React.useState(false);
-    const [classURL, setClassURL] = React.useState('');
+export default function InteractiveList({ classDetail }) {
+    const [openStudentModal, setOpenStudentModal] = useState(false);
+    const [openTeacherModal, setOpenTeacherModal] = useState(false);
+    const [classURL, setClassURL] = useState('');
 
     const handleStudentModalOpen = () => {
         setOpenStudentModal(true);
@@ -43,17 +43,17 @@ export default function InteractiveList({ classID }) {
         setOpenTeacherModal(false);
     };
 
-    React.useEffect(() => {
+    useEffect(() => {
         const loadClass = async () => {
             try {
-                const response = await axios.get(`/api/get-class-data/${classID}`, {
+                const response = await axios.get(`/api/class/${classDetail.class_id}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
                     },
                 });
 
                 if (response.status === 200) {
-                    setClassURL(`${process.env.CLIENT_URL}/class/${classID}/invite`);
+                    setClassURL(`http://localhost:3000/class/${classDetail.class_id}/invite`);
                 }
             } catch (err) {
                 console.log(err);
@@ -64,7 +64,6 @@ export default function InteractiveList({ classID }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
- 
     if (!localStorage.getItem('accessToken')) {
         return <Navigate to="/" />;
     }

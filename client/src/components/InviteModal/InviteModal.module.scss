@@ -11,8 +11,9 @@
     padding: 0 24px;
     border-radius: 8px;
 
-    .modal-content {
+    .modal-link {
         display: flex;
+        justify-content: space-between;
         flex-direction: row;
         align-items: center;
         padding-bottom: 4px;
