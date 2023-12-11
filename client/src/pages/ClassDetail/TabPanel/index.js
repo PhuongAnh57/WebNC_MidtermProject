@@ -61,7 +61,6 @@ export default function BasicTabs() {
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                         <Tab label="Bảng tin" {...a11yProps(0)} />
                         <Tab label="Mọi người" {...a11yProps(1)} />
-                        <Tab label="Item Three" {...a11yProps(2)} />
                     </Tabs>
                     <IconButton aria-label="delete" onClick={handleOpen}>
                         <SettingsIcon />
