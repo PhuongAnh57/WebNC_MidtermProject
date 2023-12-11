@@ -1,10 +1,9 @@
 import * as React from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import ListItemText from '@mui/material/ListItemText';
-import ListItem from '@mui/material/ListItem';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -30,6 +29,29 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function FullScreenDialog({ open, onClose }) {
+    const [name, setName] = useState('');
+    const [part, setPart] = useState('');
+    const [topic, setTopic] = useState('');
+    const [room, setRoom] = useState('');
+
+    const currentURL = window.location.href;
+    const classID = currentURL.split('/').pop();
+
+    useEffect(() => {
+        if(open) {
+            axios.get(`/api/class/${classID}`).then((response) => {
+                const classDetail = response.data.Class;
+                
+                setName(classDetail.class_name);
+                setPart(classDetail.part);
+                setTopic(classDetail.topic);
+                setRoom(classDetail.room);
+                // setClassInfo(response.data.Class);
+            });
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [open]);
+
     return (
         <React.Fragment>
             <Dialog fullScreen open={open} onClose={onClose} TransitionComponent={Transition}>
@@ -46,7 +68,7 @@ export default function FullScreenDialog({ open, onClose }) {
                         </Button>
                     </Toolbar>
                 </AppBar>
-                <Box sx={{ width: '50%',mx: 'auto', marginTop:'20px'}}>
+                <Box sx={{ width: '50%', mx: 'auto', marginTop: '20px' }}>
                     <Stack spacing={2}>
                         <Item>
                             <Box
@@ -63,32 +85,32 @@ export default function FullScreenDialog({ open, onClose }) {
                                     id="name"
                                     name="name"
                                     label="Tên lớp học"
-                                    // value={name}
-                                    // onChange={(e) => setName(e.target.value)}
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
                                     variant="filled"
                                 />
                                 <TextField
                                     id="part"
                                     name="part"
                                     label="Phần"
-                                    // value={part}
-                                    // onChange={(e) => setPart(e.target.value)}
+                                    value={part}
+                                    onChange={(e) => setPart(e.target.value)}
                                     variant="filled"
                                 />
                                 <TextField
                                     id="topic"
                                     name="topic"
                                     label="Chủ đề"
-                                    // value={topic}
-                                    // onChange={(e) => setTopic(e.target.value)}
+                                    value={topic}
+                                    onChange={(e) => setTopic(e.target.value)}
                                     variant="filled"
                                 />
                                 <TextField
                                     id="room"
                                     name="room"
                                     label="Phòng"
-                                    // value={room}
-                                    // onChange={(e) => setRoom(e.target.value)}
+                                    value={room}
+                                    onChange={(e) => setRoom(e.target.value)}
                                     variant="filled"
                                 />
                             </Box>
