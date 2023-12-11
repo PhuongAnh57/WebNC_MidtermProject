@@ -3,6 +3,37 @@ const jwt = require('jsonwebtoken');
 const mailer = require('../utils/mailer');
 const invitationM = require('../models/invitation.m');
 const classM = require('../models/class.m');
+const userM = require('../models/user.m');
+
+exports.getAllClasses = async (req, res) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader.split(' ')[1];
+
+    if (!token) {
+        return res.json({ message: 'Unauthorization' });
+    }
+
+    const userID = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodeValue) => {
+        if (err) {
+            res.json({ message: 'Invalid token' });
+        } else {
+            return decodeValue.id;
+        }
+    });
+
+    try {
+        const classes = await classM.getAllClasses();
+        const hasCourse = classes.find(c => c.lecturer_id === userID);
+        if (!hasCourse) {
+            res.json({ message: 'User does not have any courses' });
+        } else {
+            const classesData = classes.filter(c => c.lecturer_id === userID);
+            res.json({ message: 'Classes', classesData });
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 exports.postCreateClass = async (req, res) => {
     const { name, part, topic, room } = req.body.classInfo;
@@ -10,11 +41,11 @@ exports.postCreateClass = async (req, res) => {
     try {
         const classes = await classM.getAllClasses();
 
-        let id;
+        let class_id;
         if (!classes || !classes?.length) {
-            id = 0;
+            class_id = 0;
         } else {
-            id = classes[classes.length - 1].class_id + 1;
+            class_id = classes[classes.length - 1].class_id + 1;
         }
 
         const authHeader = req.headers['authorization'];
@@ -28,19 +59,40 @@ exports.postCreateClass = async (req, res) => {
         });
 
         const newClass = {
-            class_id: id,
+            class_id,
             lecturer_id,
             class_name: name,
             part,
             topic,
-            room,
-        };
+            room
+        }
+        // console.log(newClass);
+        const nClass = await classM.addNewClass(newClass);
+        
+        
+        //add lecturer to table class_members
+        const class_members = await classM.getAllClass_Members();
+        let id;
+        if (!class_members || !class_members?.length) {
+            id = 0;
+        } else {
+            id = class_members[class_members.length - 1].id + 1;
+        }
 
-        const result = await classM.addNewClass(newClass);
+        const newClass_Lecturer = {
+            id,
+            class_id,
+            member_id: lecturer_id,
+            role: 'teacher'
+        }
+        const nClass_Lecturer = await classM.addNewClass_Member(newClass_Lecturer);
+        res.json({ message: 'class_id', class_id });
     } catch (error) {
         console.log(error);
     }
 };
+
+
 
 // invite students
 

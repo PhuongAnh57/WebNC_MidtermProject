@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import { Navigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
+
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -7,25 +11,26 @@ import DialogContent from '@mui/material/DialogContent';
 // import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Box from '@mui/material/Box';
-import axios from 'axios';
 
 function CreateClass({ open, onClose }) {
+    const navigate = useNavigate();
     const [name, setName] = useState('');
     const [part, setPart] = useState('');
     const [topic, setTopic] = useState('');
     const [room, setRoom] = useState('');
+    const [disabled, setDisabled] = useState(false);
+    const [status, setStatus] = useState('tạo');
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         const classInfo = { name, part, topic, room };
+        let classID = 0;
 
         try {
-            setName('');
-            setPart('');
-            setTopic('');
-            setRoom('');
-            onClose();
+            setDisabled(true);
+            setStatus('Đang tạo');
+
             await axios
                 .post(
                     '/api/create-class',
@@ -36,9 +41,16 @@ function CreateClass({ open, onClose }) {
                         },
                     },
                 )
-                .then((response) => {
-                    console.log('Tạo lớp thành công');
-                });
+                .then((response) => (classID = response.data.class_id));
+            
+            setTimeout(() => {
+                onClose();
+                setName('');
+                setPart('');
+                setTopic('');
+                setRoom('');
+                navigate(`/class/${classID}`, { replace: true });
+            }, 1000);
         } catch (error) {
             console.log(error);
         }
@@ -65,6 +77,7 @@ function CreateClass({ open, onClose }) {
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             variant="filled"
+                            disabled={disabled}
                         />
                         <TextField
                             id="part"
@@ -73,6 +86,7 @@ function CreateClass({ open, onClose }) {
                             value={part}
                             onChange={(e) => setPart(e.target.value)}
                             variant="filled"
+                            disabled={disabled}
                         />
                         <TextField
                             id="topic"
@@ -81,6 +95,7 @@ function CreateClass({ open, onClose }) {
                             value={topic}
                             onChange={(e) => setTopic(e.target.value)}
                             variant="filled"
+                            disabled={disabled}
                         />
                         <TextField
                             id="room"
@@ -89,16 +104,17 @@ function CreateClass({ open, onClose }) {
                             value={room}
                             onChange={(e) => setRoom(e.target.value)}
                             variant="filled"
+                            disabled={disabled}
                         />
                     </Box>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={onClose} color="primary">
+                    <Button onClick={onClose} color="primary" disabled={disabled}>
                         hủy
                     </Button>
                     {name ? (
-                        <Button onClick={handleSubmit} color="primary">
-                            tạo
+                        <Button onClick={handleSubmit} color="primary" disabled={disabled}>
+                            {status}
                         </Button>
                     ) : (
                         <Button disabled>tạo</Button>

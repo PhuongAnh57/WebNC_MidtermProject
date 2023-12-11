@@ -42,6 +42,18 @@ module.exports = {
         return result;
     },
 
+    getAllClass_Members: async () => {
+        const result = await db.any('SELECT * FROM class_members ORDER BY id ASC');
+        return result;
+    },
+    addNewClass_Member: async (class_member) => {
+        const result = await db.one(
+            'INSERT INTO class_members(id, class_id,  member_id, role) VALUES($1, $2, $3, $4) RETURNING *',
+            [ class_member.id, class_member.class_id,  class_member.member_id, class_member.role ]
+        );
+        return result;
+    },
+
     // removeToken: async (id) => {
     //     await db.none('DELETE FROM access_tokens WHERE user_id=$1', [id]);
     // },

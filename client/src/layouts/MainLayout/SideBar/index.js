@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { NavLink } from 'react-router-dom';
+
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -15,28 +17,38 @@ import ArchiveIcon from '@mui/icons-material/Archive';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 
+import styles from './Sidebar.module.scss';
+import classNames from 'classnames/bind';
+const cx = classNames.bind(styles);
+
 export default function BasicList() {
     return (
         <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
             <nav aria-label="main mailbox folders">
                 <List>
-                    <ListItem disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                <HomeIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Màn hình chính" />
-                        </ListItemButton>
-                    </ListItem>
+                    <NavLink to='/home' className={cx('btn')}>
+                        {isActive => (
+                            <ListItem disablePadding style={{background: isActive? '#e3eefc' : 'none'}}>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <HomeIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Màn hình chính" />
+                            </ListItemButton>
+                        </ListItem>
+                        )}
+                    </NavLink>
 
-                    <ListItem disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                <CalendarMonthIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Lịch" />
-                        </ListItemButton>
-                    </ListItem>
+                    <NavLink to='/calendar' className={cx('btn')}>
+                        <ListItem disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <CalendarMonthIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Lịch" />
+                            </ListItemButton>
+                        </ListItem>
+                    </NavLink>
                 </List>
             </nav>
 
