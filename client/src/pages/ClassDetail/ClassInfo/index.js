@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
 import axios from 'axios';
+
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -15,6 +15,8 @@ import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
+import { Navigate } from 'react-router-dom';
+
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -68,6 +70,7 @@ export default function FullScreenDialog({ open, onClose }) {
                         </Button>
                     </Toolbar>
                 </AppBar>
+                <Box sx={{ width: '50%', mx: 'auto', marginTop: '20px' }}>
                 <Box sx={{ width: '50%', mx: 'auto', marginTop: '20px' }}>
                     <Stack spacing={2}>
                         <Item>
