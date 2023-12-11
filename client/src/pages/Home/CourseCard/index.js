@@ -10,17 +10,17 @@ import FolderIcon from '@mui/icons-material/Folder';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import { Link } from 'react-router-dom';
 
-export default function MediaCard() {
+export default function MediaCard({ Class }) {
     return (
-        <Link to="/class-detail" style={{ textDecoration: 'none', color: 'inherit' }}>
+        <Link to={`/class/${Class.class_id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
             <Card sx={{ width: 345 }} style={{ marginRight: '16px', marginBottom: '16px' }}>
                 <CardMedia sx={{ height: 140 }} image={Background} title="image" />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
-                        Tên lớp học
+                        {Class.class_name}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        Phần
+                        {Class.part}
                     </Typography>
                 </CardContent>
                 <CardActions style={{ float: 'right' }}>

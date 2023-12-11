@@ -16,6 +16,8 @@ router.post('/api/edit-profile', passport.authenticate('jwt', { session: false }
 router.post('/api/refresh_token', userController.postRefreshToken);
 
 //-------------------------Class Manager------------------------------------------------------------------------
+router.get('/api/all-classes', passport.authenticate('jwt', { session: false }), classController.getAllClasses);
 router.post('/api/create-class', passport.authenticate('jwt', { session: false }), classController.postCreateClass);
+router.get('/api/class/:classID', classController.getClassDetail);
 
 module.exports = router;

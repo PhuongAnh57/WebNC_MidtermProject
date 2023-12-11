@@ -1,5 +1,5 @@
 import MainLayout from 'layouts/MainLayout';
-import React, {useState} from 'react';
+import React from 'react';
 import TabPanel from './TabPanel'
 
 export default function ClassDetail() {
