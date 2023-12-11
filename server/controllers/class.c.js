@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken');
 const mailer = require('../utils/mailer');
 const invitationM = require('../models/invitation.m');
 const classM = require('../models/class.m');
+const userM = require('../models/user.m');
+const { authenticate } = require('passport');
 
 exports.getAllClasses = async (req, res) => {
     const authHeader = req.headers['authorization'];
@@ -222,4 +224,31 @@ exports.postAddMemberToClass = async (req, res) => {
     }
 };
 
-// https://classroom.google.com/u/1/invite/accept_token/NjQ1MTQwOTM2MDM2?role=3&t=a3doo5l7gy6bbnq4&pli=1
+exports.getAllMembers = async (req, res) => {
+    const classID = req.params.classID;
+
+    try {
+        const members = await classM.getAllMembersInClass(classID);
+
+        const lecturerData = [];
+        const studentData = [];
+
+        for (let i = 0; i < members.length; i++) {
+            const member = await userM.getUserByID(members[i].member_id);
+            const data = {
+                firstname: member.first_name,
+                lastname: member.last_name,
+                role: members[i].role,
+            };
+
+            if (members[i].role === '2') {
+                lecturerData.push(data);
+            } else if (members[i].role === '3') {
+                studentData.push(data);
+            }
+        }
+        res.json({ message: 'members', lecturerData, studentData });
+    } catch (error) {
+        console.log(error);
+    }
+};

@@ -17,6 +17,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import Background from '../../../assets/images/classroom.jpg';
 import InviteStudentModal from 'components/InviteModal/InviteStudentModal';
 import InviteTeacherModal from 'components/InviteModal/InviteTeacherModal';
+import LoadingSpinner from 'components/LoadingSpinner/LoadingSpinner';
 
 const Demo = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
@@ -25,7 +26,28 @@ const Demo = styled('div')(({ theme }) => ({
 export default function InteractiveList({ classDetail }) {
     const [openStudentModal, setOpenStudentModal] = useState(false);
     const [openTeacherModal, setOpenTeacherModal] = useState(false);
+    const [lecturers, setLecturers] = useState([]);
+    const [students, setStudents] = useState([]);
     const [classURL, setClassURL] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
+
+    const currentURL = window.location.href;
+    const classID = currentURL.split('/').pop();
+
+    useEffect(() => {
+        axios
+            .get(`/api/all-members/${classID}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                },
+            })
+            .then((response) => {
+                setLecturers(response.data.lecturerData);
+                setStudents(response.data.studentData);
+                setIsLoading(false);
+            });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const handleStudentModalOpen = () => {
         setOpenStudentModal(true);
@@ -70,80 +92,78 @@ export default function InteractiveList({ classDetail }) {
 
     return (
         <>
-            <Box sx={{ flexGrow: 1, width: '90%' }}>
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <Grid container alignItems="center">
-                            <Grid item xs>
-                                <Typography gutterBottom variant="h5" component="div">
-                                    Giáo viên
-                                </Typography>
-                            </Grid>
-                            <Grid item>
-                                <Button size="small" onClick={handleTeacherModalOpen}>
-                                    <PersonAddIcon />
-                                </Button>
-                            </Grid>
-                        </Grid>
-                        <Divider />
-                        <Demo>
-                            <List>
-                                <ListItem>
-                                    <ListItemAvatar>
-                                        <Avatar alt="Remy Sharp" src={Background} />
-                                    </ListItemAvatar>
-                                    <ListItemText primary="Mỹ Trinh" />
-                                </ListItem>
-                            </List>
-                        </Demo>
-                    </Grid>
-                </Grid>
-            </Box>
-
-            <Box sx={{ flexGrow: 1, width: '90%', marginTop: '30px' }}>
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <Grid container alignItems="center">
-                            <Grid item xs>
-                                <Typography gutterBottom variant="h5" component="div">
-                                    Sinh viên
-                                </Typography>
-                            </Grid>
-                            <Grid item>
-                                <Button size="small" onClick={handleStudentModalOpen}>
-                                    <PersonAddIcon />
-                                </Button>
+            {isLoading ? (
+                <LoadingSpinner />
+            ) : (
+                <>
+                    <Box sx={{ flexGrow: 1, width: '90%' }}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <Grid container alignItems="center">
+                                    <Grid item xs>
+                                        <Typography gutterBottom variant="h5" component="div">
+                                            Giáo viên
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item>
+                                        <Button size="small" onClick={handleTeacherModalOpen}>
+                                            <PersonAddIcon />
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                                <Divider />
+                                <Demo>
+                                    <List>
+                                        {lecturers.map((lecturer, index) => (
+                                            <ListItem key={index}>
+                                                <ListItemAvatar>
+                                                    <Avatar alt="Remy Sharp" src={Background} />
+                                                </ListItemAvatar>
+                                                <ListItemText primary={`${lecturer.firstname} ${lecturer.lastname}`} />
+                                            </ListItem>
+                                        ))}
+                                    </List>
+                                </Demo>
                             </Grid>
                         </Grid>
-                        <Divider />
-                        <Demo>
-                            <List>
-                                <ListItem>
-                                    <ListItemAvatar>
-                                        <Avatar alt="Remy Sharp" src={Background} />
-                                    </ListItemAvatar>
-                                    <ListItemText primary="Mỹ Trinh" />
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemAvatar>
-                                        <Avatar alt="Remy Sharp" src={Background} />
-                                    </ListItemAvatar>
-                                    <ListItemText primary="Khánh Duy" />
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemAvatar>
-                                        <Avatar alt="Remy Sharp" src={Background} />
-                                    </ListItemAvatar>
-                                    <ListItemText primary="Phương Anh" />
-                                </ListItem>
-                            </List>
-                        </Demo>
-                    </Grid>
-                </Grid>
-            </Box>
+                    </Box>
 
-            <InviteStudentModal url={classURL} open={openStudentModal} handleClose={handleStudentModalClose} />
-            <InviteTeacherModal open={openTeacherModal} handleClose={handleTeacherModalClose} />
+                    <Box sx={{ flexGrow: 1, width: '90%', marginTop: '30px' }}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <Grid container alignItems="center">
+                                    <Grid item xs>
+                                        <Typography gutterBottom variant="h5" component="div">
+                                            Sinh viên
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item>
+                                        <Button size="small" onClick={handleStudentModalOpen}>
+                                            <PersonAddIcon />
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                                <Divider />
+                                <Demo>
+                                    <List>
+                                        {students.map((student, index) => (
+                                            <ListItem key={index}>
+                                                <ListItemAvatar>
+                                                    <Avatar alt="Remy Sharp" src={Background} />
+                                                </ListItemAvatar>
+                                                <ListItemText primary={`${student.firstname} ${student.lastname}`} />
+                                            </ListItem>
+                                        ))}
+                                    </List>
+                                </Demo>
+                            </Grid>
+                        </Grid>
+                    </Box>
+
+                    <InviteStudentModal url={classURL} open={openStudentModal} handleClose={handleStudentModalClose} />
+                    <InviteTeacherModal open={openTeacherModal} handleClose={handleTeacherModalClose} />
+                </>
+            )}
         </>
     );
 }
