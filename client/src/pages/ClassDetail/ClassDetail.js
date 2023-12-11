@@ -1,7 +1,11 @@
 import MainLayout from 'layouts/MainLayout';
+import React from 'react';
+import TabPanel from './TabPanel'
 
-function ClassDetail() {
-    return <MainLayout>Class details</MainLayout>;
+export default function ClassDetail() {
+    return (
+        <MainLayout>
+            <TabPanel/>
+        </MainLayout>
+    );
 }
-
-export default ClassDetail;

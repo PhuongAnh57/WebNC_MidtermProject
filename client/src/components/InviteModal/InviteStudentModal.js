@@ -3,13 +3,13 @@ import { Navigate } from 'react-router';
 import classNames from 'classnames/bind';
 import axios from 'axios';
 
-import { Modal, Box, FormControl, Chip } from '@mui/material';
+import { Modal, Box, FormControl, Chip, responsiveFontSizes } from '@mui/material';
 import Button from '@mui/material/Button';
 import styles from './InviteModal.module.scss';
 
 const cx = classNames.bind(styles);
 
-function InviteModal({ open, handleClose }) {
+function InviteModal({ url, open, handleClose }) {
     const [values, setValues] = useState([]);
     const [currentValue, setCurrentValue] = useState('');
 
@@ -39,16 +39,19 @@ function InviteModal({ open, handleClose }) {
         // setInviteStates(tempStates);
     };
 
-    const handleInvite = (e) => {
+    const handleInvite = async (e) => {
         e.preventDefault();
+
+        // mock classid
         const data = {
             classID: '0',
             emails: [...values],
+            role: '3',
         };
 
         try {
-            const response = axios.post(
-                '/api/class/invite-students',
+            const response = await axios.post(
+                '/api/class/invite-members',
                 { data },
                 {
                     headers: {
@@ -59,6 +62,7 @@ function InviteModal({ open, handleClose }) {
 
             if (response.status === 200) {
                 console.log('Invited');
+                setValues([]);
             } else {
                 console.log('Something went wrong!');
             }
@@ -82,9 +86,7 @@ function InviteModal({ open, handleClose }) {
                     <div style={{ margin: 0, padding: '8px 0' }}>
                         <h6 style={{ margin: 0, fontSize: '16px' }}>Invite Link</h6>
                         <div className={cx('modal-content')}>
-                            <p id="child-modal-description">
-                                https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox/FMfcgzGwHxzNGVTjKLBjnVqhnJGCRXWQ
-                            </p>
+                            <p id="child-modal-description">{url}</p>
                             <Button>Copy</Button>
                         </div>
                         <FormControl className={cx('form-control')}>

@@ -57,7 +57,8 @@ DROP TABLE IF EXISTS invitations;
 
 CREATE TABLE invitations (
 	email VARCHAR (50) PRIMARY KEY,
-	accept_token VARCHAR ( 255 )  NOT NULL
+	accept_token VARCHAR ( 255 )  NOT NULL,
+	role VARCHAR (1) NOT NULL
 );
 
 ALTER TABLE classes ADD CONSTRAINT "FK_classes_accounts" FOREIGN KEY (lecturer_id) REFERENCES accounts (user_id);
@@ -71,6 +72,10 @@ ALTER TABLE access_tokens ADD CONSTRAINT "FK_access_tokens_accounts" FOREIGN KEY
 -- ALTER TABLE class_members DROP CONSTRAINT "FK_class_members_classes";
 
 -- INSERT INTO classes(class_id, lecturer_id, class_name, part, topic, room) VALUES ('0', '0', 'Test class', '', '', '')
+
+-- delete from classes where class_id = 0
+delete from class_members where id = 0
+delete from invitations where email = 'nhoklilom0102@gmail.com'
 
 -- delete from access_tokens where user_id = 0
 	

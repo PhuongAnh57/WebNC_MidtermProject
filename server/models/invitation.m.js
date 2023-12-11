@@ -14,14 +14,15 @@ module.exports = {
         return result;
     },
     addNewInvitation: async (invitation) => {
-        await db.one('INSERT INTO invitations(email, accept_token) VALUES($1, $2) RETURNING *', [
+        await db.one('INSERT INTO invitations(email, accept_token, role) VALUES($1, $2, $3) RETURNING *', [
             invitation.email,
             invitation.token,
+            invitation.role,
         ]);
     },
     //     return result;
     // },
-    // removeToken: async (id) => {
-    //     await db.none('DELETE FROM access_tokens WHERE user_id=$1', [id]);
-    // },
+    removeInvitation: async (email) => {
+        await db.none('DELETE FROM invitations WHERE email=$1', [email]);
+    },
 };

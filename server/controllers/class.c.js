@@ -35,7 +35,7 @@ exports.postCreateClass = async (req, res) => {
             topic,
             room,
         };
-        // console.log(newClass);
+
         const result = await classM.addNewClass(newClass);
     } catch (error) {
         console.log(error);
@@ -44,10 +44,10 @@ exports.postCreateClass = async (req, res) => {
 
 // invite students
 
-exports.postInviteStudents = async (req, res) => {
-    const { emails, classID } = req.body.data;
+exports.postInviteMembers = async (req, res) => {
+    const { emails, classID, role } = req.body.data;
 
-    if (!classID || !emails || !emails?.length) {
+    if (!classID || !emails || !emails.length || !role) {
         console.log('Invalid class ID or emails!');
         return res.status(400).json({ message: 'Invalid class ID or emails!' });
     }
@@ -58,8 +58,8 @@ exports.postInviteStudents = async (req, res) => {
         emails.map(async (email) => {
             const token = jwt.sign({ email }, process.env.INVITE_KEY);
 
-            await invitationM.addNewInvitation({ email, token });
-            await mailer.sendClassInvitaion(email, classInfo, token);
+            await invitationM.addNewInvitation({ email, token, role });
+            await mailer.sendClassInvitaion(email, classInfo, token, role);
         });
 
         res.status(200).json({ message: 'Invitations have been sent successfully' });
@@ -69,7 +69,7 @@ exports.postInviteStudents = async (req, res) => {
     }
 };
 
-exports.getClassData = async (req, res) => {
+exports.getCheckUserExistInClass = async (req, res) => {
     const { classID, userID } = req.params;
 
     if (!classID) {
@@ -111,10 +111,10 @@ exports.getClassData = async (req, res) => {
 };
 
 exports.postAddMemberToClass = async (req, res) => {
-    const { classData, user_id, role } = req.body.data;
+    const { classData, user, role } = req.body.data;
 
     try {
-        if (!classData || user_id === undefined || !role) {
+        if (!classData || !user || !role) {
             console.log('class data, user or role is invalid');
             return res.status(400).json({ message: 'Invalid data sent' });
         }
@@ -135,11 +135,13 @@ exports.postAddMemberToClass = async (req, res) => {
         const data = {
             id,
             ...classData,
-            member_id: user_id,
+            member_id: user.user_id,
             role,
         };
 
         await classM.addStudentIntoClass(data);
+        await invitationM.removeInvitation(user.email);
+
         res.status(200).json({ message: 'Add member to class successfully' });
     } catch (err) {
         console.log(err);

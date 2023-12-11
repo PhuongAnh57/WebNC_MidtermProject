@@ -14,7 +14,7 @@ import { Link } from 'react-router-dom';
 
 export default function MediaCard() {
     return (
-        <Link to="/class-detail" style={{ textDecoration: 'none', color: 'inherit' }}>
+        <Link to="/class/detail" style={{ textDecoration: 'none', color: 'inherit' }}>
             <Card sx={{ width: 345 }} style={{ marginRight: '16px', marginBottom: '16px' }}>
                 <CardMedia sx={{ height: 140 }} image={Background} title="image" />
                 <CardContent>

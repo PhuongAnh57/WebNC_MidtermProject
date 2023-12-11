@@ -15,12 +15,12 @@ router.post('/api/edit-profile', passport.authenticate('jwt', { session: false }
 router.post('/api/refresh_token', userC.postRefreshToken);
 
 // invite student
-router.post('/api/class/invite-students', passport.authenticate('jwt', { session: false }), classC.postInviteStudents);
+router.post('/api/class/invite-members', passport.authenticate('jwt', { session: false }), classC.postInviteMembers);
 
 router.get(
-    '/api/get-class/:classID/user/:userID',
+    '/api/check-user-class/:classID/user/:userID',
     passport.authenticate('jwt', { session: false }),
-    classC.getClassData,
+    classC.getCheckUserExistInClass,
 );
 
 router.post('/api/check-invitation', passport.authenticate('jwt', { session: false }), userC.checkInvitation);
