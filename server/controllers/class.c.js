@@ -184,7 +184,6 @@ exports.getCheckUserExistInClass = async (req, res) => {
 
 exports.postAddMemberToClass = async (req, res) => {
     const { classData, user, role } = req.body.data;
-    console.log(user);
 
     try {
         if (!classData || !user || !role) {

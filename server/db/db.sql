@@ -73,13 +73,13 @@ ALTER TABLE access_tokens ADD CONSTRAINT "FK_access_tokens_accounts" FOREIGN KEY
 
 -- INSERT INTO classes(class_id, lecturer_id, class_name, part, topic, room) VALUES ('0', '0', 'Test class', '', '', '')
 
--- delete from classes where class_id = 0
--- delete from class_members where id = 1
--- delete from invitations where email = 'nhoklilom0102@gmail.com'
+-- delete from classes where class_id = 1
+-- delete from class_members where id = 2
+-- delete from invitations where email = 'bkduy001@gmail.com'
 
--- delete from access_tokens where user_id = 0
+-- delete from access_tokens where user_id = 1
 	
--- delete from accounts where user_id = 0
+-- delete from accounts where user_id = 1
 
 -- delete from pending_users where user_id = 0
 

@@ -30,8 +30,6 @@ export default function Home() {
         }
     }, []);
 
-    console.log(classes);
-
     // Đọc thông tin người dùng từ cookie
     if (document.cookie) {
         const accessToken = document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*\=\s*([^;]*).*$)|^.*$/, '$1');
@@ -62,7 +60,8 @@ export default function Home() {
             <CreateClass open={open} onClose={handleClose} />
 
             <div style={{ display: 'flex', flexWrap: 'wrap', clear: 'both' }}>
-                {classes && classes.map((classDetail) => <CourseCard key={classDetail.class_id} classDetail={classDetail} />)}
+                {classes &&
+                    classes.map((classDetail) => <CourseCard key={classDetail.class_id} classDetail={classDetail} />)}
             </div>
         </MainLayout>
     );
