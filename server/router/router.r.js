@@ -32,4 +32,4 @@ router.post('/api/create-class', passport.authenticate('jwt', { session: false }
 router.get('/api/class/:classID', passport.authenticate('jwt', { session: false }), classC.getClassDetail);
 router.get('/api/all-members/:classID', passport.authenticate('jwt', { session: false }), classC.getAllMembers);
 
-module.exports = router;
+module.exports = router; 
