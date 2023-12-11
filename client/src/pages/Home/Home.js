@@ -62,7 +62,7 @@ export default function Home() {
             <CreateClass open={open} onClose={handleClose} />
 
             <div style={{ display: 'flex', flexWrap: 'wrap', clear: 'both' }}>
-                {classes && classes.map((Class) => <CourseCard key={Class.class_id} Class={Class} />)}
+                {classes && classes.map((classDetail) => <CourseCard key={classDetail.class_id} classDetail={classDetail} />)}
             </div>
         </MainLayout>
     );

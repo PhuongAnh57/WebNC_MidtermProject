@@ -12,14 +12,13 @@ import FolderIcon from '@mui/icons-material/Folder';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import { Link } from 'react-router-dom';
 
-export default function MediaCard({ Class }) {
+export default function MediaCard({ classDetail }) {
+    const role = classDetail.role === '3' ? 'Student' : 'Teacher';
+
     return (
-        <Link to={`/class/${Class.class_id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+        <Link to={`/class/${classDetail.class_id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
             <Card
                 sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
                     width: 345,
                     minHeight: 290,
                     marginRight: '16px',
@@ -29,18 +28,18 @@ export default function MediaCard({ Class }) {
                 <CardMedia sx={{ height: 140 }} image={Background} title="image" />
                 <CardContent sx={{ padding: '16px 16px 8px' }}>
                     <Typography gutterBottom variant="h5" component="div">
-                        {Class.class_name}
+                        {classDetail.class_name}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        {Class.part}
+                        {role}
                     </Typography>
                 </CardContent>
-                <CardActions style={{ float: 'right' }}>
-                    <IconButton color="primary" aria-label="add to shopping cart">
-                        <AssignmentIcon />
-                    </IconButton>
+                <CardActions style={{ flexDirection: 'row-reverse' }}>
                     <IconButton color="primary" aria-label="add to shopping cart">
                         <FolderIcon />
+                    </IconButton>
+                    <IconButton color="primary" aria-label="add to shopping cart">
+                        <AssignmentIcon />
                     </IconButton>
                 </CardActions>
             </Card>
