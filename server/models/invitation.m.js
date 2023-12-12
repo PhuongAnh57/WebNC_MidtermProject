@@ -23,6 +23,6 @@ module.exports = {
     //     return result;
     // },
     removeInvitation: async (email) => {
-        await db.none('DELETE FROM invitations WHERE email=$1', [email]);
+        await db.none('DELETE  FROM invitations WHERE email=$1', [email]);
     },
 };

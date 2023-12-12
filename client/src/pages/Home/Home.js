@@ -15,7 +15,6 @@ export default function Home() {
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-
     useEffect(() => {
         try {
             axios

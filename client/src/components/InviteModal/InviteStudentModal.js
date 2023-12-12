@@ -10,7 +10,7 @@ import styles from './InviteModal.module.scss';
 
 const cx = classNames.bind(styles);
 
-function InviteStudentModal({ url, open, handleClose }) {
+function InviteStudentModal({ classID, url, open, handleClose }) {
     const [values, setValues] = useState([]);
     const [currentValue, setCurrentValue] = useState('');
 
@@ -49,7 +49,7 @@ function InviteStudentModal({ url, open, handleClose }) {
 
         // mock classid
         const data = {
-            classID: '0',
+            classID: classID,
             emails: [...values],
             role: '3',
         };

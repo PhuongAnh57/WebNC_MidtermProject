@@ -72,6 +72,7 @@ module.exports = {
     },
 
     sendClassInvitaion: (email, classInfo, token, role) => {
+        console.log(role);
         const message = {
             from: process.env.USER,
             to: email,

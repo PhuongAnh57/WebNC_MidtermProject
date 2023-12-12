@@ -18,7 +18,6 @@ import GoogleIcon from '@mui/icons-material/Google';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AuthContext } from 'context/AuthProvider';
 import { LOGIN, SERVER_URL } from 'utils/constants';
-import { Reddit } from '@mui/icons-material';
 
 function Copyright(props) {
     return (
@@ -47,7 +46,7 @@ export default function LogIn() {
 
     if (localStorage.getItem('accessToken')) {
         if (localStorage.getItem('storedLink')) {
-            const storedLink = localStorage.getItem('storedLink').slice(21, -1);
+            const storedLink = localStorage.getItem('storedLink').split('http://localhost:3000')[1];
 
             return <Navigate to={storedLink} />;
         }
