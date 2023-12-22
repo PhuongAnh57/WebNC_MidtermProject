@@ -53,10 +53,7 @@ export default function BasicGrid({ classDetail }) {
                                 title={classDetail.class_name}
                                 subtitle={classDetail.part}
                                 actionIcon={
-                                    <IconButton
-                                        sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                                        // aria-label={`info about ${item.title}`}
-                                    >
+                                    <IconButton sx={{ color: 'rgba(255, 255, 255, 0.54)' }}>
                                         <InfoIcon />
                                     </IconButton>
                                 }
