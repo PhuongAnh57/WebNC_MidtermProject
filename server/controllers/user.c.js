@@ -6,6 +6,7 @@ const userM = require('../models/user.m');
 const pendingUserM = require('../models/pending_user.m');
 const mailer = require('../utils/mailer');
 const access_tokenM = require('../models/access_token.m');
+const { log } = require('console');
 
 exports.postSignup = async (req, res) => {
     const { firstName, lastName, username, password, email } = req.body.user;
@@ -130,7 +131,7 @@ exports.postLogin = async (req, res) => {
 
         try {
             const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
-                expiresIn: process.env.TOKEN_LIFE,
+                expiresIn: parseInt(process.env.TOKEN_LIFE),
             });
 
             const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, {
@@ -254,11 +255,11 @@ exports.postRefreshToken = async (req, res) => {
                     id: decodedValue.id,
                 };
 
-                const newToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
-                    expiresIn: process.env.TOKEN_LIFE,
+                const newAccessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+                    expiresIn: parseInt(process.env.TOKEN_LIFE),
                 });
 
-                res.json({ token: newToken });
+                res.json({ accessToken: newAccessToken });
             }
         });
     } catch (err) {
@@ -343,8 +344,6 @@ exports.postEditProfile = async (req, res) => {
             email: userData.email,
             address: userData.address,
         };
-
-        console.log('sf');
 
         await userM.editUser(userEdit);
 

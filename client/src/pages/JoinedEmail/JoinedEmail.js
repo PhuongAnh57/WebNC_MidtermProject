@@ -5,45 +5,53 @@ import { Box, Card, CardContent, Typography, CardActions, Button } from '@mui/ma
 
 import MainLayout from 'layouts/MainLayout';
 import LoadingSpinner from 'components/LoadingSpinner/LoadingSpinner';
+import { useSearchParams } from 'react-router-dom';
+import useAxiosPrivate from 'hooks/useAxiosPrivate';
 
-function JoinClassViaLink() {
-    const { classID } = useParams();
+function JoinedEmail() {
+    const { classID, token } = useParams();
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const [user, setUser] = useState({});
     const [classData, setClassData] = useState({});
     const [joined, setJoined] = useState(false);
     const [isLoading, setLoading] = useState(true);
+    const [isInvited, setIsInvited] = useState();
+    const axiosPrivate = useAxiosPrivate();
 
-    if (classID) {
+    if (classID && token) {
         const storedLink = window.location.href;
+        localStorage.setItem('accept_token', token);
         localStorage.setItem('storedLink', storedLink);
     }
 
     useEffect(() => {
         const loadAllData = async () => {
             try {
-                const loadUser = await axios.get('/api/get-profile', {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-                    },
-                });
+                const data = {
+                    accept_token: localStorage.getItem('accept_token'),
+                };
 
-                if (loadUser.data.message === 'User found') {
+                const loadUser = await axiosPrivate.post('/api/check-invitation', { data });
+
+                if (loadUser.data.message === 'User not invited') {
+                    // check if user email is equal to email in invitation
+                    setIsInvited(false);
+                    setLoading(false);
+                    return;
+                }
+
+                if (loadUser.data.message === 'User invited') {
+                    setIsInvited(true);
                     setUser(loadUser.data.userData);
                 }
 
-                const loadClass = await axios.get(
-                    `/api/check-user-class/${classID}/user/${loadUser.data.userData.id}`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem('accessToken')} `,
-                        },
-                    },
+                const loadClass = await axiosPrivate.get(
+                    `/api/check-user-class/${classID}/user/${loadUser.data.userData.user_id}`,
                 );
 
                 if (loadClass.status === 200) {
                     setClassData(loadClass.data.classData);
-                    console.log(loadClass.data.classData.joined);
 
                     if (loadClass.data.classData.joined) {
                         setJoined(true);
@@ -58,7 +66,7 @@ function JoinClassViaLink() {
             }
         };
 
-        if (localStorage.getItem('accessToken')) {
+        if (localStorage.getItem('accessToken') && !isInvited) {
             loadAllData();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -68,6 +76,11 @@ function JoinClassViaLink() {
         return <Navigate to="/login" />;
     }
 
+    if (isInvited === false) {
+        console.log(isInvited);
+        return <Navigate to="/home" />;
+    }
+
     if (joined) {
         localStorage.removeItem('classID');
         localStorage.removeItem('acceptToken');
@@ -75,14 +88,14 @@ function JoinClassViaLink() {
     }
 
     const handleAddIntoClass = () => {
-        if (!classID) {
+        if (!classID || !token) {
             console.log('classid or token not found');
         }
 
         const data = {
             user,
             classData,
-            role: '3',
+            role: searchParams.get('role'),
         };
 
         try {
@@ -124,10 +137,10 @@ function JoinClassViaLink() {
             >
                 <Card sx={{ maxWidth: 400, textAlign: 'center' }}>
                     <CardContent>
-                        <h3 style={{ margin: 0, textAlign: 'left', fontWeight: 400 }}>Tham gia lớp học này?</h3>
+                        <h3 style={{ margin: 0, textAlign: 'left', fontWeight: 400 }}>Tham gia lớp học?</h3>
                         <Typography style={{ margin: 0, marginTop: 8 }}>
-                            Bạn sẽ tham gia lớp <strong>{classData.class_name}</strong> với tư cách học sinh. Bạn đang
-                            đăng nhập với tài khoản
+                            Bạn được mời tham gia lớp <strong>{classData.class_name}</strong>. Bạn đang đăng nhập với
+                            tài khoản
                             <strong>
                                 {' '}
                                 {user.username} ({user.email})
@@ -148,4 +161,4 @@ function JoinClassViaLink() {
     return <>{isLoading ? <LoadingSpinner /> : renderLayout}</>;
 }
 
-export default JoinClassViaLink;
+export default JoinedEmail;

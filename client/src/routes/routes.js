@@ -8,7 +8,7 @@ import HomePage from 'pages/Home/Home';
 import SignUpPage from 'pages/SignUp/SignUp';
 import LogInPage from 'pages/LogIn/LogIn';
 import EditAccountPage from 'pages/EditAccount';
-import EmailActivated from 'pages/EmailActivated/EmailActivated';
+import EmailActivated from 'pages/ActivateAccount/ActivateAccount';
 import ClassDetailPage from 'pages/ClassDetail/ClassDetail';
 
 const publicRoutes = [

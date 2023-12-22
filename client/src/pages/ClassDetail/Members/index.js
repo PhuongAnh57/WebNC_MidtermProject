@@ -18,6 +18,7 @@ import Background from '../../../assets/images/classroom.jpg';
 import InviteStudentModal from 'components/InviteModal/InviteStudentModal';
 import InviteTeacherModal from 'components/InviteModal/InviteTeacherModal';
 import LoadingSpinner from 'components/LoadingSpinner/LoadingSpinner';
+import useAxiosPrivate from 'hooks/useAxiosPrivate';
 
 const Demo = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
@@ -30,22 +31,22 @@ export default function InteractiveList({ classDetail }) {
     const [students, setStudents] = useState([]);
     const [classURL, setClassURL] = useState('');
     const [isLoading, setIsLoading] = useState(true);
+    const axiosPrivate = useAxiosPrivate();
 
     const currentURL = window.location.href;
     const classID = currentURL.split('/').pop();
 
     useEffect(() => {
-        axios
-            .get(`/api/all-members/${classID}`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-                },
-            })
-            .then((response) => {
+        const getAllMembers = async () => {
+            await axiosPrivate.get(`/api/all-members/${classID}`).then((response) => {
                 setLecturers(response.data.lecturerData);
                 setStudents(response.data.studentData);
                 setIsLoading(false);
             });
+        };
+
+        getAllMembers();
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

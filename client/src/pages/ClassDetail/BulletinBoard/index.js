@@ -7,7 +7,6 @@ import background from '../../../assets/images/classroom.jpg';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
-import ListSubheader from '@mui/material/ListSubheader';
 import IconButton from '@mui/material/IconButton';
 import InfoIcon from '@mui/icons-material/Info';
 import ListItem from '@mui/material/ListItem';
@@ -36,28 +35,34 @@ export default function BasicGrid({ classDetail }) {
             <Grid container spacing={2}>
                 <Grid item xs={12}>
                     <Item>
-                        <ImageList sx={{ width: '200%', height: 300 }}>
-                            <ImageListItem>
-                                <img
-                                    // srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                                    src={background}
-                                    alt=""
-                                    loading="lazy"
-                                />
-                                <ImageListItemBar
-                                    title={classDetail.class_name}
-                                    subtitle={classDetail.part}
-                                    actionIcon={
-                                        <IconButton
-                                            sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                                            // aria-label={`info about ${item.title}`}
-                                        >
-                                            <InfoIcon />
-                                        </IconButton>
-                                    }
-                                />
-                            </ImageListItem>
-                        </ImageList>
+                        {/* <ImageList sx={{ width: '200%', height: 300 }}> */}
+                        <ImageListItem>
+                            <img
+                                // srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                                src={background}
+                                alt="background"
+                                loading="lazy"
+                                style={{
+                                    width: '100%',
+                                    height: '300px',
+                                    objectFit: 'cover',
+                                    objectPosition: '100% 20%',
+                                }}
+                            />
+                            <ImageListItemBar
+                                title={classDetail.class_name}
+                                subtitle={classDetail.part}
+                                actionIcon={
+                                    <IconButton
+                                        sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                                        // aria-label={`info about ${item.title}`}
+                                    >
+                                        <InfoIcon />
+                                    </IconButton>
+                                }
+                            />
+                        </ImageListItem>
+                        {/* </ImageList> */}
                     </Item>
                 </Grid>
                 <Grid item xs={3}>

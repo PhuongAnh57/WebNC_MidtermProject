@@ -6,6 +6,7 @@ import axios from 'axios';
 import { Modal, Box, FormControl, Chip } from '@mui/material';
 import Button from '@mui/material/Button';
 import styles from './InviteModal.module.scss';
+import { axiosPrivate } from 'api/axios';
 
 const cx = classNames.bind(styles);
 
@@ -50,15 +51,7 @@ function InviteTeacherModal({ classID, open, handleClose }) {
         console.log(data);
 
         try {
-            const response = await axios.post(
-                '/api/class/invite-members',
-                { data },
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-                    },
-                },
-            );
+            const response = await axiosPrivate.post('/api/class/invite-members', { data });
 
             if (response.status === 200) {
                 console.log('Invited');

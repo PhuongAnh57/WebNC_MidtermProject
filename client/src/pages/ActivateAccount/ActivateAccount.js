@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import PageNotFound from 'pages/PageNotFound/PageNotFound';
 
-function EmailActivated() {
+function ActivateAccount() {
     const [validUrl, setValidUrl] = useState(true);
     const params = useParams();
 
@@ -19,7 +19,7 @@ function EmailActivated() {
         const handleEmailActivation = async () => {
             try {
                 const response = await axios.get(`/api/user/email-confirm/${params.token}`);
-                console.log(response.status);
+
                 if (response.status === 200) {
                     setValidUrl(true);
                 } else {
@@ -60,4 +60,4 @@ function EmailActivated() {
     );
 }
 
-export default EmailActivated;
+export default ActivateAccount;

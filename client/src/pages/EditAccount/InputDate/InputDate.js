@@ -7,7 +7,7 @@ export default function InputDate({ dateOfBirth, changeDate }) {
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
             <DemoContainer components={['DatePicker', 'DatePicker']}>
-                <DatePicker label="Date of birth" value={dateOfBirth} onChange={(newValue) => changeDate(newValue)} />
+                <DatePicker label="Ngày sinh" value={dateOfBirth} onChange={(newValue) => changeDate(newValue)} />
             </DemoContainer>
         </LocalizationProvider>
     );

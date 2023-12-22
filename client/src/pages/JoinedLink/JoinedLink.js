@@ -1,68 +1,46 @@
 import { useEffect, useState } from 'react';
-import { Navigate, useLocation, useParams } from 'react-router';
+import { Navigate, useParams } from 'react-router';
 import axios from 'axios';
 import { Box, Card, CardContent, Typography, CardActions, Button } from '@mui/material';
 
 import MainLayout from 'layouts/MainLayout';
 import LoadingSpinner from 'components/LoadingSpinner/LoadingSpinner';
-import { useSearchParams } from 'react-router-dom';
+import useAxiosPrivate from 'hooks/useAxiosPrivate';
 
-function JoinClassViaEmail() {
-    const { classID, token } = useParams();
-    const [searchParams, setSearchParams] = useSearchParams();
+function JoinedLink() {
+    const { classID } = useParams();
 
     const [user, setUser] = useState({});
     const [classData, setClassData] = useState({});
     const [joined, setJoined] = useState(false);
     const [isLoading, setLoading] = useState(true);
-    const [isInvited, setIsInvited] = useState();
+    const axiosPrivate = useAxiosPrivate();
 
-    if (classID && token) {
+    if (classID) {
         const storedLink = window.location.href;
-        localStorage.setItem('accept_token', token);
         localStorage.setItem('storedLink', storedLink);
     }
 
     useEffect(() => {
+        const controller = new AbortController();
+        const signal = controller.signal;
+
         const loadAllData = async () => {
             try {
-                const data = {
-                    accept_token: localStorage.getItem('accept_token'),
-                };
+                const loadUser = await axiosPrivate.get('/api/get-profile', { signal });
 
-                const loadUser = await axios.post(
-                    '/api/check-invitation',
-                    { data },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-                        },
-                    },
-                );
-
-                if (loadUser.data.message === 'User not invited') {
-                    // check if user email is equal to email in invitation
-                    setIsInvited(false);
-                    setLoading(false);
-                    return;
-                }
-
-                if (loadUser.data.message === 'User invited') {
-                    setIsInvited(true);
+                if (loadUser.data.message === 'User found') {
                     setUser(loadUser.data.userData);
                 }
 
-                const loadClass = await axios.get(
-                    `/api/check-user-class/${classID}/user/${loadUser.data.userData.user_id}`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem('accessToken')} `,
-                        },
-                    },
+                const loadClass = await axiosPrivate.get(
+                    `/api/check-user-class/${classID}/user/${loadUser.data.userData.id}`,
+                    { signal },
                 );
 
                 if (loadClass.status === 200) {
                     setClassData(loadClass.data.classData);
+                    console.log(loadClass.data.classData.joined);
 
                     if (loadClass.data.classData.joined) {
                         setJoined(true);
@@ -71,13 +49,17 @@ function JoinClassViaEmail() {
                     }
                 }
                 setLoading(false);
+
+                return () => {
+                    controller.abort();
+                };
             } catch (err) {
                 console.log(err);
                 setLoading(false);
             }
         };
 
-        if (localStorage.getItem('accessToken') && !isInvited) {
+        if (localStorage.getItem('accessToken')) {
             loadAllData();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -87,11 +69,6 @@ function JoinClassViaEmail() {
         return <Navigate to="/login" />;
     }
 
-    if (isInvited === false) {
-        console.log(isInvited);
-        return <Navigate to="/home" />;
-    }
-
     if (joined) {
         localStorage.removeItem('classID');
         localStorage.removeItem('acceptToken');
@@ -99,14 +76,14 @@ function JoinClassViaEmail() {
     }
 
     const handleAddIntoClass = () => {
-        if (!classID || !token) {
+        if (!classID) {
             console.log('classid or token not found');
         }
 
         const data = {
             user,
             classData,
-            role: searchParams.get('role'),
+            role: '3',
         };
 
         try {
@@ -148,10 +125,10 @@ function JoinClassViaEmail() {
             >
                 <Card sx={{ maxWidth: 400, textAlign: 'center' }}>
                     <CardContent>
-                        <h3 style={{ margin: 0, textAlign: 'left', fontWeight: 400 }}>Tham gia lớp học?</h3>
+                        <h3 style={{ margin: 0, textAlign: 'left', fontWeight: 400 }}>Tham gia lớp học này?</h3>
                         <Typography style={{ margin: 0, marginTop: 8 }}>
-                            Bạn được mời tham gia lớp <strong>{classData.class_name}</strong>. Bạn đang đăng nhập với
-                            tài khoản
+                            Bạn sẽ tham gia lớp <strong>{classData.class_name}</strong> với tư cách học sinh. Bạn đang
+                            đăng nhập với tài khoản
                             <strong>
                                 {' '}
                                 {user.username} ({user.email})
@@ -172,4 +149,4 @@ function JoinClassViaEmail() {
     return <>{isLoading ? <LoadingSpinner /> : renderLayout}</>;
 }
 
-export default JoinClassViaEmail;
+export default JoinedLink;

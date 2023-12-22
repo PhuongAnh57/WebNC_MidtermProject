@@ -15,6 +15,7 @@ import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
+import useAxiosPrivate from 'hooks/useAxiosPrivate';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -29,30 +30,46 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function FullScreenDialog({ open, onClose }) {
-    const [name, setName] = useState('');
-    const [part, setPart] = useState('');
-    const [topic, setTopic] = useState('');
-    const [room, setRoom] = useState('');
+    const [classData, setClassData] = useState({
+        name: '',
+        part: '',
+        topic: '',
+        room: '',
+    });
 
     const currentURL = window.location.href;
     const classID = currentURL.split('/').pop();
+    const axiosPrivate = useAxiosPrivate();
+
+    const handleChange = (e) => {
+        setClassData((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value,
+        }));
+    };
 
     useEffect(() => {
         if (open) {
-            axios
-                .get(`/api/class/${classID}`, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-                    },
-                })
-                .then((response) => {
-                    const classDetail = response.data.Class;
+            const getClassData = async () => {
+                axiosPrivate
+                    .get(`/api/class/${classID}`, {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                        },
+                    })
+                    .then((response) => {
+                        const classDetail = response.data.Class;
 
-                    setName(classDetail.class_name);
-                    setPart(classDetail.part);
-                    setTopic(classDetail.topic);
-                    setRoom(classDetail.room);
-                });
+                        setClassData({
+                            name: classDetail.class_name,
+                            part: classDetail.part,
+                            topic: classDetail.topic,
+                            room: classDetail.room,
+                        });
+                    });
+            };
+
+            getClassData();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [open]);
@@ -91,32 +108,32 @@ export default function FullScreenDialog({ open, onClose }) {
                                     id="name"
                                     name="name"
                                     label="Tên lớp học"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
+                                    value={classData.name}
+                                    onChange={handleChange}
                                     variant="filled"
                                 />
                                 <TextField
                                     id="part"
                                     name="part"
                                     label="Phần"
-                                    value={part}
-                                    onChange={(e) => setPart(e.target.value)}
+                                    value={classData.part}
+                                    onChange={handleChange}
                                     variant="filled"
                                 />
                                 <TextField
                                     id="topic"
                                     name="topic"
                                     label="Chủ đề"
-                                    value={topic}
-                                    onChange={(e) => setTopic(e.target.value)}
+                                    value={classData.topic}
+                                    onChange={handleChange}
                                     variant="filled"
                                 />
                                 <TextField
                                     id="room"
                                     name="room"
                                     label="Phòng"
-                                    value={room}
-                                    onChange={(e) => setRoom(e.target.value)}
+                                    value={classData.room}
+                                    onChange={handleChange}
                                     variant="filled"
                                 />
                             </Box>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
@@ -12,8 +12,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import Stack from '@mui/material/Stack';
 import ClassInfo from '../ClassInfo';
 import Members from '../Members';
-import { AuthContext } from 'context/AuthProvider';
-
+import useAxiosPrivate from 'hooks/useAxiosPrivate';
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
@@ -48,10 +47,10 @@ function a11yProps(index) {
 }
 
 export default function BasicTabs({ classID }) {
-    // const { user } = useContext(AuthContext);
     const [value, setValue] = React.useState(0);
     const [open, setOpen] = useState(false);
     const [classDetail, setClassDetail] = useState({});
+    const axiosPrivate = useAxiosPrivate();
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -60,17 +59,11 @@ export default function BasicTabs({ classID }) {
     const handleClose = () => setOpen(false);
 
     useEffect(() => {
-        axios
-            .get(`/api/class/${classID}`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-                },
-            })
-            .then((response) => {
-                const classDetail = response.data.Class;
+        axiosPrivate.get(`/api/class/${classID}`).then((response) => {
+            const classDetail = response.data.Class;
 
-                setClassDetail(classDetail);
-            });
+            setClassDetail(classDetail);
+        });
     }, [classID]);
 
     return (
