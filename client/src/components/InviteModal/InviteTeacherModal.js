@@ -9,7 +9,7 @@ import styles from './InviteModal.module.scss';
 
 const cx = classNames.bind(styles);
 
-function InviteTeacherModal({ open, handleClose }) {
+function InviteTeacherModal({ classID, open, handleClose }) {
     const [values, setValues] = useState([]);
     const [currentValue, setCurrentValue] = useState('');
 
@@ -34,7 +34,7 @@ function InviteTeacherModal({ open, handleClose }) {
         // let tempStates = [...inviteStates];
         tempValues.splice(index, 1);
         // tempStates.splice(index, 1);
-        console.log(item);
+
         setValues(tempValues);
         // setInviteStates(tempStates);
     };
@@ -42,10 +42,12 @@ function InviteTeacherModal({ open, handleClose }) {
     const handleInvite = async (e) => {
         e.preventDefault();
         const data = {
-            classID: '0',
+            classID: classID,
             emails: [...values],
             role: '2',
         };
+
+        console.log(data);
 
         try {
             const response = await axios.post(

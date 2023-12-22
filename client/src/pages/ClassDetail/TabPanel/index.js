@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
@@ -12,6 +12,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import Stack from '@mui/material/Stack';
 import ClassInfo from '../ClassInfo';
 import Members from '../Members';
+import { AuthContext } from 'context/AuthProvider';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -47,6 +48,7 @@ function a11yProps(index) {
 }
 
 export default function BasicTabs({ classID }) {
+    // const { user } = useContext(AuthContext);
     const [value, setValue] = React.useState(0);
     const [open, setOpen] = useState(false);
     const [classDetail, setClassDetail] = useState({});

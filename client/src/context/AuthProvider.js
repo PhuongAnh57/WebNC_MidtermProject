@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useReducer, useState } from 'react';
+import React, { createContext, useReducer } from 'react';
 import { LOGIN, LOGOUT } from 'utils/constants';
 
 export const AuthContext = createContext();
@@ -15,6 +15,8 @@ const reducer = (state, action) => {
             localStorage.setItem('user', JSON.stringify(action.payload.user));
             localStorage.setItem('accessToken', action.payload.accessToken);
             localStorage.setItem('refreshToken', action.payload.refreshToken);
+            console.log(action.payload);
+
             return {
                 ...state,
                 user: action.payload.user,
@@ -35,9 +37,9 @@ const reducer = (state, action) => {
 };
 
 function AuthProvider({ children }) {
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const [user, dispatch] = useReducer(reducer, initialState);
 
-    return <AuthContext.Provider value={{ state, dispatch }}>{children}</AuthContext.Provider>;
+    return <AuthContext.Provider value={{ user, dispatch }}>{children}</AuthContext.Provider>;
 }
 
 export default AuthProvider;

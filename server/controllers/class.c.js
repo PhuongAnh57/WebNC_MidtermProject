@@ -4,7 +4,6 @@ const mailer = require('../utils/mailer');
 const invitationM = require('../models/invitation.m');
 const classM = require('../models/class.m');
 const userM = require('../models/user.m');
-const { authenticate } = require('passport');
 
 exports.getAllClasses = async (req, res) => {
     const authHeader = req.headers['authorization'];
@@ -23,10 +22,6 @@ exports.getAllClasses = async (req, res) => {
     });
 
     try {
-        // const classes = await classM.getAllClasses();
-
-        // const hasClass = classes.find((c) => c.lecturer_id === userID);
-
         const ownedClasses = await classM.getOwnedClasses(userID);
         const joinedClasses = await classM.getJoinedClasses(userID);
 
@@ -74,7 +69,7 @@ exports.postCreateClass = async (req, res) => {
             topic,
             room,
         };
-        // console.log(newClass);
+
         const nClass = await classM.addNewClass(newClass);
 
         //add lecturer to table class_members
@@ -117,7 +112,7 @@ exports.getClassDetail = async (req, res) => {
 exports.postInviteMembers = async (req, res) => {
     const { emails, classID, role } = req.body.data;
 
-    if (!classID || !emails || !emails.length || !role) {
+    if (classID === undefined || !emails || !emails.length || !role) {
         console.log('Invalid class ID or emails!');
         return res.status(400).json({ message: 'Invalid class ID or emails!' });
     }
@@ -142,9 +137,7 @@ exports.postInviteMembers = async (req, res) => {
 exports.getCheckUserExistInClass = async (req, res) => {
     const { classID, userID } = req.params;
 
-    console.log(classID, userID);
-
-    if (!classID) {
+    if (classID == undefined) {
         console.log('Undefined class id');
         return res.status(400).json({ message: 'Class ID is undefined' });
     }
@@ -184,7 +177,6 @@ exports.getCheckUserExistInClass = async (req, res) => {
 
 exports.postAddMemberToClass = async (req, res) => {
     const { classData, user, role } = req.body.data;
-    console.log(user);
 
     try {
         if (!classData || !user || !role) {
@@ -208,11 +200,9 @@ exports.postAddMemberToClass = async (req, res) => {
         const data = {
             id,
             ...classData,
-            member_id: user.user_id || user.id,
+            member_id: user.user_id !== undefined ? user.user_id.toString() : user.id.toString(),
             role,
         };
-
-        console.log(data);
 
         await classM.addStudentIntoClass(data);
         await invitationM.removeInvitation(user.email);

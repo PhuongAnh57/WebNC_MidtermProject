@@ -15,7 +15,6 @@ export default function Home() {
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-
     useEffect(() => {
         try {
             axios
@@ -29,8 +28,6 @@ export default function Home() {
             console.log(err);
         }
     }, []);
-
-    console.log(classes);
 
     // Đọc thông tin người dùng từ cookie
     if (document.cookie) {
@@ -62,7 +59,8 @@ export default function Home() {
             <CreateClass open={open} onClose={handleClose} />
 
             <div style={{ display: 'flex', flexWrap: 'wrap', clear: 'both' }}>
-                {classes && classes.map((classDetail) => <CourseCard key={classDetail.class_id} classDetail={classDetail} />)}
+                {classes &&
+                    classes.map((classDetail) => <CourseCard key={classDetail.class_id} classDetail={classDetail} />)}
             </div>
         </MainLayout>
     );

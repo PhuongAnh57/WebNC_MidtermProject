@@ -160,8 +160,17 @@ export default function InteractiveList({ classDetail }) {
                         </Grid>
                     </Box>
 
-                    <InviteStudentModal url={classURL} open={openStudentModal} handleClose={handleStudentModalClose} />
-                    <InviteTeacherModal open={openTeacherModal} handleClose={handleTeacherModalClose} />
+                    <InviteStudentModal
+                        url={classURL}
+                        classID={classDetail.class_id}
+                        open={openStudentModal}
+                        handleClose={handleStudentModalClose}
+                    />
+                    <InviteTeacherModal
+                        classID={classDetail.class_id}
+                        open={openTeacherModal}
+                        handleClose={handleTeacherModalClose}
+                    />
                 </>
             )}
         </>

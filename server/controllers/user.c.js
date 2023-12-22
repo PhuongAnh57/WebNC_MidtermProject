@@ -99,7 +99,7 @@ exports.getEmailActivationConfirmation = async (req, res) => {
         await userM.addNewUser(newUser);
         await pendingUserM.removeUser(pendingUserExists.user_id);
 
-        res.status(200).json({ message: `User ${userExists.username} has been activated` });
+        res.status(200).json({ message: `User ${pendingUserExists.username} has been activated` });
     } catch (err) {
         console.log(err);
         res.status(400).json({ message: 'User cannot be activated' });
