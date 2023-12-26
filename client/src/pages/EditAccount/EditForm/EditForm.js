@@ -24,15 +24,13 @@ export default function EditForm() {
         setDateOfBirth(date);
     };
 
-    console.log('date after changing ', dateOfBirth.toISOString());
-
     const handleChangeGender = (gender) => {
         setGender(gender);
     };
 
     useEffect(() => {
         axios
-            .get('/api/edit-profile', {
+            .get('/api/get-profile', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('accessToken')} `,
                 },
@@ -56,6 +54,10 @@ export default function EditForm() {
             });
     }, []);
 
+    if (!localStorage.getItem('accessToken')) {
+        return <Navigate to="/" />;
+    }
+
     if (!userExists) {
         return <Navigate to="*" />;
     }
@@ -72,7 +74,7 @@ export default function EditForm() {
 
         axios
             .post(
-                '/edit-profile',
+                '/api/edit-profile',
                 { userData },
                 {
                     headers: {

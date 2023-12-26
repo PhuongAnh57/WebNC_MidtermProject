@@ -1,4 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import * as React from 'react';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import AppBar from '@mui/material/AppBar';
@@ -12,9 +15,6 @@ import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
-import axios from 'axios';
-import { Navigate } from 'react-router-dom';
-
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -34,35 +34,29 @@ export default function FullScreenDialog({ open, onClose }) {
     const [topic, setTopic] = useState('');
     const [room, setRoom] = useState('');
 
-    const [userExists, setUserExists] = useState(true);
+    const currentURL = window.location.href;
+    const classID = currentURL.split('/').pop();
 
     useEffect(() => {
-        axios
-            .get('/api/class-info', {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('accessToken')} `,
-                },
-            })
-            .then((response) => {
-                if (response.data.message === 'User not found') {
-                    setUserExists(false);
-                }
+        if (open) {
+            axios
+                .get(`/api/class/${classID}`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                    },
+                })
+                .then((response) => {
+                    const classDetail = response.data.Class;
 
-                if (response.data.message === 'User found') {
-                    const classData = response.data.userData;
+                    setName(classDetail.class_name);
+                    setPart(classDetail.part);
+                    setTopic(classDetail.topic);
+                    setRoom(classDetail.room);
+                });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [open]);
 
-                    setName(classData.class_name);
-                    setPart(classData.part);
-                    setTopic(classData.topic);
-                    setRoom(classData.room);
-                    setUserExists(true);
-                }
-            });
-    }, []);
-
-    if (!userExists) {
-        return <Navigate to="*" />;
-    }
     return (
         <React.Fragment>
             <Dialog fullScreen open={open} onClose={onClose} TransitionComponent={Transition}>
@@ -79,6 +73,7 @@ export default function FullScreenDialog({ open, onClose }) {
                         </Button>
                     </Toolbar>
                 </AppBar>
+                <Box sx={{ width: '50%', mx: 'auto', marginTop: '20px' }} />
                 <Box sx={{ width: '50%', mx: 'auto', marginTop: '20px' }}>
                     <Stack spacing={2}>
                         <Item>
@@ -97,7 +92,7 @@ export default function FullScreenDialog({ open, onClose }) {
                                     name="name"
                                     label="Tên lớp học"
                                     value={name}
-                                    // onChange={(e) => setName(e.target.value)}
+                                    onChange={(e) => setName(e.target.value)}
                                     variant="filled"
                                 />
                                 <TextField
@@ -105,7 +100,7 @@ export default function FullScreenDialog({ open, onClose }) {
                                     name="part"
                                     label="Phần"
                                     value={part}
-                                    // onChange={(e) => setPart(e.target.value)}
+                                    onChange={(e) => setPart(e.target.value)}
                                     variant="filled"
                                 />
                                 <TextField
@@ -113,7 +108,7 @@ export default function FullScreenDialog({ open, onClose }) {
                                     name="topic"
                                     label="Chủ đề"
                                     value={topic}
-                                    // onChange={(e) => setTopic(e.target.value)}
+                                    onChange={(e) => setTopic(e.target.value)}
                                     variant="filled"
                                 />
                                 <TextField
@@ -121,7 +116,7 @@ export default function FullScreenDialog({ open, onClose }) {
                                     name="room"
                                     label="Phòng"
                                     value={room}
-                                    // onChange={(e) => setRoom(e.target.value)}
+                                    onChange={(e) => setRoom(e.target.value)}
                                     variant="filled"
                                 />
                             </Box>

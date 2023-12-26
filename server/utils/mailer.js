@@ -54,4 +54,35 @@ module.exports = {
 
         return sendEmail(message);
     },
+
+    sendResetPasswordEmail: (user, token) => {
+        const message = {
+            from: process.env.USER,
+            to: user.email,
+            subject: 'Reset your Classroom password',
+            html: `
+            <h3>Hello ${user.username} </h3>
+            <p>Click on the link below to reset your password: </p>
+            <a target="_" href="${process.env.CLIENT_URL}/api/user/password-reset/${token}">Reset Password Link</a>
+            <p>Best,</p>
+            <p>Your Classroom Team</p>`,
+        };
+
+        return sendEmail(message);
+    },
+
+    sendClassInvitaion: (email, classInfo, token, role) => {
+        console.log(role);
+        const message = {
+            from: process.env.USER,
+            to: email,
+            subject: `Joining Mail`,
+            html: `
+            <h3>You are invited to join ${classInfo.class_name}</h3>
+            <p>Click on the link below to enter the class: </p>
+            <a target="_" href="${process.env.CLIENT_URL}/api/class/${classInfo.class_id}/invite/accept-token/${token}?role=${role}">Join in</a>`,
+        };
+
+        return sendEmail(message);
+    },
 };

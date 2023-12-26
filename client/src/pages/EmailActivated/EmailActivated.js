@@ -31,6 +31,7 @@ function EmailActivated() {
         };
 
         handleEmailActivation();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     //

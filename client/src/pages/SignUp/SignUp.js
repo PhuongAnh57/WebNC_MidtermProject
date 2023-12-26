@@ -44,19 +44,17 @@ export default function SignUp() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
 
         const user = {
-            firstName: data.get('firstName'),
-            lastName: data.get('lastName'),
-            username: data.get('username'),
-            password: data.get('password'),
-            email: data.get('email'),
+            firstName,
+            lastName,
+            username,
+            password,
+            email,
         };
 
         try {
             await axios.post('/api/signup', { user }).then((response) => {
-                console.log(response.status);
                 if (response.status === 200) {
                     return setEmailActivation(true);
                 }
@@ -67,17 +65,10 @@ export default function SignUp() {
                 }
             });
         } catch (err) {
-            console.log(err);
+            console.log('err', err);
+            setAlreadyExists(true);
         }
     };
-
-    if (alreadyExists) {
-        setFirstName('');
-        setLastName('');
-        setUsername('');
-        setPassword('');
-        setEmail('');
-    }
 
     if (localStorage.getItem('accessToken')) {
         return <Navigate to="/" />;

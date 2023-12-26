@@ -49,29 +49,39 @@ CREATE TABLE class_members (
 	id INT PRIMARY KEY,
 	class_id INT NOT NULL,
 	member_id INT NOT NULL,
-	role VARCHAR(10) NOT NULL,
-	accept_token VARCHAR ( 100 )  NOT NULL
+	role VARCHAR(10) NOT NULL
+-- 	accept_token VARCHAR ( 100 )  NOT NULL
 );
 
 DROP TABLE IF EXISTS invitations;
 
 CREATE TABLE invitations (
 	email VARCHAR (50) PRIMARY KEY,
-	accept_token VARCHAR ( 100 )  NOT NULL
+	accept_token VARCHAR ( 255 )  NOT NULL,
+	role VARCHAR (1) NOT NULL
 );
 
 ALTER TABLE classes ADD CONSTRAINT "FK_classes_accounts" FOREIGN KEY (lecturer_id) REFERENCES accounts (user_id);
 ALTER TABLE class_members ADD CONSTRAINT "FK_class_members_accounts" FOREIGN KEY (member_id) REFERENCES accounts (user_id);
 ALTER TABLE class_members ADD CONSTRAINT "FK_class_members_classes" FOREIGN KEY (class_id) REFERENCES classes (class_id);
+
 ALTER TABLE access_tokens ADD CONSTRAINT "FK_access_tokens_accounts" FOREIGN KEY (user_id) REFERENCES accounts (user_id);
 
--- ALTER TABLE classes DROP CONSTRAINT FK_classes_accounts;
--- ALTER TABLE class_members DROP CONSTRAINT FK_class_members_accounts;
--- ALTER TABLE class_members DROP CONSTRAINT FK_class_members_classes;
+-- ALTER TABLE classes DROP CONSTRAINT "FK_classes_accounts";
+-- ALTER TABLE class_members DROP CONSTRAINT "FK_class_members_accounts";
+-- ALTER TABLE class_members DROP CONSTRAINT "FK_class_members_classes";
 
--- delete from access_tokens where user_id = 0
+-- INSERT INTO classes(class_id, lecturer_id, class_name, part, topic, room) VALUES ('0', '0', 'Test class', '', '', '')
+
+delete from classes where class_id = 0
+
+
+delete from class_members where id = 1
+delete from invitations where email = 'bkdhcmus@gmail.com'
+
+-- delete from access_tokens where user_id = 1
 	
--- delete from accounts where user_id = 0
+delete from accounts where user_id = 2
 
 -- delete from pending_users where user_id = 0
 
