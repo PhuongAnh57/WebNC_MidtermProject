@@ -48,6 +48,13 @@ module.exports = {
         ]);
         return result;
     },
+    getMemberByEmail: async (classID, email) => {
+        const result = await db.one(
+            'SELECT * FROM class_members cm JOIN accounts acc on cm.member_id = acc.user_id WHERE class_id=$1 and email =$2',
+            [classID, email],
+        );
+        return result;
+    },
     addStudentIntoClass: async (data) => {
         const result = await db.one(
             'INSERT INTO class_members(id, class_id, member_id, role) VALUES($1, $2, $3, $4) RETURNING *',

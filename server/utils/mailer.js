@@ -144,7 +144,7 @@ module.exports = {
             >       
                 <div
                     id="header" style="padding: 16px; background-color: #E5F6FD;">
-                    <h1 style="fontWeight: 700; margin: 0;">
+                    <h1 style="font-weight: 700; margin: 0;">
                         Classroom
                     </h1>
                 </div>
@@ -161,7 +161,13 @@ module.exports = {
                     <p>You are invited to join ${classInfo.class_name}</p>
                     <p>Click on the button below to reset your password.</p>
                     <div
-                        style="margin: 24px 0; padding: 12px; width: 150px; background-color: #2196FA; align-self: center; font-size: 18px;"
+                        style="
+                        margin: 24px 0; 
+                        padding: 12px; 
+                        width: 150px; 
+                        background-color: #2196FA; 
+                        align-self: center; 
+                        font-size: 18px;"
                     >
                         <a
                             href="${process.env.CLIENT_URL}/api/class/${

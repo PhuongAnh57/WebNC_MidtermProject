@@ -1,7 +1,7 @@
 const db = require('../configs/database');
 
 module.exports = {
-    getAllClasses: async () => {
+    getAllInvitations: async () => {
         const result = await db.any('SELECT * FROM invitations');
         return result;
     },

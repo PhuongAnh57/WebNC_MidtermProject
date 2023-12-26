@@ -123,14 +123,23 @@ exports.postInviteMembers = async (req, res) => {
     try {
         const classInfo = await classM.getClassByID(classID);
 
-        emails.map(async (email) => {
-            const token = jwt.sign({ email }, process.env.INVITE_KEY);
+        const usersExist = await emails.reduce(async (emails, email) => {
+            const invitationExits = await invitationM.getInvitationByEmail(email).catch((err) => {});
+            const userJoined = await classM.getMemberByEmail(classID, email).catch((err) => {});
 
-            await invitationM.addNewInvitation({ email, token, role });
-            await mailer.sendClassInvitaion(email, classInfo, token, role);
-        });
+            if (invitationExits || userJoined) {
+                emails.push(email);
+            } else {
+                const token = jwt.sign({ email }, process.env.INVITE_KEY);
 
-        res.status(200).json({ message: 'Invitations have been sent successfully' });
+                await invitationM.addNewInvitation({ email, token, role });
+                await mailer.sendClassInvitaion(email, classInfo, token, role);
+            }
+
+            return emails;
+        }, []);
+
+        res.status(200).json({ usersExist });
     } catch (err) {
         console.log(err);
         return res.status(400).json({ message: 'Something went wrong!' });
