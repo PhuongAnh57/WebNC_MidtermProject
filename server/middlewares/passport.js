@@ -11,6 +11,7 @@ const applyPassportStrategy = (passport) => {
     passport.use(
         new Strategy(jwtOptions, async (jwt_payload, done) => {
             // passport-jwt already verified the signature. We can now use the jwt_payload
+
             return done(null, jwt_payload);
         }),
     );

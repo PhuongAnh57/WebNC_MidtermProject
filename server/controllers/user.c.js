@@ -6,7 +6,6 @@ const userM = require('../models/user.m');
 const pendingUserM = require('../models/pending_user.m');
 const mailer = require('../utils/mailer');
 const access_tokenM = require('../models/access_token.m');
-const { log } = require('console');
 
 exports.postSignup = async (req, res) => {
     const { firstName, lastName, username, password, email } = req.body.user;
@@ -89,12 +88,19 @@ exports.getEmailActivationConfirmation = async (req, res) => {
             newID = users[users.length - 1].user_id + 1;
         }
 
+        // const role = '';
+
+        // if (pendingUserExists.username === 'admin') {
+
+        // }
+
         const newUser = {
             ...pendingUserExists,
             id: newID,
             gender: null,
             dateOfBirth: null,
             address: null,
+            role: 'user',
         };
 
         await userM.addNewUser(newUser);
@@ -131,7 +137,7 @@ exports.postLogin = async (req, res) => {
 
         try {
             const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
-                expiresIn: parseInt(process.env.TOKEN_LIFE),
+                expiresIn: process.env.TOKEN_LIFE,
             });
 
             const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, {
@@ -141,7 +147,7 @@ exports.postLogin = async (req, res) => {
             const response = {
                 message: 'Verification successfully',
                 user: {
-                    uid: userDB.user_id,
+                    user_id: userDB.user_id,
                     lastName: userDB.last_name,
                 },
                 accessToken: token,
@@ -232,7 +238,6 @@ exports.postResetPasswordConfirmation = async (req, res) => {
                     await access_tokenM.removeToken(id);
 
                     res.status(200).json({ message: 'Password has been updated!' });
-                    console.log('Password has been reseted!');
                 });
             }
         });
@@ -256,7 +261,7 @@ exports.postRefreshToken = async (req, res) => {
                 };
 
                 const newAccessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
-                    expiresIn: parseInt(process.env.TOKEN_LIFE),
+                    expiresIn: process.env.TOKEN_LIFE,
                 });
 
                 res.json({ accessToken: newAccessToken });

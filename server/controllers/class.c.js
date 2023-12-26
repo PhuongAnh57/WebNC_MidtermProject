@@ -38,7 +38,7 @@ exports.getAllClasses = async (req, res) => {
 };
 
 exports.postCreateClass = async (req, res) => {
-    const { name, part, topic, room } = req.body.classInfo;
+    const { name, part, topic, room } = req.body.classData;
 
     try {
         const classes = await classM.getAllClasses();
@@ -84,7 +84,7 @@ exports.postCreateClass = async (req, res) => {
             id,
             class_id,
             member_id: lecturer_id,
-            role: '2',
+            role: 'teacher',
         };
         const nClass_Lecturer = await classM.addNewClass_Member(newClass_Lecturer);
         res.json({ message: 'class_id', class_id });
@@ -94,12 +94,16 @@ exports.postCreateClass = async (req, res) => {
 };
 
 exports.getClassDetail = async (req, res) => {
-    const { classID } = req.params;
+    const { classID, userID } = req.params;
 
     try {
         const classes = await classM.getAllClasses();
+        const user = await classM.getMemberInClass(classID, userID);
 
         const Class = classes.find((c) => c.class_id === +classID);
+
+        Class['role'] = user.role;
+
         res.json({ message: 'class-detail', Class });
     } catch (error) {
         console.log(error);
@@ -219,8 +223,8 @@ exports.getAllMembers = async (req, res) => {
     try {
         const members = await classM.getAllMembersInClass(classID);
 
-        const lecturerData = [];
-        const studentData = [];
+        const teachers = [];
+        const students = [];
 
         for (let i = 0; i < members.length; i++) {
             const member = await userM.getUserByID(members[i].member_id);
@@ -230,13 +234,13 @@ exports.getAllMembers = async (req, res) => {
                 role: members[i].role,
             };
 
-            if (members[i].role === '2') {
-                lecturerData.push(data);
-            } else if (members[i].role === '3') {
-                studentData.push(data);
+            if (members[i].role === 'teacher') {
+                teachers.push(data);
+            } else if (members[i].role === 'student') {
+                students.push(data);
             }
         }
-        res.json({ message: 'members', lecturerData, studentData });
+        res.json({ message: 'members', teachers, students });
     } catch (error) {
         console.log(error);
     }

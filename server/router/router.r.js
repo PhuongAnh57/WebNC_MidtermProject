@@ -29,7 +29,7 @@ router.post('/api/class/add-member', passport.authenticate('jwt', { session: fal
 //-------------------------Class Manager------------------------------------------------------------------------
 router.get('/api/all-classes', passport.authenticate('jwt', { session: false }), classC.getAllClasses);
 router.post('/api/create-class', passport.authenticate('jwt', { session: false }), classC.postCreateClass);
-router.get('/api/class/:classID', passport.authenticate('jwt', { session: false }), classC.getClassDetail);
+router.get('/api/class/:classID/:userID', passport.authenticate('jwt', { session: false }), classC.getClassDetail);
 router.get('/api/all-members/:classID', passport.authenticate('jwt', { session: false }), classC.getAllMembers);
 
 module.exports = router;
