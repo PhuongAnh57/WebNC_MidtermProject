@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Navigate } from 'react-router';
-import axios from 'axios';
 
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -18,6 +17,7 @@ import Background from '../../../assets/images/classroom.jpg';
 import InviteStudentModal from 'components/InviteModal/InviteStudentModal';
 import InviteTeacherModal from 'components/InviteModal/InviteTeacherModal';
 import LoadingSpinner from 'components/LoadingSpinner/LoadingSpinner';
+import useAxiosPrivate from 'hooks/useAxiosPrivate';
 
 const Demo = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
@@ -26,26 +26,26 @@ const Demo = styled('div')(({ theme }) => ({
 export default function InteractiveList({ classDetail }) {
     const [openStudentModal, setOpenStudentModal] = useState(false);
     const [openTeacherModal, setOpenTeacherModal] = useState(false);
-    const [lecturers, setLecturers] = useState([]);
+    const [teachers, setTeachers] = useState([]);
     const [students, setStudents] = useState([]);
     const [classURL, setClassURL] = useState('');
     const [isLoading, setIsLoading] = useState(true);
+    const axiosPrivate = useAxiosPrivate();
 
     const currentURL = window.location.href;
     const classID = currentURL.split('/').pop();
 
     useEffect(() => {
-        axios
-            .get(`/api/all-members/${classID}`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-                },
-            })
-            .then((response) => {
-                setLecturers(response.data.lecturerData);
-                setStudents(response.data.studentData);
+        const getAllMembers = async () => {
+            await axiosPrivate.get(`/api/all-members/${classID}`).then((response) => {
+                setTeachers(response.data.teachers);
+                setStudents(response.data.students);
                 setIsLoading(false);
             });
+        };
+
+        getAllMembers();
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -67,12 +67,9 @@ export default function InteractiveList({ classDetail }) {
 
     useEffect(() => {
         const loadClass = async () => {
+            const userID = localStorage.getItem('userID');
             try {
-                const response = await axios.get(`/api/class/${classDetail.class_id}`, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-                    },
-                });
+                const response = await axiosPrivate.get(`/api/class/${classDetail.class_id}/${userID}`);
 
                 if (response.status === 200) {
                     setClassURL(`http://localhost:3000/class/${classDetail.class_id}/invite`);
@@ -114,7 +111,7 @@ export default function InteractiveList({ classDetail }) {
                                 <Divider />
                                 <Demo>
                                     <List>
-                                        {lecturers.map((lecturer, index) => (
+                                        {teachers.map((lecturer, index) => (
                                             <ListItem key={index}>
                                                 <ListItemAvatar>
                                                     <Avatar alt="Remy Sharp" src={Background} />

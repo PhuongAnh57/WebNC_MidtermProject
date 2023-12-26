@@ -1,11 +1,11 @@
 import { memo, useState } from 'react';
 import { Navigate } from 'react-router';
 import classNames from 'classnames/bind';
-import axios from 'axios';
 
 import { Modal, Box, FormControl, Chip } from '@mui/material';
 import Button from '@mui/material/Button';
 import styles from './InviteModal.module.scss';
+import { axiosPrivate } from 'api/axios';
 
 const cx = classNames.bind(styles);
 
@@ -44,27 +44,20 @@ function InviteTeacherModal({ classID, open, handleClose }) {
         const data = {
             classID: classID,
             emails: [...values],
-            role: '2',
+            role: 'teacher',
         };
 
-        console.log(data);
-
         try {
-            const response = await axios.post(
-                '/api/class/invite-members',
-                { data },
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-                    },
-                },
-            );
+            const response = await axiosPrivate.post('/api/class/invite-members', { data });
 
-            if (response.status === 200) {
-                console.log('Invited');
+            const usersExist = response.data.usersExist;
+
+            if (response.status === 200 && usersExist?.length) {
+                usersExist.forEach((email) => {
+                    alert(`${email} đã được mời hoặc đã tham gia lớp học!`);
+                });
+
                 setValues([]);
-            } else {
-                console.log('Something went wrong!');
             }
         } catch (err) {
             console.log(err);

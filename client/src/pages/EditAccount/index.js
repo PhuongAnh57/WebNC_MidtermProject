@@ -19,7 +19,7 @@ export default function EditAccount() {
                 <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
                     <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
                         <Typography component="h1" variant="h4" align="center" mb={2}>
-                            Edit Account
+                            Chỉnh sửa hồ sơ
                         </Typography>
 
                         <EditForm />

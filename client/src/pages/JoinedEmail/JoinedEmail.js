@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Navigate, useLocation, useParams } from 'react-router';
-import axios from 'axios';
+import { Navigate, useParams } from 'react-router';
 import { Box, Card, CardContent, Typography, CardActions, Button } from '@mui/material';
 
 import MainLayout from 'layouts/MainLayout';
 import LoadingSpinner from 'components/LoadingSpinner/LoadingSpinner';
 import { useSearchParams } from 'react-router-dom';
+import useAxiosPrivate from 'hooks/useAxiosPrivate';
 
-function JoinClassViaEmail() {
+function JoinedEmail() {
     const { classID, token } = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -16,11 +16,12 @@ function JoinClassViaEmail() {
     const [joined, setJoined] = useState(false);
     const [isLoading, setLoading] = useState(true);
     const [isInvited, setIsInvited] = useState();
+    const axiosPrivate = useAxiosPrivate();
 
     if (classID && token) {
-        const storedLink = window.location.href;
+        const nextURL = window.location.href;
         localStorage.setItem('accept_token', token);
-        localStorage.setItem('storedLink', storedLink);
+        localStorage.setItem('nextURL', nextURL);
     }
 
     useEffect(() => {
@@ -30,15 +31,7 @@ function JoinClassViaEmail() {
                     accept_token: localStorage.getItem('accept_token'),
                 };
 
-                const loadUser = await axios.post(
-                    '/api/check-invitation',
-                    { data },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-                        },
-                    },
-                );
+                const loadUser = await axiosPrivate.post('/api/check-invitation', { data });
 
                 if (loadUser.data.message === 'User not invited') {
                     // check if user email is equal to email in invitation
@@ -52,13 +45,8 @@ function JoinClassViaEmail() {
                     setUser(loadUser.data.userData);
                 }
 
-                const loadClass = await axios.get(
+                const loadClass = await axiosPrivate.get(
                     `/api/check-user-class/${classID}/user/${loadUser.data.userData.user_id}`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem('accessToken')} `,
-                        },
-                    },
                 );
 
                 if (loadClass.status === 200) {
@@ -98,7 +86,7 @@ function JoinClassViaEmail() {
         return <Navigate to={`/class/${classData.class_id}`} />;
     }
 
-    const handleAddIntoClass = () => {
+    const handleAddIntoClass = async () => {
         if (!classID || !token) {
             console.log('classid or token not found');
         }
@@ -106,29 +94,19 @@ function JoinClassViaEmail() {
         const data = {
             user,
             classData,
-            role: searchParams.get('role'),
+            role: searchParams.get('role') === '2' ? 'teacher' : 'student',
         };
 
         try {
             if (!joined) {
-                axios
-                    .post(
-                        '/api/class/add-member',
-                        { data },
-                        {
-                            headers: {
-                                Authorization: `Bearer ${localStorage.getItem('accessToken')} `,
-                            },
-                        },
-                    )
-                    .then((response) => {
-                        if (response.status === 200) {
-                            console.log('added to class');
-                            setJoined(true);
-                        } else {
-                            console.log('someting went wrong');
-                        }
-                    });
+                await axiosPrivate.post('/api/class/add-member', { data }).then((response) => {
+                    if (response.status === 200) {
+                        console.log('added to class');
+                        setJoined(true);
+                    } else {
+                        console.log('someting went wrong');
+                    }
+                });
             }
         } catch (err) {
             console.log(err);
@@ -172,4 +150,4 @@ function JoinClassViaEmail() {
     return <>{isLoading ? <LoadingSpinner /> : renderLayout}</>;
 }
 
-export default JoinClassViaEmail;
+export default JoinedEmail;

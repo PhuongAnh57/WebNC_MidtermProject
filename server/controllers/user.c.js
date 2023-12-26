@@ -88,12 +88,19 @@ exports.getEmailActivationConfirmation = async (req, res) => {
             newID = users[users.length - 1].user_id + 1;
         }
 
+        // const role = '';
+
+        // if (pendingUserExists.username === 'admin') {
+
+        // }
+
         const newUser = {
             ...pendingUserExists,
             id: newID,
             gender: null,
             dateOfBirth: null,
             address: null,
+            role: 'user',
         };
 
         await userM.addNewUser(newUser);
@@ -140,7 +147,7 @@ exports.postLogin = async (req, res) => {
             const response = {
                 message: 'Verification successfully',
                 user: {
-                    uid: userDB.user_id,
+                    user_id: userDB.user_id,
                     lastName: userDB.last_name,
                 },
                 accessToken: token,
@@ -231,7 +238,6 @@ exports.postResetPasswordConfirmation = async (req, res) => {
                     await access_tokenM.removeToken(id);
 
                     res.status(200).json({ message: 'Password has been updated!' });
-                    console.log('Password has been reseted!');
                 });
             }
         });
@@ -254,11 +260,11 @@ exports.postRefreshToken = async (req, res) => {
                     id: decodedValue.id,
                 };
 
-                const newToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+                const newAccessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
                     expiresIn: process.env.TOKEN_LIFE,
                 });
 
-                res.json({ token: newToken });
+                res.json({ accessToken: newAccessToken });
             }
         });
     } catch (err) {
@@ -343,8 +349,6 @@ exports.postEditProfile = async (req, res) => {
             email: userData.email,
             address: userData.address,
         };
-
-        console.log('sf');
 
         await userM.editUser(userEdit);
 

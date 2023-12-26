@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Card from '@mui/material/Card';
-import { useState } from 'react';
 
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -13,7 +12,9 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import { Link } from 'react-router-dom';
 
 export default function MediaCard({ classDetail }) {
-    const role = classDetail.role === '3' ? 'Học sinh' : 'Giáo viên';
+    const role = classDetail.role === 'student' ? 'Học sinh' : 'Giáo viên';
+
+    console.log(classDetail);
 
     return (
         <Link to={`/class/${classDetail.class_id}`} style={{ textDecoration: 'none', color: 'inherit' }}>

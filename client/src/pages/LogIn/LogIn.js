@@ -37,21 +37,31 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function LogIn() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const [user, setUser] = useState({
+        username: '',
+        password: '',
+    });
     const [accountDoesNotExit, setAccountDoesNotExist] = useState(false);
     const [invalidPassword, setInvalidPassword] = useState(false);
 
     const { dispatch } = useContext(AuthContext);
 
     if (localStorage.getItem('accessToken')) {
-        if (localStorage.getItem('storedLink')) {
-            const storedLink = localStorage.getItem('storedLink').split('http://localhost:3000')[1];
+        if (localStorage.getItem('nextURL')) {
+            const nextURL = localStorage.getItem('nextURL').split('http://localhost:3000')[1];
+            localStorage.removeItem('nextURL');
 
-            return <Navigate to={storedLink} />;
+            return <Navigate to={nextURL} />;
         }
         return <Navigate to="/home" />;
     }
+
+    const handleChange = (e) => {
+        setUser((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value,
+        }));
+    };
 
     const handleSubmit = (event, type = '') => {
         event.preventDefault();
@@ -59,12 +69,6 @@ export default function LogIn() {
         if (type !== '') {
             return window.open(`${SERVER_URL}/auth/${type}`, '_self');
         }
-
-        const data = new FormData(event.currentTarget);
-        const user = {
-            username: data.get('username'),
-            password: data.get('password'),
-        };
 
         try {
             axios.post('/api/login', { user }).then((response) => {
@@ -75,14 +79,19 @@ export default function LogIn() {
                 if (response.data.message === 'This account does not exist') {
                     setAccountDoesNotExist(true);
                     setInvalidPassword(false);
-                    setUsername('');
-                    setPassword('');
-                }
+                    setUser({
+                        username: '',
+                        password: '',
+                    });
+                }   
 
                 if (response.data.message === 'Password is invalid') {
                     setInvalidPassword(true);
                     setAccountDoesNotExist(false);
-                    setPassword('');
+                    setUser((prev) => ({
+                        ...prev,
+                        password: '',
+                    }));
                 }
             });
         } catch (err) {
@@ -106,7 +115,7 @@ export default function LogIn() {
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Log in
+                        Đăng nhập
                     </Typography>
                     <Box component="form" onSubmit={(event) => handleSubmit(event)} noValidate sx={{ mt: 1 }}>
                         <TextField
@@ -114,16 +123,16 @@ export default function LogIn() {
                             required
                             fullWidth
                             id="username"
-                            label="Username"
+                            label="Tên đăng nhập"
                             name="username"
                             autoComplete="username"
                             autoFocus
-                            value={username}
-                            onChange={(event) => setUsername(event.target.value)}
+                            value={user.username}
+                            onChange={handleChange}
                         />
                         {accountDoesNotExit && (
                             <>
-                                <span style={{ color: 'red' }}>Account does not exits</span>
+                                <span style={{ color: 'red' }}>Tên đăng nhập không tồn tại</span>
                             </>
                         )}
                         <TextField
@@ -131,24 +140,21 @@ export default function LogIn() {
                             required
                             fullWidth
                             name="password"
-                            label="Password"
+                            label="Mật khẩu"
                             type="password"
                             id="password"
                             autoComplete="current-password"
-                            value={password}
-                            onChange={(event) => setPassword(event.target.value)}
+                            value={user.password}
+                            onChange={handleChange}
                         />
 
                         {invalidPassword && (
                             <>
-                                <span style={{ color: 'red' }}>Password is incorrect</span>
+                                <span style={{ color: 'red' }}>Sai mật khẩu</span>
                             </>
                         )}
                         <div sx={{ marginBottom: -4 }}>
-                            <FormControlLabel
-                                control={<Checkbox value="remember" color="primary" />}
-                                label="Remember me"
-                            />
+                            <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Ghi nhớ" />
                         </div>
                         <Button
                             type="submit"
@@ -156,11 +162,11 @@ export default function LogIn() {
                             variant="contained"
                             sx={{ mt: 1, mb: 0, padding: 1, background: '#000000' }}
                         >
-                            Log In
+                            Đăng nhập
                         </Button>
 
                         <div style={{ textAlign: 'center', color: '#6c757dff' }}>
-                            <p>Or log in with</p>
+                            <p>Hoặc</p>
                         </div>
 
                         <Button
@@ -178,7 +184,7 @@ export default function LogIn() {
                             onClick={(event) => handleSubmit(event, 'facebook')}
                         >
                             <FacebookIcon sx={{ fontSize: '1.8rem' }} />
-                            <span style={{ marginLeft: 'auto', marginRight: 'auto' }}>Log In with Facebook</span>
+                            <span style={{ marginLeft: 'auto', marginRight: 'auto' }}>Đăng nhập với Facebook</span>
                         </Button>
 
                         <Button
@@ -196,17 +202,18 @@ export default function LogIn() {
                             onClick={(event) => handleSubmit(event, 'google')}
                         >
                             <GoogleIcon sx={{ fontSize: '1.8rem' }} />
-                            <span style={{ marginLeft: 'auto', marginRight: 'auto' }}>Log In with google</span>
+                            <span style={{ marginLeft: 'auto', marginRight: 'auto' }}>Đăng nhập với google</span>
                         </Button>
                         <Grid container>
                             <Grid item xs>
                                 <Link to="/forgot-password" variant="body2" style={{ color: '#1976d2' }}>
-                                    Forgot password?
+                                    Quên mật khẩu?
                                 </Link>
                             </Grid>
                             <Grid item>
+                                Chưa có tài khoản?
                                 <Link to="/signup" variant="body2" style={{ color: '#1976d2' }}>
-                                    Don't have an account? Sign Up
+                                    Đăng ký ngay!
                                 </Link>
                             </Grid>
                         </Grid>

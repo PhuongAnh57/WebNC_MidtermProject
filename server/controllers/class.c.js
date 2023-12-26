@@ -28,7 +28,6 @@ exports.getAllClasses = async (req, res) => {
         if (!ownedClasses && !joinedClasses) {
             res.json({ message: 'User does not have any courses' });
         } else {
-            // const classesData = classes.filter((c) => c.lecturer_id === userID);
             const classesData = [...ownedClasses, ...joinedClasses];
             res.json({ message: 'Classes', classesData });
         }
@@ -38,7 +37,7 @@ exports.getAllClasses = async (req, res) => {
 };
 
 exports.postCreateClass = async (req, res) => {
-    const { name, part, topic, room } = req.body.classInfo;
+    const { name, part, topic, room } = req.body.classData;
 
     try {
         const classes = await classM.getAllClasses();
@@ -84,7 +83,7 @@ exports.postCreateClass = async (req, res) => {
             id,
             class_id,
             member_id: lecturer_id,
-            role: '2',
+            role: 'teacher',
         };
         const nClass_Lecturer = await classM.addNewClass_Member(newClass_Lecturer);
         res.json({ message: 'class_id', class_id });
@@ -94,12 +93,16 @@ exports.postCreateClass = async (req, res) => {
 };
 
 exports.getClassDetail = async (req, res) => {
-    const { classID } = req.params;
+    const { classID, userID } = req.params;
 
     try {
         const classes = await classM.getAllClasses();
+        const user = await classM.getMemberInClass(classID, userID);
 
         const Class = classes.find((c) => c.class_id === +classID);
+
+        Class['role'] = user.role;
+
         res.json({ message: 'class-detail', Class });
     } catch (error) {
         console.log(error);
@@ -119,14 +122,23 @@ exports.postInviteMembers = async (req, res) => {
     try {
         const classInfo = await classM.getClassByID(classID);
 
-        emails.map(async (email) => {
-            const token = jwt.sign({ email }, process.env.INVITE_KEY);
+        const usersExist = await emails.reduce(async (emails, email) => {
+            const invitationExits = await invitationM.getInvitationByEmail(email).catch((err) => {});
+            const userJoined = await classM.getMemberByEmail(classID, email).catch((err) => {});
 
-            await invitationM.addNewInvitation({ email, token, role });
-            await mailer.sendClassInvitaion(email, classInfo, token, role);
-        });
+            if (invitationExits || userJoined) {
+                emails.push(email);
+            } else {
+                const token = jwt.sign({ email }, process.env.INVITE_KEY);
 
-        res.status(200).json({ message: 'Invitations have been sent successfully' });
+                await invitationM.addNewInvitation({ email, token, role });
+                await mailer.sendClassInvitaion(email, classInfo, token, role);
+            }
+
+            return emails;
+        }, []);
+
+        res.status(200).json({ usersExist });
     } catch (err) {
         console.log(err);
         return res.status(400).json({ message: 'Something went wrong!' });
@@ -219,8 +231,8 @@ exports.getAllMembers = async (req, res) => {
     try {
         const members = await classM.getAllMembersInClass(classID);
 
-        const lecturerData = [];
-        const studentData = [];
+        const teachers = [];
+        const students = [];
 
         for (let i = 0; i < members.length; i++) {
             const member = await userM.getUserByID(members[i].member_id);
@@ -230,13 +242,13 @@ exports.getAllMembers = async (req, res) => {
                 role: members[i].role,
             };
 
-            if (members[i].role === '2') {
-                lecturerData.push(data);
-            } else if (members[i].role === '3') {
-                studentData.push(data);
+            if (members[i].role === 'teacher') {
+                teachers.push(data);
+            } else if (members[i].role === 'student') {
+                students.push(data);
             }
         }
-        res.json({ message: 'members', lecturerData, studentData });
+        res.json({ message: 'members', teachers, students });
     } catch (error) {
         console.log(error);
     }

@@ -8,14 +8,14 @@ module.exports = {
     getOwnedClasses: async (userID) => {
         const result = await db.any(
             'SELECT * FROM class_members cm JOIN classes c ON cm.class_id = c.class_id WHERE member_id=$1 and role=$2 ',
-            [userID, '2'],
+            [userID, 'teacher'],
         );
         return result;
     },
     getJoinedClasses: async (userID) => {
         const result = await db.any(
             'SELECT * FROM class_members cm JOIN classes c ON cm.class_id = c.class_id WHERE member_id=$1 and role=$2 ',
-            [userID, '3'],
+            [userID, 'student'],
         );
         return result;
     },
@@ -46,6 +46,13 @@ module.exports = {
             classID,
             memberID,
         ]);
+        return result;
+    },
+    getMemberByEmail: async (classID, email) => {
+        const result = await db.one(
+            'SELECT * FROM class_members cm JOIN accounts acc on cm.member_id = acc.user_id WHERE class_id=$1 and email =$2',
+            [classID, email],
+        );
         return result;
     },
     addStudentIntoClass: async (data) => {

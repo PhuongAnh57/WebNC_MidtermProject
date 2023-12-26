@@ -9,17 +9,18 @@ export default function InputSelect({ gender, changeGender }) {
     return (
         <Box sx={{ minWidth: 120 }}>
             <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Gender</InputLabel>
+                <InputLabel id="demo-simple-select-label">Giới tính</InputLabel>
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     value={gender}
-                    label="Gender"
-                    onChange={(e) => changeGender(e.target.value)}
+                    label="Giới tính"
+                    name="gender"
+                    onChange={changeGender}
                 >
-                    <MenuItem value={'male'}>Male</MenuItem>
-                    <MenuItem value={'female'}>Female</MenuItem>
-                    <MenuItem value={'other'}>Other</MenuItem>
+                    <MenuItem value={'male'}>Nam</MenuItem>
+                    <MenuItem value={'female'}>Nữ</MenuItem>
+                    <MenuItem value={'other'}>Khác</MenuItem>
                 </Select>
             </FormControl>
         </Box>

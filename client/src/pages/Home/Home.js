@@ -1,6 +1,5 @@
-import { Navigate } from 'react-router';
+import { Navigate, useNavigate } from 'react-router';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 
 import MainLayout from 'layouts/MainLayout';
 import CourseCard from './CourseCard';
@@ -8,26 +7,34 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import CreateClass from 'components/CreateClass';
+import useAxiosPrivate from 'hooks/useAxiosPrivate';
 
 export default function Home() {
     const [open, setOpen] = useState(false);
     const [classes, setClasses] = useState([]);
+    const axiosPrivate = useAxiosPrivate();
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
     useEffect(() => {
-        try {
-            axios
-                .get('/api/all-classes', {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('accessToken')} `,
-                    },
-                })
-                .then((response) => setClasses(response.data.classesData));
-                // .then((response) => console.log(response))
-        } catch (err) {
-            console.log(err);
-        }
+        const getAllClasses = async () => {
+            try {
+                const response = await axiosPrivate.get('/api/all-classes');
+                
+
+                if (response.status === 200) {
+                    setClasses(response.data.classesData);
+                }
+            } catch (err) {
+                console.log(err);
+                if (err.response.status === 401) {
+                    return <Navigate to="/login" />;
+                }
+            }
+        };
+
+        getAllClasses();
     }, []);
 
     // Đọc thông tin người dùng từ cookie
@@ -46,8 +53,6 @@ export default function Home() {
         // redirect to landing page
         return <Navigate to="/" />;
     }
-
-    console.log(classes)
 
     return (
         <MainLayout>

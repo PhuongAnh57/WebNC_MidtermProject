@@ -1,50 +1,44 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useParams } from 'react-router';
-import axios from 'axios';
 import { Box, Card, CardContent, Typography, CardActions, Button } from '@mui/material';
 
 import MainLayout from 'layouts/MainLayout';
 import LoadingSpinner from 'components/LoadingSpinner/LoadingSpinner';
+import useAxiosPrivate from 'hooks/useAxiosPrivate';
 
-function JoinClassViaLink() {
+function JoinedLink() {
     const { classID } = useParams();
 
     const [user, setUser] = useState({});
     const [classData, setClassData] = useState({});
     const [joined, setJoined] = useState(false);
     const [isLoading, setLoading] = useState(true);
+    const axiosPrivate = useAxiosPrivate();
 
     if (classID) {
-        const storedLink = window.location.href;
-        localStorage.setItem('storedLink', storedLink);
+        const nextURL = window.location.href;
+        localStorage.setItem('nextURL', nextURL);
     }
 
     useEffect(() => {
+        const controller = new AbortController();
+        const signal = controller.signal;
+
         const loadAllData = async () => {
             try {
-                const loadUser = await axios.get('/api/get-profile', {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-                    },
-                });
+                const loadUser = await axiosPrivate.get('/api/get-profile', { signal });
 
                 if (loadUser.data.message === 'User found') {
                     setUser(loadUser.data.userData);
                 }
 
-                const loadClass = await axios.get(
+                const loadClass = await axiosPrivate.get(
                     `/api/check-user-class/${classID}/user/${loadUser.data.userData.id}`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem('accessToken')} `,
-                        },
-                    },
+                    { signal },
                 );
 
                 if (loadClass.status === 200) {
                     setClassData(loadClass.data.classData);
-                    console.log(loadClass.data.classData.joined);
-
                     if (loadClass.data.classData.joined) {
                         setJoined(true);
                     } else {
@@ -52,6 +46,10 @@ function JoinClassViaLink() {
                     }
                 }
                 setLoading(false);
+
+                return () => {
+                    controller.abort();
+                };
             } catch (err) {
                 console.log(err);
                 setLoading(false);
@@ -74,30 +72,19 @@ function JoinClassViaLink() {
         return <Navigate to={`/class/${classData.class_id}`} />;
     }
 
-    const handleAddIntoClass = () => {
+    const handleAddIntoClass = async () => {
         if (!classID) {
             console.log('classid or token not found');
-        }
+        } else {
+            const data = {
+                user,
+                classData,
+                role: 'student',
+            };
 
-        const data = {
-            user,
-            classData,
-            role: '3',
-        };
-
-        try {
-            if (!joined) {
-                axios
-                    .post(
-                        '/api/class/add-member',
-                        { data },
-                        {
-                            headers: {
-                                Authorization: `Bearer ${localStorage.getItem('accessToken')} `,
-                            },
-                        },
-                    )
-                    .then((response) => {
+            try {
+                if (!joined) {
+                    await axiosPrivate.post('/api/class/add-member', { data }).then((response) => {
                         if (response.status === 200) {
                             console.log('added to class');
                             setJoined(true);
@@ -105,10 +92,11 @@ function JoinClassViaLink() {
                             console.log('someting went wrong');
                         }
                     });
+                }
+            } catch (err) {
+                console.log(err);
+                console.log('someting went wrong');
             }
-        } catch (err) {
-            console.log(err);
-            console.log('someting went wrong');
         }
     };
 
@@ -148,4 +136,4 @@ function JoinClassViaLink() {
     return <>{isLoading ? <LoadingSpinner /> : renderLayout}</>;
 }
 
-export default JoinClassViaLink;
+export default JoinedLink;

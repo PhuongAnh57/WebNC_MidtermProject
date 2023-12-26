@@ -49,13 +49,13 @@ app.get(
     '/auth/google/callback',
     passport.authenticate('google', { failureRedirect: `${process.env.CLIENT_URL}/login` }),
     (req, res) => {
-        //console.log(req.user);
         res.cookie('accessToken', req.user.accessToken);
         res.cookie('user', JSON.stringify(req.user.u));
 
         res.redirect(`${process.env.CLIENT_URL}/home`);
     },
 );
+
 //----------------------------------------------------------------
 app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['public_profile'] }));
 
@@ -63,7 +63,6 @@ app.get(
     '/auth/facebook/callback',
     passport.authenticate('facebook', { failureRedirect: `${process.env.CLIENT_URL}/login` }),
     (req, res) => {
-        // console.log(req.user);
         res.cookie('accessToken', req.user.accessToken);
         res.cookie('user', JSON.stringify(req.user.u));
 
