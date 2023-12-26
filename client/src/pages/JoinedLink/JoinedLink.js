@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useParams } from 'react-router';
-import axios from 'axios';
 import { Box, Card, CardContent, Typography, CardActions, Button } from '@mui/material';
 
 import MainLayout from 'layouts/MainLayout';
@@ -17,8 +16,8 @@ function JoinedLink() {
     const axiosPrivate = useAxiosPrivate();
 
     if (classID) {
-        const storedLink = window.location.href;
-        localStorage.setItem('storedLink', storedLink);
+        const nextURL = window.location.href;
+        localStorage.setItem('nextURL', nextURL);
     }
 
     useEffect(() => {
@@ -40,8 +39,6 @@ function JoinedLink() {
 
                 if (loadClass.status === 200) {
                     setClassData(loadClass.data.classData);
-                    console.log(loadClass.data.classData.joined);
-
                     if (loadClass.data.classData.joined) {
                         setJoined(true);
                     } else {
@@ -75,30 +72,19 @@ function JoinedLink() {
         return <Navigate to={`/class/${classData.class_id}`} />;
     }
 
-    const handleAddIntoClass = () => {
+    const handleAddIntoClass = async () => {
         if (!classID) {
             console.log('classid or token not found');
-        }
+        } else {
+            const data = {
+                user,
+                classData,
+                role: 'student',
+            };
 
-        const data = {
-            user,
-            classData,
-            role: '3',
-        };
-
-        try {
-            if (!joined) {
-                axios
-                    .post(
-                        '/api/class/add-member',
-                        { data },
-                        {
-                            headers: {
-                                Authorization: `Bearer ${localStorage.getItem('accessToken')} `,
-                            },
-                        },
-                    )
-                    .then((response) => {
+            try {
+                if (!joined) {
+                    await axiosPrivate.post('/api/class/add-member', { data }).then((response) => {
                         if (response.status === 200) {
                             console.log('added to class');
                             setJoined(true);
@@ -106,10 +92,11 @@ function JoinedLink() {
                             console.log('someting went wrong');
                         }
                     });
+                }
+            } catch (err) {
+                console.log(err);
+                console.log('someting went wrong');
             }
-        } catch (err) {
-            console.log(err);
-            console.log('someting went wrong');
         }
     };
 

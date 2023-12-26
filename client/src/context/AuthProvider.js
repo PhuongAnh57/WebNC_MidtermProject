@@ -1,4 +1,3 @@
-
 import React, { createContext, useReducer } from 'react';
 import { LOGIN, LOGOUT, REFRESH_TOKEN, RELOAD_PAGE } from 'utils/constants';
 
@@ -13,12 +12,13 @@ const initialState = {
 const reducer = (state, action) => {
     switch (action.type) {
         case LOGIN:
+            localStorage.setItem('userID', action.payload.user.user_id);
             localStorage.setItem('accessToken', action.payload.accessToken);
             localStorage.setItem('refreshToken', action.payload.refreshToken);
 
             return {
                 ...state,
-                user: action.payload.user,
+                user: action.payload.user.user,
                 accessToken: action.payload.accessToken,
                 refreshToken: action.payload.refreshToken,
             };

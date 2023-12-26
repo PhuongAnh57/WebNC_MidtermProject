@@ -1,5 +1,4 @@
 import * as React from 'react';
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 
 import Button from '@mui/material/Button';
@@ -51,22 +50,17 @@ export default function FullScreenDialog({ open, onClose }) {
     useEffect(() => {
         if (open) {
             const getClassData = async () => {
-                axiosPrivate
-                    .get(`/api/class/${classID}`, {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-                        },
-                    })
-                    .then((response) => {
-                        const classDetail = response.data.Class;
+                const userID = localStorage.getItem('userID');
 
-                        setClassData({
-                            name: classDetail.class_name,
-                            part: classDetail.part,
-                            topic: classDetail.topic,
-                            room: classDetail.room,
-                        });
+                axiosPrivate.get(`/api/class/${classID}/${userID}`).then((response) => {
+                    const classDetail = response.data.Class;
+                    setClassData({
+                        name: classDetail.class_name,
+                        part: classDetail.part,
+                        topic: classDetail.topic,
+                        room: classDetail.room,
                     });
+                });
             };
 
             getClassData();

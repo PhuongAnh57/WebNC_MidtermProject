@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useParams } from 'react-router';
-import axios from 'axios';
 import { Box, Card, CardContent, Typography, CardActions, Button } from '@mui/material';
 
 import MainLayout from 'layouts/MainLayout';
@@ -20,9 +19,9 @@ function JoinedEmail() {
     const axiosPrivate = useAxiosPrivate();
 
     if (classID && token) {
-        const storedLink = window.location.href;
+        const nextURL = window.location.href;
         localStorage.setItem('accept_token', token);
-        localStorage.setItem('storedLink', storedLink);
+        localStorage.setItem('nextURL', nextURL);
     }
 
     useEffect(() => {
@@ -87,7 +86,7 @@ function JoinedEmail() {
         return <Navigate to={`/class/${classData.class_id}`} />;
     }
 
-    const handleAddIntoClass = () => {
+    const handleAddIntoClass = async () => {
         if (!classID || !token) {
             console.log('classid or token not found');
         }
@@ -95,29 +94,19 @@ function JoinedEmail() {
         const data = {
             user,
             classData,
-            role: searchParams.get('role'),
+            role: searchParams.get('role') === '2' ? 'teacher' : 'student',
         };
 
         try {
             if (!joined) {
-                axios
-                    .post(
-                        '/api/class/add-member',
-                        { data },
-                        {
-                            headers: {
-                                Authorization: `Bearer ${localStorage.getItem('accessToken')} `,
-                            },
-                        },
-                    )
-                    .then((response) => {
-                        if (response.status === 200) {
-                            console.log('added to class');
-                            setJoined(true);
-                        } else {
-                            console.log('someting went wrong');
-                        }
-                    });
+                await axiosPrivate.post('/api/class/add-member', { data }).then((response) => {
+                    if (response.status === 200) {
+                        console.log('added to class');
+                        setJoined(true);
+                    } else {
+                        console.log('someting went wrong');
+                    }
+                });
             }
         } catch (err) {
             console.log(err);

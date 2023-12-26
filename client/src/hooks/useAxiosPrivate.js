@@ -5,8 +5,6 @@ import useRefreshToken from './useRefreshToken';
 const useAxiosPrivate = () => {
     const refresh = useRefreshToken();
 
-    console.log('here');
-
     useEffect(() => {
         const requestIntercept = axiosPrivate.interceptors.request.use(
             (config) => {
@@ -23,9 +21,6 @@ const useAxiosPrivate = () => {
             (response) => response,
             async (error) => {
                 const prevRequest = error?.config;
-
-                console.log(prevRequest);
-                console.log(error.response);
 
                 if (error?.response?.status === 401 && !prevRequest?.sent) {
                     prevRequest.sent = true;

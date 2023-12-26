@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 import Button from '@mui/material/Button';
@@ -26,7 +25,7 @@ function CreateClass({ open, onClose }) {
     const handleChange = (e) => {
         setClassData((prev) => ({
             ...prev,
-            [e.target.name]: [e.target.value],
+            [e.target.name]: e.target.value,
         }));
     };
 

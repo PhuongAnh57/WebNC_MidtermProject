@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Navigate } from 'react-router';
-import axios from 'axios';
 
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -27,7 +26,7 @@ const Demo = styled('div')(({ theme }) => ({
 export default function InteractiveList({ classDetail }) {
     const [openStudentModal, setOpenStudentModal] = useState(false);
     const [openTeacherModal, setOpenTeacherModal] = useState(false);
-    const [lecturers, setLecturers] = useState([]);
+    const [teachers, setTeachers] = useState([]);
     const [students, setStudents] = useState([]);
     const [classURL, setClassURL] = useState('');
     const [isLoading, setIsLoading] = useState(true);
@@ -39,8 +38,8 @@ export default function InteractiveList({ classDetail }) {
     useEffect(() => {
         const getAllMembers = async () => {
             await axiosPrivate.get(`/api/all-members/${classID}`).then((response) => {
-                setLecturers(response.data.lecturerData);
-                setStudents(response.data.studentData);
+                setTeachers(response.data.teachers);
+                setStudents(response.data.students);
                 setIsLoading(false);
             });
         };
@@ -68,12 +67,9 @@ export default function InteractiveList({ classDetail }) {
 
     useEffect(() => {
         const loadClass = async () => {
+            const userID = localStorage.getItem('userID');
             try {
-                const response = await axios.get(`/api/class/${classDetail.class_id}`, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-                    },
-                });
+                const response = await axiosPrivate.get(`/api/class/${classDetail.class_id}/${userID}`);
 
                 if (response.status === 200) {
                     setClassURL(`http://localhost:3000/class/${classDetail.class_id}/invite`);
@@ -115,7 +111,7 @@ export default function InteractiveList({ classDetail }) {
                                 <Divider />
                                 <Demo>
                                     <List>
-                                        {lecturers.map((lecturer, index) => (
+                                        {teachers.map((lecturer, index) => (
                                             <ListItem key={index}>
                                                 <ListItemAvatar>
                                                     <Avatar alt="Remy Sharp" src={Background} />

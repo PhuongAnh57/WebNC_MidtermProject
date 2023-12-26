@@ -12,7 +12,9 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import { Link } from 'react-router-dom';
 
 export default function MediaCard({ classDetail }) {
-    const role = classDetail.role === '3' ? 'Học sinh' : 'Giáo viên';
+    const role = classDetail.role === 'student' ? 'Học sinh' : 'Giáo viên';
+
+    console.log(classDetail);
 
     return (
         <Link to={`/class/${classDetail.class_id}`} style={{ textDecoration: 'none', color: 'inherit' }}>

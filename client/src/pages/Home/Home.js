@@ -1,4 +1,4 @@
-import { Navigate } from 'react-router';
+import { Navigate, useNavigate } from 'react-router';
 import { useEffect, useState } from 'react';
 
 import MainLayout from 'layouts/MainLayout';
@@ -20,9 +20,17 @@ export default function Home() {
     useEffect(() => {
         const getAllClasses = async () => {
             try {
-                axiosPrivate.get('/api/all-classes').then((response) => setClasses(response.data.classesData));
+                const response = await axiosPrivate.get('/api/all-classes');
+                
+
+                if (response.status === 200) {
+                    setClasses(response.data.classesData);
+                }
             } catch (err) {
                 console.log(err);
+                if (err.response.status === 401) {
+                    return <Navigate to="/login" />;
+                }
             }
         };
 

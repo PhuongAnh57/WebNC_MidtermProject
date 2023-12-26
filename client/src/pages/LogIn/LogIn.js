@@ -47,10 +47,11 @@ export default function LogIn() {
     const { dispatch } = useContext(AuthContext);
 
     if (localStorage.getItem('accessToken')) {
-        if (localStorage.getItem('storedLink')) {
-            const storedLink = localStorage.getItem('storedLink').split('http://localhost:3000')[1];
+        if (localStorage.getItem('nextURL')) {
+            const nextURL = localStorage.getItem('nextURL').split('http://localhost:3000')[1];
+            localStorage.removeItem('nextURL');
 
-            return <Navigate to={storedLink} />;
+            return <Navigate to={nextURL} />;
         }
         return <Navigate to="/home" />;
     }
@@ -82,7 +83,7 @@ export default function LogIn() {
                         username: '',
                         password: '',
                     });
-                }
+                }   
 
                 if (response.data.message === 'Password is invalid') {
                     setInvalidPassword(true);

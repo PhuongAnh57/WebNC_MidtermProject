@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import axios from 'api/axios';
+import axios from 'axios';
 import { AuthContext } from 'context/AuthProvider';
 import { REFRESH_TOKEN } from 'utils/constants';
 
