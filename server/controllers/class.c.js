@@ -30,7 +30,6 @@ exports.getAllClasses = async (req, res) => {
         } else {
             // const classesData = classes.filter((c) => c.lecturer_id === userID);
             const classesData = [...ownedClasses, ...joinedClasses];
-
             res.json({ message: 'Classes', classesData });
         }
     } catch (error) {

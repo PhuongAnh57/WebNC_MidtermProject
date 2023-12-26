@@ -24,6 +24,7 @@ export default function Home() {
                     },
                 })
                 .then((response) => setClasses(response.data.classesData));
+                // .then((response) => console.log(response))
         } catch (err) {
             console.log(err);
         }
@@ -45,6 +46,8 @@ export default function Home() {
         // redirect to landing page
         return <Navigate to="/" />;
     }
+
+    console.log(classes)
 
     return (
         <MainLayout>
