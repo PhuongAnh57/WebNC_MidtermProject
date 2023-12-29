@@ -1,0 +1,23 @@
+.attached {
+    text-align: left;
+    margin-left: 12px;
+}
+
+.listTypes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.box {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    align-items: center;
+}
+
+.icon {
+    border: 1px solid #b5bec9;
+    width: 44px;
+    height: 44px;
+}

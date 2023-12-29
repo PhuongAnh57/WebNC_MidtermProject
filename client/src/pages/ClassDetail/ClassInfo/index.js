@@ -13,8 +13,12 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
+import Divider from '@mui/material/Divider';
 import { styled } from '@mui/material/styles';
 import useAxiosPrivate from 'hooks/useAxiosPrivate';
+import ClearIcon from '@mui/icons-material/Clear';
+
+import SwitchIcon from './SwitchIcon';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -133,7 +137,59 @@ export default function FullScreenDialog({ open, onClose }) {
                             </Box>
                         </Item>
                         <Item>
-                            <h1>Chung</h1>
+                            <div style={{ margin: '12px' }}>
+                                <h1>Chấm điểm</h1>
+                                <div style={{ textAlign: 'left', fontSize: '22px', fontWeight: '400', color: '#3c4043' }}>Tính tổng điểm theo trọng số</div>
+                                <div style={{margin: '12px 0px', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                                    <span style={{fontSize: '14px', color: '#3c4043'}}>Hiển thị tổng điểm cho học sinh</span>
+                                    <span style={{alignSelf: 'center'}}>{<SwitchIcon />}</span>
+                                </div>
+
+                                <Divider />
+
+                                <div style={{ textAlign: 'left', fontSize: '22px', fontWeight: '400', color: '#3c4043', marginTop: '18px' }}>Loại điểm</div>
+                                <div style={{ textAlign: 'left', fontSize: '12px', color: '#5f6368', margin: '16px 0px' }}>Loại điểm phải có tổng là 100%</div>
+                                <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginBottom: '16px' }}>
+                                    <TextField
+                                        id=""
+                                        name=""
+                                        label="Danh mục điểm*"
+                                        value=""
+                                        variant="filled"
+                                        sx={{ mr: 3 }}
+                                    />
+                                    <TextField
+                                        id=""
+                                        name=""
+                                        label="Phần trăm*"
+                                        value=""
+                                        variant="filled"
+                                        sx={{ mr: 4 }}
+                                    />
+                                    <span style={{alignSelf: 'center'}}>{<ClearIcon />}</span>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginBottom: '16px' }}>
+                                    <TextField
+                                        id=""
+                                        name=""
+                                        label="Danh mục điểm*"
+                                        value=""
+                                        variant="filled"
+                                        sx={{ mr: 3 }}
+                                    />
+                                    <TextField
+                                        id=""
+                                        name=""
+                                        label="Phần trăm*"
+                                        value=""
+                                        variant="filled"
+                                        sx={{ mr: 4 }}
+                                    />
+                                    <span style={{alignSelf: 'center'}}>{<ClearIcon />}</span>
+                                </div>
+                                <div style={{ textAlign: 'left', fontSize: '12px', color: '#5f6368'}}>Phần trăm còn lại <span>0%</span></div>
+                                <Button size="large" sx={{ float: 'left', marginLeft: '-12px', fontSize: '14px', color: '#1967d2'}}>Thêm loại điểm</Button>
+                            </div>
                         </Item>
                         <Item>Item 3</Item>
                     </Stack>
