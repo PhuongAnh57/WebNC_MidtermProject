@@ -15,27 +15,22 @@ import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
-import BookIcon from '@mui/icons-material/Book';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import IconButton from '@mui/material/IconButton';
-import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import SkipNextIcon from '@mui/icons-material/SkipNext';
-import { useTheme } from '@mui/material/styles';
 import Background from '../../../assets/images/classroom.jpg';
+import Divider from '@mui/material/Divider';
+import { Link, Navigate } from 'react-router-dom';
 
-export default function SelectLabels() {
+export default function Classwork() {
     const [age, setAge] = React.useState('');
 
     const handleChange = (event) => {
         setAge(event.target.value);
     };
-
-    const theme = useTheme();
 
     return (
         <Grid container spacing={2}>
@@ -74,7 +69,7 @@ export default function SelectLabels() {
                                 <ListItem>
                                     <ListItemAvatar>
                                         <Avatar>
-                                            <BookIcon />
+                                            <AssignmentIcon />
                                         </Avatar>
                                     </ListItemAvatar>
                                     <ListItemText primary="Simple JWT auth with Nest" secondary="" />
@@ -87,7 +82,7 @@ export default function SelectLabels() {
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit
                             amet blandit leo lobortis eget.
                         </Typography>
-                        <Card sx={{ display: 'flex', width: '50%', margin:'20px'}}>
+                        <Card sx={{ display: 'flex', width: '50%', margin: '20px' }}>
                             <CardMedia
                                 component="img"
                                 sx={{ width: 151 }}
@@ -96,7 +91,7 @@ export default function SelectLabels() {
                             />
                             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                                 <CardContent sx={{ flex: '1 0 auto' }}>
-                                    <Typography component="div" variant="h5">
+                                    <Typography component="div" variant="h6">
                                         Live From Space
                                     </Typography>
                                     <Typography variant="subtitle1" color="text.secondary" component="div">
@@ -105,6 +100,10 @@ export default function SelectLabels() {
                                 </CardContent>
                             </Box>
                         </Card>
+                        <Divider sx={{ margin: '10px 0' }} />
+                        <Link to="/classwork-detail">
+                            <Button variant="text">Xem chi tiết</Button>
+                        </Link>
                     </AccordionDetails>
                 </Accordion>
                 <Accordion>
@@ -119,7 +118,7 @@ export default function SelectLabels() {
                                 <ListItem>
                                     <ListItemAvatar>
                                         <Avatar>
-                                            <BookIcon />
+                                            <AssignmentIcon />
                                         </Avatar>
                                     </ListItemAvatar>
                                     <ListItemText primary="Simple JWT auth with Nest" secondary="" />
@@ -132,10 +131,12 @@ export default function SelectLabels() {
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit
                             amet blandit leo lobortis eget.
                         </Typography>
+                        <Divider sx={{ margin: '10px 0' }} />
+                        <Button variant="text">Xem chi tiết</Button>
                     </AccordionDetails>
                 </Accordion>
             </Grid>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
                 <Grid item xs>
                     <Grid container alignItems="center" marginTop={'30px'}>
                         <Grid item xs>
@@ -161,7 +162,7 @@ export default function SelectLabels() {
                                     <ListItem>
                                         <ListItemAvatar>
                                             <Avatar>
-                                                <BookIcon />
+                                                <AssignmentIcon />
                                             </Avatar>
                                         </ListItemAvatar>
                                         <ListItemText primary="React tutorial" secondary="" />
@@ -174,10 +175,12 @@ export default function SelectLabels() {
                                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
                                 sit amet blandit leo lobortis eget.
                             </Typography>
+                            <Divider sx={{ margin: '10px 0' }}/>
+                        <Button variant="text">Xem chi tiết</Button>
                         </AccordionDetails>
                     </Accordion>
                 </Grid>
-            </Grid>
+            </Grid> */}
         </Grid>
     );
 }
