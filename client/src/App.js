@@ -5,13 +5,15 @@ import SignUp from 'pages/SignUp/SignUp';
 import LogIn from 'pages/LogIn/LogIn';
 import Home from 'pages/Home/Home';
 import EditAccount from 'pages/EditAccount';
-import LogOut from 'pages/Logout/LogOut';
 import PageNotFound from 'pages/PageNotFound/PageNotFound';
 import AuthProvider from 'context/AuthProvider';
-import EmailActivated from 'pages/EmailActivated/EmailActivated';
+import ActivateAccount from 'pages/ActivateAccount/ActivateAccount';
 import ResetPassword from 'pages/ResetPassword/ResetPassword';
 import NewPassword from 'pages/NewPassword/NewPassword';
-import ClassDetail from 'pages/ClassDetail';
+import JoinedEmail from 'pages/JoinedEmail/JoinedEmail';
+import JoinedLink from 'pages/JoinedLink/JoinedLink';
+
+import ClassDetail from 'pages/ClassDetail/ClassDetail';
 
 function App() {
     return (
@@ -25,7 +27,7 @@ function App() {
                         <Route exact path="/signup" element={<SignUp />} />
                         <Route exact path="/register" element={<SignUp />} />
 
-                        <Route exact path="/api/user/email-confirm/:token" element={<EmailActivated />} />
+                        <Route exact path="/api/user/email-confirm/:token" element={<ActivateAccount />} />
 
                         <Route exact path="/forgot-password" element={<ResetPassword />} />
                         <Route exact path="/api/user/password-reset/:token" element={<NewPassword />} />
@@ -37,9 +39,13 @@ function App() {
 
                         <Route exact path="/edit-account" element={<EditAccount />} />
 
-                        <Route exact path="/class-detail" element={<ClassDetail />} />
+                        <Route exact path="/logout" element={<Landing />} />
 
-                        <Route exact path="/logout" element={<LogOut />} />
+                        <Route exact path="/class/:classID" element={<ClassDetail />} />
+
+                        <Route exact path="/api/class/:classID/invite/accept-token/:token" element={<JoinedEmail />} />
+
+                        <Route exact path="/class/:classID/invite" element={<JoinedLink />} />
 
                         {/* Nếu người dùng nhập một đường dẫn không khớp, thông báo page not found */}
                         <Route path="*" element={<PageNotFound />} />

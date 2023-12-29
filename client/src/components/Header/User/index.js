@@ -87,7 +87,6 @@ export default function User() {
     };
 
     const handleLogOut = () => {
-        console.log('logout');
         axios.get('/api/logout').then((response) => {
             if (response.data.message === 'Logging out') {
                 dispatch({ type: LOGOUT });

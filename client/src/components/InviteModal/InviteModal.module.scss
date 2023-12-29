@@ -1,0 +1,86 @@
+.modal-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 456px;
+    // height: 500px;
+    color: #3c4043;
+    background-color: #fff;
+    box-shadow: 24px;
+    padding: 0 24px;
+    border-radius: 8px;
+
+    .modal-link {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+        align-items: center;
+        padding-bottom: 4px;
+        border-bottom: 0.0625rem solid #e0e0e0;
+    }
+
+    p {
+        display: inline-block;
+        margin: 0;
+        font-size: 14px;
+        color: #5f6368;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-wrap: nowrap;
+    }
+
+    .form-control {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        flex-wrap: wrap;
+        flex-direction: row;
+        padding-top: 8px;
+
+        & > div.container {
+            gap: 6px;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+
+        & > div.container > span {
+            background-color: gray;
+            padding: 1px 3px;
+            border-radius: 4px;
+        }
+        input {
+            width: 100%;
+            margin: 0 0 8px;
+            border: none;
+            padding: 8px 0;
+            font-size: 16px;
+            border-bottom: 0.0625rem solid #e0e0e0;
+        }
+
+        input:focus {
+            outline: none;
+        }
+    }
+
+    .modal-button {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        padding-bottom: 8px;
+
+        .cancel-btn {
+            color: #5f6368 !important;
+        }
+
+        .cancel-btn:hover {
+            background-color: rgba(95, 99, 104, 0.1) !important;
+        }
+
+        Button + Button {
+            margin-left: 8px;
+        }
+    }
+}

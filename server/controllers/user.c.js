@@ -20,8 +20,8 @@ exports.postSignup = async (req, res) => {
         );
 
         if (userExists || pendingUserExists) {
-            res.status(400).json({ message: 'Username or email already belongs to another user' });
             console.log('Username or email already belongs to another user');
+            return res.status(400).json({ message: 'Username or email already belongs to another user' });
         }
 
         if (!userExists && !pendingUserExists) {
@@ -31,8 +31,6 @@ exports.postSignup = async (req, res) => {
             } else {
                 id = pendingUsers[pendingUsers.length - 1].user_id + 1;
             }
-
-            console.log(id);
 
             bcrypt.hash(password, 10, async (err, hash) => {
                 if (err) {
@@ -90,18 +88,25 @@ exports.getEmailActivationConfirmation = async (req, res) => {
             newID = users[users.length - 1].user_id + 1;
         }
 
+        // const role = '';
+
+        // if (pendingUserExists.username === 'admin') {
+
+        // }
+
         const newUser = {
             ...pendingUserExists,
             id: newID,
             gender: null,
             dateOfBirth: null,
             address: null,
+            role: 'user',
         };
 
         await userM.addNewUser(newUser);
         await pendingUserM.removeUser(pendingUserExists.user_id);
 
-        res.status(200).json({ message: `User ${userExists.username} has been activated` });
+        res.status(200).json({ message: `User ${pendingUserExists.username} has been activated` });
     } catch (err) {
         console.log(err);
         res.status(400).json({ message: 'User cannot be activated' });
@@ -142,7 +147,7 @@ exports.postLogin = async (req, res) => {
             const response = {
                 message: 'Verification successfully',
                 user: {
-                    uid: userDB.user_id,
+                    user_id: userDB.user_id,
                     lastName: userDB.last_name,
                 },
                 accessToken: token,
@@ -233,7 +238,6 @@ exports.postResetPasswordConfirmation = async (req, res) => {
                     await access_tokenM.removeToken(id);
 
                     res.status(200).json({ message: 'Password has been updated!' });
-                    console.log('Password has been reseted!');
                 });
             }
         });
@@ -256,11 +260,11 @@ exports.postRefreshToken = async (req, res) => {
                     id: decodedValue.id,
                 };
 
-                const newToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+                const newAccessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
                     expiresIn: process.env.TOKEN_LIFE,
                 });
 
-                res.json({ token: newToken });
+                res.json({ accessToken: newAccessToken });
             }
         });
     } catch (err) {
@@ -270,7 +274,7 @@ exports.postRefreshToken = async (req, res) => {
 };
 
 // authentication test with jwt
-exports.getEditProfile = async (req, res) => {
+exports.getProfile = async (req, res) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader.split(' ')[1];
 
@@ -293,9 +297,11 @@ exports.getEditProfile = async (req, res) => {
             res.json({ message: 'User not found' });
         } else {
             const userData = {
+                id: user.user_id,
+                username: user.username,
                 firstName: user.first_name,
                 lastName: user.last_name,
-                dateOfBirth: user.day_of_birth,
+                dateOfBirth: user.date_of_birth,
                 gender: user.gender,
                 email: user.email,
                 address: user.address,
@@ -344,13 +350,59 @@ exports.postEditProfile = async (req, res) => {
             address: userData.address,
         };
 
-        console.log('sf');
-
         await userM.editUser(userEdit);
 
         return res.json({ message: 'Update successfully' });
     } catch (err) {
         console.log(err);
         res.json({ message: 'Something went wrong' });
+    }
+};
+
+exports.checkInvitation = async (req, res) => {
+    const { accept_token } = req.body.data;
+
+    const authHeader = req.headers['authorization'];
+    const accessToken = authHeader.split(' ')[1];
+
+    if (!accessToken) {
+        return res.json({ message: 'Unauthorization' });
+    }
+
+    try {
+        const inviteEmail = jwt.verify(accept_token, process.env.INVITE_KEY, (err, decodedValue) => {
+            if (err) {
+                return res.status(400).json({ message: 'Something went wrong' });
+            } else {
+                return decodedValue.email;
+            }
+        });
+
+        const userID = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (err, decodeValue) => {
+            if (err) {
+                res.json({ message: 'Invalid token' });
+            } else {
+                return decodeValue.id;
+            }
+        });
+
+        const user = await userM.getUserByID(userID);
+
+        const userData = {
+            user_id: user.user_id,
+            username: user.username,
+            email: user.email,
+        };
+
+        if (user.email === inviteEmail) {
+            console.log('User invited');
+            return res.status(200).json({ message: 'User invited', userData });
+        } else {
+            console.log('User not invited');
+            return res.status(200).json({ message: 'User not invited', userData });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(400).json({ message: 'Something went wrong' });
     }
 };

@@ -1,10 +1,8 @@
 import * as React from 'react';
+import { useState, useEffect } from 'react';
+
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import ListItemText from '@mui/material/ListItemText';
-import ListItem from '@mui/material/ListItem';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -15,7 +13,12 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
+import Divider from '@mui/material/Divider';
 import { styled } from '@mui/material/styles';
+import useAxiosPrivate from 'hooks/useAxiosPrivate';
+import ClearIcon from '@mui/icons-material/Clear';
+
+import SwitchIcon from './SwitchIcon';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -30,6 +33,45 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function FullScreenDialog({ open, onClose }) {
+    const [classData, setClassData] = useState({
+        name: '',
+        part: '',
+        topic: '',
+        room: '',
+    });
+
+    const currentURL = window.location.href;
+    const classID = currentURL.split('/').pop();
+    const axiosPrivate = useAxiosPrivate();
+
+    const handleChange = (e) => {
+        setClassData((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value,
+        }));
+    };
+
+    useEffect(() => {
+        if (open) {
+            const getClassData = async () => {
+                const userID = localStorage.getItem('userID');
+
+                axiosPrivate.get(`/api/class/${classID}/${userID}`).then((response) => {
+                    const classDetail = response.data.Class;
+                    setClassData({
+                        name: classDetail.class_name,
+                        part: classDetail.part,
+                        topic: classDetail.topic,
+                        room: classDetail.room,
+                    });
+                });
+            };
+
+            getClassData();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [open]);
+
     return (
         <React.Fragment>
             <Dialog fullScreen open={open} onClose={onClose} TransitionComponent={Transition}>
@@ -46,7 +88,8 @@ export default function FullScreenDialog({ open, onClose }) {
                         </Button>
                     </Toolbar>
                 </AppBar>
-                <Box sx={{ width: '50%',mx: 'auto', marginTop:'20px'}}>
+                <Box sx={{ width: '50%', mx: 'auto', marginTop: '20px' }} />
+                <Box sx={{ width: '50%', mx: 'auto', marginTop: '20px' }}>
                     <Stack spacing={2}>
                         <Item>
                             <Box
@@ -63,38 +106,90 @@ export default function FullScreenDialog({ open, onClose }) {
                                     id="name"
                                     name="name"
                                     label="Tên lớp học"
-                                    // value={name}
-                                    // onChange={(e) => setName(e.target.value)}
+                                    value={classData.name}
+                                    onChange={handleChange}
                                     variant="filled"
                                 />
                                 <TextField
                                     id="part"
                                     name="part"
                                     label="Phần"
-                                    // value={part}
-                                    // onChange={(e) => setPart(e.target.value)}
+                                    value={classData.part}
+                                    onChange={handleChange}
                                     variant="filled"
                                 />
                                 <TextField
                                     id="topic"
                                     name="topic"
                                     label="Chủ đề"
-                                    // value={topic}
-                                    // onChange={(e) => setTopic(e.target.value)}
+                                    value={classData.topic}
+                                    onChange={handleChange}
                                     variant="filled"
                                 />
                                 <TextField
                                     id="room"
                                     name="room"
                                     label="Phòng"
-                                    // value={room}
-                                    // onChange={(e) => setRoom(e.target.value)}
+                                    value={classData.room}
+                                    onChange={handleChange}
                                     variant="filled"
                                 />
                             </Box>
                         </Item>
                         <Item>
-                            <h1>Chung</h1>
+                            <div style={{ margin: '12px' }}>
+                                <h1>Chấm điểm</h1>
+                                <div style={{ textAlign: 'left', fontSize: '22px', fontWeight: '400', color: '#3c4043' }}>Tính tổng điểm theo trọng số</div>
+                                <div style={{margin: '12px 0px', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                                    <span style={{fontSize: '14px', color: '#3c4043'}}>Hiển thị tổng điểm cho học sinh</span>
+                                    <span style={{alignSelf: 'center'}}>{<SwitchIcon />}</span>
+                                </div>
+
+                                <Divider />
+
+                                <div style={{ textAlign: 'left', fontSize: '22px', fontWeight: '400', color: '#3c4043', marginTop: '18px' }}>Loại điểm</div>
+                                <div style={{ textAlign: 'left', fontSize: '12px', color: '#5f6368', margin: '16px 0px' }}>Loại điểm phải có tổng là 100%</div>
+                                <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginBottom: '16px' }}>
+                                    <TextField
+                                        id=""
+                                        name=""
+                                        label="Danh mục điểm*"
+                                        value=""
+                                        variant="filled"
+                                        sx={{ mr: 3 }}
+                                    />
+                                    <TextField
+                                        id=""
+                                        name=""
+                                        label="Phần trăm*"
+                                        value=""
+                                        variant="filled"
+                                        sx={{ mr: 4 }}
+                                    />
+                                    <span style={{alignSelf: 'center'}}>{<ClearIcon />}</span>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginBottom: '16px' }}>
+                                    <TextField
+                                        id=""
+                                        name=""
+                                        label="Danh mục điểm*"
+                                        value=""
+                                        variant="filled"
+                                        sx={{ mr: 3 }}
+                                    />
+                                    <TextField
+                                        id=""
+                                        name=""
+                                        label="Phần trăm*"
+                                        value=""
+                                        variant="filled"
+                                        sx={{ mr: 4 }}
+                                    />
+                                    <span style={{alignSelf: 'center'}}>{<ClearIcon />}</span>
+                                </div>
+                                <div style={{ textAlign: 'left', fontSize: '12px', color: '#5f6368'}}>Phần trăm còn lại <span>0%</span></div>
+                                <Button size="large" sx={{ float: 'left', marginLeft: '-12px', fontSize: '14px', color: '#1967d2'}}>Thêm loại điểm</Button>
+                            </div>
                         </Item>
                         <Item>Item 3</Item>
                     </Stack>

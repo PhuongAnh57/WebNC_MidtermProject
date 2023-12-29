@@ -34,29 +34,29 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-    const [firstName, setFirstName] = useState('');
+    const [user, setUser] = useState({
+        firstName: '',
+        lastName: '',
+        username: '',
+        password: '',
+        email: '',
+    });
+
     const [alreadyExists, setAlreadyExists] = useState(false);
-    const [lastName, setLastName] = useState('');
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const [emailActivation, setEmailActivation] = useState(false);
+
+    const handleChange = (e) => {
+        setUser((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value,
+        }));
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
-
-        const user = {
-            firstName: data.get('firstName'),
-            lastName: data.get('lastName'),
-            username: data.get('username'),
-            password: data.get('password'),
-            email: data.get('email'),
-        };
 
         try {
             await axios.post('/api/signup', { user }).then((response) => {
-                console.log(response.status);
                 if (response.status === 200) {
                     return setEmailActivation(true);
                 }
@@ -67,17 +67,10 @@ export default function SignUp() {
                 }
             });
         } catch (err) {
-            console.log(err);
+            console.log('err', err);
+            setAlreadyExists(true);
         }
     };
-
-    if (alreadyExists) {
-        setFirstName('');
-        setLastName('');
-        setUsername('');
-        setPassword('');
-        setEmail('');
-    }
 
     if (localStorage.getItem('accessToken')) {
         return <Navigate to="/" />;
@@ -101,7 +94,7 @@ export default function SignUp() {
                                 <LockOutlinedIcon />
                             </Avatar>
                             <Typography component="h1" variant="h5">
-                                Sign up
+                                Đăng ký
                             </Typography>
 
                             {alreadyExists && (
@@ -115,26 +108,26 @@ export default function SignUp() {
                                     <Grid item xs={12} sm={6}>
                                         <TextField
                                             autoComplete="given-name"
-                                            name="firstName"
+                                            name="lastName"
                                             required
                                             fullWidth
-                                            id="firstName"
-                                            label="First Name"
+                                            id="lastName"
+                                            label="Họ"
                                             autoFocus
-                                            value={firstName}
-                                            onChange={(event) => setFirstName(event.target.value)}
+                                            value={user.lastName}
+                                            onChange={handleChange}
                                         />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <TextField
                                             required
                                             fullWidth
-                                            id="lastName"
-                                            label="Last Name"
-                                            name="lastName"
+                                            id="firstName"
+                                            label="Tên"
+                                            name="firstName"
                                             autoComplete="family-name"
-                                            value={lastName}
-                                            onChange={(event) => setLastName(event.target.value)}
+                                            value={user.firstName}
+                                            onChange={handleChange}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -142,11 +135,11 @@ export default function SignUp() {
                                             required
                                             fullWidth
                                             id="username"
-                                            label="Username"
+                                            label="Tên đăng nhập"
                                             name="username"
                                             autoComplete="username"
-                                            value={username}
-                                            onChange={(event) => setUsername(event.target.value)}
+                                            value={user.username}
+                                            onChange={handleChange}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -154,12 +147,12 @@ export default function SignUp() {
                                             required
                                             fullWidth
                                             name="password"
-                                            label="Password"
+                                            label="Mật khẩu"
                                             type="password"
                                             id="password"
                                             autoComplete="new-password"
-                                            value={password}
-                                            onChange={(event) => setPassword(event.target.value)}
+                                            value={user.password}
+                                            onChange={handleChange}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -171,25 +164,26 @@ export default function SignUp() {
                                             type="email"
                                             id="email"
                                             autoComplete="email"
-                                            value={email}
-                                            onChange={(event) => setEmail(event.target.value)}
+                                            value={user.email}
+                                            onChange={handleChange}
                                         />
                                     </Grid>
 
                                     <Grid item xs={12}>
                                         <FormControlLabel
                                             control={<Checkbox value="allowExtraEmails" color="primary" />}
-                                            label="I agree to the Terms and Conditions"
+                                            label="Đồng ý với các Điều khoản và Điều kiện"
                                         />
                                     </Grid>
                                 </Grid>
                                 <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-                                    Sign Up
+                                    Đăng ký
                                 </Button>
                                 <Grid container justifyContent="flex-end">
                                     <Grid item>
+                                        Đã có tài khoản?
                                         <Link to="/login" variant="body2" style={{ color: '#1976d2' }}>
-                                            Already have an account? Log in
+                                            Đăng nhập
                                         </Link>
                                     </Grid>
                                 </Grid>

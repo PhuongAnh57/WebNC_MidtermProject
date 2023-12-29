@@ -1,44 +1,57 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-// import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Box from '@mui/material/Box';
-import axios from 'axios';
+import useAxiosPrivate from 'hooks/useAxiosPrivate';
 
 function CreateClass({ open, onClose }) {
-    const [name, setName] = useState('');
-    const [part, setPart] = useState('');
-    const [topic, setTopic] = useState('');
-    const [room, setRoom] = useState('');
+    const navigate = useNavigate();
+    const [classData, setClassData] = useState({
+        name: '',
+        part: '',
+        topic: '',
+        room: '',
+    });
+    const [disabled, setDisabled] = useState(false);
+    const [status, setStatus] = useState('tạo');
+    const axiosPrivate = useAxiosPrivate();
+
+    const handleChange = (e) => {
+        setClassData((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value,
+        }));
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        const classInfo = { name, part, topic, room };
+        let classID = 0;
 
         try {
-            setName('');
-            setPart('');
-            setTopic('');
-            setRoom('');
-            onClose();
-            await axios
-                .post(
-                    '/api/create-class',
-                    { classInfo },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-                        },
-                    },
-                )
-                .then((response) => {
-                    console.log('Tạo lớp thành công');
+            setDisabled(true);
+            setStatus('Đang tạo');
+
+            await axiosPrivate
+                .post('/api/create-class', { classData })
+                .then((response) => (classID = response.data.class_id));
+
+            setTimeout(() => {
+                onClose();
+                setClassData({
+                    name: '',
+                    part: '',
+                    topic: '',
+                    room: '',
                 });
+                navigate(`/class/${classID}`, { replace: true });
+            }, 1000);
         } catch (error) {
             console.log(error);
         }
@@ -62,43 +75,47 @@ function CreateClass({ open, onClose }) {
                             id="name"
                             name="name"
                             label="Tên lớp học"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            value={classData.name}
+                            onChange={handleChange}
                             variant="filled"
+                            disabled={disabled}
                         />
                         <TextField
                             id="part"
                             name="part"
                             label="Phần"
-                            value={part}
-                            onChange={(e) => setPart(e.target.value)}
+                            value={classData.part}
+                            onChange={handleChange}
                             variant="filled"
+                            disabled={disabled}
                         />
                         <TextField
                             id="topic"
                             name="topic"
                             label="Chủ đề"
-                            value={topic}
-                            onChange={(e) => setTopic(e.target.value)}
+                            value={classData.topic}
+                            onChange={handleChange}
                             variant="filled"
+                            disabled={disabled}
                         />
                         <TextField
                             id="room"
                             name="room"
                             label="Phòng"
-                            value={room}
-                            onChange={(e) => setRoom(e.target.value)}
+                            value={classData.room}
+                            onChange={handleChange}
                             variant="filled"
+                            disabled={disabled}
                         />
                     </Box>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={onClose} color="primary">
+                    <Button onClick={onClose} color="primary" disabled={disabled}>
                         hủy
                     </Button>
-                    {name ? (
-                        <Button onClick={handleSubmit} color="primary">
-                            tạo
+                    {classData.name ? (
+                        <Button onClick={handleSubmit} color="primary" disabled={disabled}>
+                            {status}
                         </Button>
                     ) : (
                         <Button disabled>tạo</Button>

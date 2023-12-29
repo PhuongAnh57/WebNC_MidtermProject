@@ -1,16 +1,41 @@
-import { Navigate } from 'react-router';
+import { Navigate, useNavigate } from 'react-router';
+import { useEffect, useState } from 'react';
 
 import MainLayout from 'layouts/MainLayout';
 import CourseCard from './CourseCard';
-import React, {useState} from 'react';
+import React from 'react';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import CreateClass from 'components/CreateClass';
+import useAxiosPrivate from 'hooks/useAxiosPrivate';
 
 export default function Home() {
     const [open, setOpen] = useState(false);
+    const [classes, setClasses] = useState([]);
+    const axiosPrivate = useAxiosPrivate();
+
     const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false)
+    const handleClose = () => setOpen(false);
+
+    useEffect(() => {
+        const getAllClasses = async () => {
+            try {
+                const response = await axiosPrivate.get('/api/all-classes');
+                
+
+                if (response.status === 200) {
+                    setClasses(response.data.classesData);
+                }
+            } catch (err) {
+                console.log(err);
+                if (err.response.status === 401) {
+                    return <Navigate to="/login" />;
+                }
+            }
+        };
+
+        getAllClasses();
+    }, []);
 
     // Đọc thông tin người dùng từ cookie
     if (document.cookie) {
@@ -31,19 +56,19 @@ export default function Home() {
 
     return (
         <MainLayout>
-            <Button style={{ float: 'right', marginBottom: '20px' }} variant="outlined" startIcon={<AddIcon />}
-            onClick={handleOpen}>
+            <Button
+                style={{ float: 'right', marginBottom: '20px' }}
+                variant="outlined"
+                startIcon={<AddIcon />}
+                onClick={handleOpen}
+            >
                 tạo lớp học
             </Button>
-            <CreateClass open={open} onClose={handleClose}/>
-            
-            <div style={{ display: 'flex', flexWrap: 'wrap', clear: 'both'}}>
-                <CourseCard />
-                <CourseCard />
-                <CourseCard />
-                <CourseCard />
-                <CourseCard />
-                <CourseCard />
+            <CreateClass open={open} onClose={handleClose} />
+
+            <div style={{ display: 'flex', flexWrap: 'wrap', clear: 'both' }}>
+                {classes &&
+                    classes.map((classDetail) => <CourseCard key={classDetail.class_id} classDetail={classDetail} />)}
             </div>
         </MainLayout>
     );
