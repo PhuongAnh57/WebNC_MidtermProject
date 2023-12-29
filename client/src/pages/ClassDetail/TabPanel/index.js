@@ -84,36 +84,59 @@ export default function BasicTabs({ classID }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    return (
-        <>
-            {loading ? (
-                <LoadingSpinner />
-            ) : (
-                <Box sx={{ width: '100%' }}>
-                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                        <Stack direction="row">
-                            <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                                <Tab label="Bảng tin" {...a11yProps(0)} />
-                                <Tab label="Bài tập" {...a11yProps(1)} />
-                                <Tab label="Mọi người" {...a11yProps(2)} />
-                            </Tabs>
-                            <IconButton aria-label="delete" onClick={handleOpen}>
-                                <SettingsIcon />
-                            </IconButton>
-                            <ClassInfo open={open} onClose={handleClose} />
-                        </Stack>
-                    </Box>
-                    <TabPanel value={value} index={0}>
-                        <BulletinBoard classDetail={classDetail} />
-                    </TabPanel>
-                    <TabPanel value={value} index={1}>
-                        <Classwork classDetail={classDetail} />
-                    </TabPanel>
-                    <TabPanel value={value} index={2}>
-                        <Members classDetail={classDetail} />
-                    </TabPanel>
+    const studentView = () => {
+        return (
+            <Box sx={{ width: '100%' }}>
+                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                    <Stack direction="row">
+                        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                            <Tab label="Bảng tin" {...a11yProps(0)} />
+                            <Tab label="Bài tập" {...a11yProps(1)} />
+                            <Tab label="Mọi người" {...a11yProps(2)} />
+                        </Tabs>
+                    </Stack>
                 </Box>
-            )}
-        </>
-    );
+                <TabPanel value={value} index={0}>
+                    <BulletinBoard classDetail={classDetail} />
+                </TabPanel>
+                <TabPanel value={value} index={1}>
+                    <Classwork classDetail={classDetail} />
+                </TabPanel>
+                <TabPanel value={value} index={2}>
+                    <Members classDetail={classDetail} />
+                </TabPanel>
+            </Box>
+        );
+    };
+
+    const teacherView = () => {
+        return (
+            <Box sx={{ width: '100%' }}>
+                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                    <Stack direction="row">
+                        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                            <Tab label="Bảng tin" {...a11yProps(0)} />
+                            <Tab label="Bài tập" {...a11yProps(1)} />
+                            <Tab label="Mọi người" {...a11yProps(2)} />
+                        </Tabs>
+                        <IconButton aria-label="delete" onClick={handleOpen}>
+                            <SettingsIcon />
+                        </IconButton>
+                        <ClassInfo open={open} onClose={handleClose} />
+                    </Stack>
+                </Box>
+                <TabPanel value={value} index={0}>
+                    <BulletinBoard classDetail={classDetail} />
+                </TabPanel>
+                <TabPanel value={value} index={1}>
+                    <Classwork classDetail={classDetail} />
+                </TabPanel>
+                <TabPanel value={value} index={2}>
+                    <Members classDetail={classDetail} />
+                </TabPanel>
+            </Box>
+        );
+    };
+
+    return <>{loading ? <LoadingSpinner /> : <>{classDetail.role === 'student' ? studentView() : teacherView()}</>}</>;
 }

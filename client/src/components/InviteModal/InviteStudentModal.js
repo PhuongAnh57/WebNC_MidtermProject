@@ -63,9 +63,8 @@ function InviteStudentModal({ classID, url, open, handleClose }) {
                 usersExist.forEach((email) => {
                     alert(`${email} đã được mời hoặc đã tham gia lớp học!`);
                 });
-
-                setValues([]);
             }
+            setValues([]);
         } catch (err) {
             console.log(err);
         }

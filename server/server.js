@@ -25,7 +25,7 @@ app.use(
     }),
 );
 app.use(cookieParser());
-app.use(router);
+app.use('/api', router);
 
 dotenv.config();
 

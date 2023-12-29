@@ -5,8 +5,8 @@ module.exports = {
         const result = await db.any('SELECT * FROM invitations');
         return result;
     },
-    getInvitationByEmail: async (email) => {
-        const result = await db.one('SELECT * FROM invitations WHERE email=$1', [email]);
+    getInvitationByEmail: async (classID, email) => {
+        const result = await db.one('SELECT * FROM invitations WHERE class_id=$1 and email=$2', [classID, email]);
         return result;
     },
     getInvitationByToken: async (token) => {
@@ -14,14 +14,11 @@ module.exports = {
         return result;
     },
     addNewInvitation: async (invitation) => {
-        await db.one('INSERT INTO invitations(email, accept_token, role) VALUES($1, $2, $3) RETURNING *', [
-            invitation.email,
-            invitation.token,
-            invitation.role,
-        ]);
+        await db.one(
+            'INSERT INTO invitations(email, class_id, role, accept_token) VALUES($1, $2, $3, $4) RETURNING *',
+            [invitation.email, invitation.classID, invitation.role, invitation.token],
+        );
     },
-    //     return result;
-    // },
     removeInvitation: async (email) => {
         await db.none('DELETE  FROM invitations WHERE email=$1', [email]);
     },

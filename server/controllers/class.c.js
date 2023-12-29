@@ -123,20 +123,20 @@ exports.postInviteMembers = async (req, res) => {
     try {
         const classInfo = await classM.getClassByID(classID);
 
-        const usersExist = await emails.reduce(async (emails, email) => {
-            const invitationExits = await invitationM.getInvitationByEmail(email).catch((err) => {});
+        const usersExist = await emails.reduce(async (emailsExist, email) => {
+            const invitationExits = await invitationM.getInvitationByEmail(classID, email).catch((err) => {});
             const userJoined = await classM.getMemberByEmail(classID, email).catch((err) => {});
 
             if (invitationExits || userJoined) {
-                emails.push(email);
+                emailsExist.push(email);
             } else {
                 const token = jwt.sign({ email }, process.env.INVITE_KEY);
 
-                await invitationM.addNewInvitation({ email, token, role });
+                await invitationM.addNewInvitation({ email, classID, token, role });
                 await mailer.sendClassInvitaion(email, classInfo, token, role);
             }
 
-            return emails;
+            return emailsExist;
         }, []);
 
         res.status(200).json({ usersExist });

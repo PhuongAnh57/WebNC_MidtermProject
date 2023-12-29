@@ -31,24 +31,33 @@ module.exports = {
             <div id="container" style=" display: flex; justify-content: center;">
             <div
                 id="invitation"
-                style="font-family: Roboto; padding: 16px 24px; border: 2px solid gray; max-width: 500px;"
-            >
+                style="font-family: Roboto; 
+                padding: 16px 24px; 
+                border: 2px solid gray; 
+                max-width: 500px;"
+            >   
                 <div
                     id="header" style="padding: 16px; background-color: #E5F6FD;">
-                    <h1 style="fontWeight: 700; margin: 0;">
+                    <h1 style="font-weight: 700; margin: 0;">
                         Classroom
                     </h1>
                 </div>
                 <div
                     id="body"
-                    style="padding: 36px 36px 0; display: flex; flex-direction: column; align-items: flex-start;"
+                    style="padding: 36px 36px 0;display: flex;"
                 >
-                    <h3 style="color: rgba(0,0,0,0.87);">
-                        Hello  ${user.username},
+                    <h3 style="color: rgba(0,0,0,0.87); margin: 4px 0;">
+                        Hello  ${email},
                     </h3>
-                    <p>Thank you for registering into our application. Click on the link below to verify your email.</p>
+                    <p style="margin: 4px 0;">Thank you for registering into our application. Click on the link below to verify your email.</p>
                     <div
-                        style="margin: 24px 0; padding: 12px; width: 150px; background-color: #2196F; align-self: center; font-size: 18px;"
+                        style="
+                        margin: 16px 0; 
+                        padding: 12px; 
+                        width: 150px; 
+                        background-color: #2196FA; 
+                        font-size: 18px;
+                        text-align: center;"
                     >
                         <a
                             href="${process.env.CLIENT_URL}/api/user/email-confirm/${token}"
@@ -81,27 +90,35 @@ module.exports = {
             <div id="container" style=" display: flex; justify-content: center;">
             <div
                 id="invitation"
-                style="font-family: Roboto; padding: 16px 24px; border: 2px solid gray; max-width: 500px;"
-            >
+                style="font-family: Roboto; 
+                padding: 16px 24px; 
+                border: 2px solid gray; 
+                max-width: 500px;"
+            >   
                 <div
                     id="header" style="padding: 16px; background-color: #E5F6FD;">
-                    <h1 style="fontWeight: 700; margin: 0;">
+                    <h1 style="font-weight: 700; margin: 0;">
                         Classroom
                     </h1>
                 </div>
                 <div
                     id="body"
-                    style="padding: 36px 36px 0;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: flex-start;"
+                    style="padding: 36px 36px 0;"
                 >
-                    <h3 style="color: rgba(0,0,0,0.87);">
-                        Hello  ${user.username},
+                    <h3 style="color: rgba(0,0,0,0.87); margin: 4px 0;">
+                        Hello  ${email},
                     </h3>
-                    <p>Click on the button below to reset your password.</p>
+                    <p style="margin: 4px 0;">Click on the button below to reset your password.</p>
                     <div
-                        style="margin: 24px 0; padding: 12px; width: 150px; background-color: #2196FA; align-self: center; font-size: 18px;"
+                        style="
+                        margin: 16px 0; 
+                        padding: 12px; 
+                        width: 150px; 
+                        background-color: #2196FA; 
+                        font-size: 18px;
+                        text-align: center;
+                        align-self: center;"
+
                     >
                         <a
                             href="${process.env.CLIENT_URL}/api/user/password-reset/${token}"
@@ -131,64 +148,60 @@ module.exports = {
             to: email,
             subject: `Joining Mail`,
             html: `
-            <h3>You are invited to join ${classInfo.class_name}</h3>
-            <p>Click on the link below to enter the class: </p>
-            <a target="_" href="${process.env.CLIENT_URL}/api/class/${
-                classInfo.class_id
-            }/invite/accept-token/${token}?role=${role === 'teacher' ? '2' : '3'}">Join in</a>,
-       
-            <div id="container" style=" display: flex; justify-content: center;">
-            <div
-                id="invitation"
-                style="font-family: Roboto; padding: 16px 24px; border: 2px solid gray; max-width: 500px;"
-            >       
-                <div
-                    id="header" style="padding: 16px; background-color: #E5F6FD;">
-                    <h1 style="font-weight: 700; margin: 0;">
-                        Classroom
-                    </h1>
-                </div>
-                <div
-                    id="body"
-                    style="padding: 36px 36px 0;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: flex-start;"
-                >
-                    <h3 style="color: rgba(0,0,0,0.87);">
-                        Hello  ${email},
-                    </h3>
-                    <p>You are invited to join ${classInfo.class_name}</p>
-                    <p>Click on the button below to reset your password.</p>
+            <div id="container" style="display: flex; justify-content: center;">
+                <div id="invitation" 
+                    style=" 
+                    font-family: Roboto; 
+                    padding: 16px 24px; 
+                    border: 2px solid gray; 
+                    max-width: 500px;"
+                >       
                     <div
-                        style="
-                        margin: 24px 0; 
-                        padding: 12px; 
-                        width: 150px; 
-                        background-color: #2196FA; 
-                        align-self: center; 
-                        font-size: 18px;"
+                        id="header"
+                        style="padding: 16px; background-color: #E5F6FD;"    
                     >
-                        <a
-                            href="${process.env.CLIENT_URL}/api/class/${
+                        <h1 style="font-weight: 700; margin: 0;">Classroom</h1>
+                    </div>
+                    <div id="body" style="padding:36px 36px 0; display: block;">
+                        <h3 style="color: rgba(0,0,0,0.87); margin: 4px 0;">Hello  ${email},</h3>
+                        <p style="margin: 4px 0;">You are invited to join ${classInfo.class_name}</p>
+                        <p style="margin: 4px 0;">Click on the button below to join new class.</p>
+                        <div class="button" 
+                            style="
+                            margin: 16px 0; 
+                            padding: 12px; 
+                            width: 150px; 
+                            background-color: #2196FA; 
+                            font-size: 18px;
+                            text-align: center;
+                            align-self: center;"
+                        >
+                            <a style="text-decoration: none; color: white;"
+                                href="${process.env.CLIENT_URL}/api/class/${
                 classInfo.class_id
             }/invite/accept-token/${token}?role=${role}"
-                            style="text-decoration: none; color: white;"
+                            >
+                            Join
+                            </a>
+                        </div>
+
+                        <p style="margin: 4px 0;">
+                            Instead, you can copy/paste this link into your browser.
+                        </p>
+                        <p class="url" style="
+                            padding: 16px;
+                            background-color: #E5F6FD;
+                            align-self: center;
+                            text-align: center;"
                         >
-                           Join
-                        </a>
+                            ${process.env.CLIENT_URL}/api/class/${
+                classInfo.class_id
+            }/invite/accept-token/${token}?role=${role === 'teacher' ? '2' : '3'}
+                        </p>
                     </div>
-                    <p style="align-self: center;">
-                        Instead, you can copy/paste this link into your browser.
-                    </p>
-                    <p style="padding: 16px; background-color: #E5F6FD; align-self: center; text-align: center;">
-                    ${process.env.CLIENT_URL}/api/class/${classInfo.class_id}/invite/accept-token/${token}?role=${
-                role === 'teacher' ? '2' : '3'
-            }
-                    </p>
                 </div>
-            </div>
-        </div>`,
+            </div> 
+        `,
         };
 
         return sendEmail(message);
