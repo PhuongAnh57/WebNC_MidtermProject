@@ -1,16 +1,16 @@
-const dotenv = require('dotenv');
+import { initializeApp } from 'firebase/app';
+import { getStorage } from 'firebase/storage';
 
-dotenv.config();
-
-module.exports = {
-    firebaseConfig: {
-        apiKey: process.env.API_KEY,
-        authDomain: process.env.AUTH_DOMAIN,
-        projectId: process.env.PROJECT_ID,
-        databaseURL: process.env.FIRESTORE_DB_URL,
-        storageBucket: process.env.STORAGE_BUCKET,
-        messagingSenderId: process.env.MESSAGING_SENDER_ID,
-        appId: process.env.APP_ID,
-        measurementId: process.env.MEASUREMENT_ID,
-    },
+const firebaseConfig = {
+    apiKey: 'AIzaSyBkC9XRaIXfURi6DPT3V_SyrDLhLx7Vy2k',
+    authDomain: 'classroom-project-52472.firebaseapp.com',
+    projectId: 'classroom-project-52472',
+    storageBucket: 'classroom-project-52472.appspot.com',
+    messagingSenderId: '725972366383',
+    appId: '1:725972366383:web:e3ab85575b3404505882da',
+    measurementId: 'G-FM0X63F130',
 };
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+export const storage = getStorage(app);

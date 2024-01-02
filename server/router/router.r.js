@@ -3,11 +3,12 @@ const multer = require('multer');
 const router = express.Router();
 const userC = require('../controllers/user.c');
 const classC = require('../controllers/class.c');
-const assignmentC = require('../controllers/assignment.c');
+const resourceC = require('../controllers/resource.c');
 const { passport } = require('../middlewares/passport');
 
-// setup multer as a middleware to grab files upload
-const upload = multer({ storage: multer.memoryStorage() });
+// Multer configuration
+const storage = multer.memoryStorage(); // Use memory storage
+const upload = multer({ storage: storage });
 
 // authenticate
 router.post('/signup', userC.postSignup);
@@ -38,36 +39,42 @@ router.post('/create-class', passport.authenticate('jwt', { session: false }), c
 router.get('/class/:classID/:userID', passport.authenticate('jwt', { session: false }), classC.getClassDetail);
 router.get('/all-members/:classID', passport.authenticate('jwt', { session: false }), classC.getAllMembers);
 
-//-------------------------Assignment Management-------------------------------------------------------------
+//-------------------------Resource Management-------------------------------------------------------------
 router.post(
-    '/class/:classID/assignment/add',
+    '/class/:classID/resource/:resourceID/add_file',
     passport.authenticate('jwt', { session: false }),
-    upload.array('files', 5),
-    assignmentC.postAddAssignment,
+    upload.single('file'),
+    resourceC.postAddFile,
+);
+
+router.post(
+    '/class/:classID/resource/add_resource',
+    passport.authenticate('jwt', { session: false }),
+    resourceC.postAddResource,
 );
 
 router.get(
-    '/class/:classID/assignment/all',
+    '/class/:classID/resource/all',
     passport.authenticate('jwt', { session: false }),
-    assignmentC.getAssignmentsOfClass,
+    resourceC.getResourcesOfClass,
 );
 
 router.get(
-    '/class/:classID/assignment/:assignmentID/detail',
+    '/class/:classID/resource/:resourceID/detail',
     passport.authenticate('jwt', { session: false }),
-    assignmentC.getDetailAssignment,
+    resourceC.getDetailResource,
 );
 
 router.put(
-    '/class/:classID/assignment/:assignmentID/update',
+    '/class/:classID/resource/:resourceID/update',
     passport.authenticate('jwt', { session: false }),
-    assignmentC.putEditAssignment,
+    resourceC.putEditResource,
 );
 
 router.delete(
-    '/class/:classID/assignment/:assignmentID',
+    '/class/:classID/resource/:resourceID',
     passport.authenticate('jwt', { session: false }),
-    assignmentC.deleteRemoveAssignment,
+    resourceC.deleteRemoveResource,
 );
 
 module.exports = router;

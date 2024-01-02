@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Material from './Material';
+import Assignment from './Assignment/Assignment';
 
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
@@ -19,11 +19,14 @@ import Select from '@mui/material/Select';
 import Paper from '@mui/material/Paper';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-import CreateAssignment from './CreateAssignment';
-import CreateDocument from './CreateDocument';
+import CreateAssignment from './Assignment/CreateAssignment';
+import CreateMaterial from './Material/CreateMaterial';
+import useAxiosPrivate from 'hooks/useAxiosPrivate';
+import Material from './Material/Material';
 
 export default function Classwork({ classDetail }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [classworks, setClassworks] = React.useState([]);
     const open = Boolean(anchorEl);
     const handleOpenCreateAssignment = (event) => {
         setAnchorEl(event.currentTarget);
@@ -42,12 +45,35 @@ export default function Classwork({ classDetail }) {
     const handleOpenAssignment = () => setOpenAssignment(true);
     const handleCloseAssignment = () => setOpenAssignment(false);
 
-    const [openDocument, setOpenDocument] = React.useState(false);
-    const handleOpenDocument = () => setOpenDocument(true);
-    const handleCloseDocument = () => setOpenDocument(false);
+    const [openMaterial, setOpenMaterial] = React.useState(false);
+    const handleOpenMaterial = () => setOpenMaterial(true);
+    const handleCloseMaterial = () => setOpenMaterial(false);
+
+    const axiosPrivate = useAxiosPrivate();
+
+    React.useEffect(() => {
+        const loadMaterials = async () => {
+            try {
+                const response = await axiosPrivate.get(`/api/class/${classDetail.class_id}/resource/all`);
+
+                if (response.status === 200) {
+                    const resources = response.data.resources;
+                    setClassworks([...resources]);
+                }
+            } catch (err) {
+                console.log('Error loading classworks', err);
+            }
+        };
+
+        loadMaterials();
+    }, []);
+
+    const handleUpdateClassworks = (newClasswork) => {
+        setClassworks((prev) => [newClasswork, ...prev]);
+    };
 
     return (
-        <div style={{width: '920px'}}>
+        <div style={{ width: '920px' }}>
             <Button
                 id="fade-button"
                 aria-controls={open ? 'fade-menu' : undefined}
@@ -66,6 +92,7 @@ export default function Classwork({ classDetail }) {
                     'aria-labelledby': 'fade-button',
                 }}
                 anchorEl={anchorEl}
+                classDetail={classDetail}
                 open={open}
                 onClose={handleClose}
                 TransitionComponent={Fade}
@@ -77,7 +104,7 @@ export default function Classwork({ classDetail }) {
                     </ListItemIcon>
                     <ListItemText>Bài tập</ListItemText>
                 </MenuItem>
-                <MenuItem onClick={handleOpenDocument}>
+                <MenuItem onClick={handleOpenMaterial}>
                     <ListItemIcon sx={{ marginRight: '8px' }}>
                         <BookIcon fontSize="small" color="primary" />
                     </ListItemIcon>
@@ -94,12 +121,28 @@ export default function Classwork({ classDetail }) {
                 </MenuItem>
             </Menu>
 
-            {<CreateAssignment open={openAssignment} onCloseAssignment={handleCloseAssignment}/>}
-            {<CreateDocument open={openDocument} onCloseDocument={handleCloseDocument}/>}
+            <CreateAssignment
+                classDetail={classDetail}
+                open={openAssignment}
+                onUpdateClassworks={handleUpdateClassworks}
+                onCloseAssignment={handleCloseAssignment}
+            />
+
+            <CreateMaterial
+                classDetail={classDetail}
+                open={openMaterial}
+                onUpdateClassworks={handleUpdateClassworks}
+                onCloseMaterial={handleCloseMaterial}
+            />
 
             {/* Input Select */}
             <FormControl sx={{ mt: 7, ml: -10, mb: 2, minWidth: 300 }}>
-                <Select value={topic} onChange={handleSelectTopic} displayEmpty inputProps={{ 'aria-label': 'Without label' }}>
+                <Select
+                    value={topic}
+                    onChange={handleSelectTopic}
+                    displayEmpty
+                    inputProps={{ 'aria-label': 'Without label' }}
+                >
                     <MenuItem value="">Tất cả chủ đề</MenuItem>
                     <MenuItem value="mid">Giữa kỳ</MenuItem>
                     <MenuItem value="seminar">Seminar</MenuItem>
@@ -107,23 +150,22 @@ export default function Classwork({ classDetail }) {
                 </Select>
             </FormControl>
 
-            {<Material />}
-            {<Material />}
-            {<Material />}
+            {/* Asignment list */}
+            {classworks.map((classwork, index) => {
+                if (classwork.type === 'assignment') {
+                    return <Assignment data={classwork} key={index} />;
+                }
+
+                return <Material data={classwork} key={index} />;
+            })}
 
             {/* Chủ đề */}
-            <Paper 
-                elevation='0'
-                sx={{ width: '100%', marginTop: '32px' }}
-            >
+            {/* <Paper elevation="0" sx={{ width: '100%', marginTop: '32px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 16px' }}>
                     <span style={{ fontSize: '1.6rem', color: '#1976d2' }}>Cuối kỳ</span>
-                    <span style={{ alignSelf: 'center' }}>{<MoreVertIcon sx={{color: '#4285f4'}} />}</span>
+                    <span style={{ alignSelf: 'center' }}>{<MoreVertIcon sx={{ color: '#4285f4' }} />}</span>
                 </div>
-
-                {<Material />}
-                {<Material />}
-            </Paper>
+            </Paper> */}
         </div>
     );
 }
