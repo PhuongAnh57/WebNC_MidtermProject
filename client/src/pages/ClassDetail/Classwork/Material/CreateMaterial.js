@@ -53,19 +53,7 @@ const Item = styled(Paper)(({ theme }) => ({
     color: theme.palette.text.secondary,
 }));
 
-// const VisuallyHiddenInput = styled('input')({
-//     clip: 'rect(0 0 0 0)',
-//     clipPath: 'inset(50%)',
-//     height: 1,
-//     overflow: 'hidden',
-//     position: 'absolute',
-//     bottom: 0,
-//     left: 0,
-//     whiteSpace: 'nowrap',
-//     width: 1,
-// });
-
-export default function CreateMaterial({ classDetail, open, onCloseMaterial }) {
+function CreateMaterial({ classDetail, onUpdateClassworks, onCloseMaterial }) {
     const axiosPrivate = useAxiosPrivate();
     const [filesUpload, setFilesUpload] = React.useState([]);
     const [disabled, setDisabled] = React.useState(false);
@@ -76,6 +64,8 @@ export default function CreateMaterial({ classDetail, open, onCloseMaterial }) {
         type: 'material',
         date: new Date(),
     });
+
+    console.log('render');
 
     const handleChange = (event) => {
         setMaterial((prev) => ({
@@ -177,10 +167,15 @@ export default function CreateMaterial({ classDetail, open, onCloseMaterial }) {
         }
 
         setDisabled(true);
-        const materialResponse = await sendMaterial();
+        let materialResponse = await sendMaterial();
 
         if (filesUpload.length && materialResponse) {
-            await sendFiles(materialResponse);
+            materialResponse = await sendFiles(materialResponse);
+        }
+
+        if (materialResponse) {
+            onUpdateClassworks(materialResponse);
+            setDisabled(false);
         }
 
         onCloseMaterial();
@@ -235,7 +230,7 @@ export default function CreateMaterial({ classDetail, open, onCloseMaterial }) {
 
     return (
         <React.Fragment>
-            <Dialog fullScreen open={open} onClose={onCloseMaterial} TransitionComponent={Transition}>
+            <Dialog fullScreen open={true} onClose={onCloseMaterial} TransitionComponent={Transition}>
                 <AppBar sx={{ position: 'relative' }}>
                     <Toolbar>
                         <IconButton edge="start" color="inherit" onClick={onCloseMaterial} aria-label="close">
@@ -371,14 +366,4 @@ export default function CreateMaterial({ classDetail, open, onCloseMaterial }) {
     );
 }
 
-{
-    /* <Button
-    component="label"
-    variant="contained"
-    startIcon={<CloudUploadIcon />}
-    sx={{ marginBottom: '12px' }}
->
-    
-</Button>
-Tải lên */
-}
+export default React.memo(CreateMaterial);

@@ -53,7 +53,7 @@ const Item = styled(Paper)(({ theme }) => ({
     color: theme.palette.text.secondary,
 }));
 
-export default function CreateAssignment({ classDetail, open, onUpdateClassworks, onCloseAssignment }) {
+export default function CreateAssignment({ classDetail, onUpdateClassworks, onCloseAssignment }) {
     const axiosPrivate = useAxiosPrivate();
     const [filesUpload, setFilesUpload] = React.useState([]);
     const [assignment, setAssignment] = React.useState({
@@ -234,7 +234,7 @@ export default function CreateAssignment({ classDetail, open, onUpdateClassworks
 
     return (
         <React.Fragment>
-            <Dialog fullScreen open={open} onClose={onCloseAssignment} TransitionComponent={Transition}>
+            <Dialog fullScreen open={true} onClose={onCloseAssignment} TransitionComponent={Transition}>
                 <AppBar sx={{ position: 'relative' }}>
                     <Toolbar>
                         <IconButton edge="start" color="inherit" onClick={onCloseAssignment} aria-label="close">

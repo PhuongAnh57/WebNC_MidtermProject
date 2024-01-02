@@ -68,45 +68,51 @@ export default function Material({ data }) {
                 <Typography sx={{ alignSelf: 'center' }}>{<MoreVertIcon />}</Typography>
             </AccordionSummary>
 
-            <AccordionDetails sx={{ borderTop: '1px solid #b5bec9' }}>
-                <Typography sx={{ padding: '16px 24px' }}>
-                    <Card sx={{ display: 'flex', width: '400px', height: '90px' }}>
-                        <CardActionArea
-                            component={Link}
-                            to={material.file_urls[0]}
-                            target="_blank"
-                            sx={{ display: 'flex', justifyContent: 'flex-start', width: '400px', height: '90px' }}
-                        >
-                            {extractFileNameExtension(material.file_urls[0]) === 'Image' ? (
-                                <CardMedia
-                                    component="img"
-                                    sx={{ width: 150 }}
-                                    image={material.file_urls[0]}
-                                    alt="Image"
-                                />
-                            ) : (
-                                <CardMedia
-                                    component="img"
-                                    sx={{ width: 150 }}
-                                    image={GoogleDriveImage}
-                                    alt="Google Drive"
-                                />
-                            )}
+            {material.file_urls[0] && (
+                <AccordionDetails sx={{ borderTop: '1px solid #b5bec9' }}>
+                    <Typography sx={{ padding: '16px 24px' }}>
+                        <Card sx={{ display: 'flex', width: '400px', height: '90px' }}>
+                            <CardActionArea
+                                component={Link}
+                                to={material.file_urls[0]}
+                                target="_blank"
+                                sx={{ display: 'flex', justifyContent: 'flex-start', width: '400px', height: '90px' }}
+                            >
+                                {extractFileNameExtension(material.file_urls[0]) === 'Image' ? (
+                                    <CardMedia
+                                        component="img"
+                                        sx={{ width: 150 }}
+                                        image={material.file_urls[0]}
+                                        alt="Image"
+                                    />
+                                ) : (
+                                    <CardMedia
+                                        component="img"
+                                        sx={{ width: 150 }}
+                                        image={GoogleDriveImage}
+                                        alt="Google Drive"
+                                    />
+                                )}
 
-                            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                <CardContent sx={{ flex: '1 0 auto' }}>
-                                    <Typography component="div" sx={{ fontSize: '16px', color: '#3C3034' }}>
-                                        <FileName filename={extractFileName(material.file_urls[0])} maxLength={25} />
-                                    </Typography>
-                                    <Typography sx={{ fontSize: '14px', color: '#5F6368' }} component="div">
-                                        {extractFileNameExtension(material.file_urls[0])}
-                                    </Typography>
-                                </CardContent>
-                            </Box>
-                        </CardActionArea>
-                    </Card>
-                </Typography>
-            </AccordionDetails>
+                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                    <CardContent sx={{ flex: '1 0 auto' }}>
+                                        <Typography component="div" sx={{ fontSize: '16px', color: '#3C3034' }}>
+                                            <FileName
+                                                filename={extractFileName(material.file_urls[0])}
+                                                maxLength={25}
+                                            />
+                                        </Typography>
+                                        <Typography sx={{ fontSize: '14px', color: '#5F6368' }} component="div">
+                                            {extractFileNameExtension(material.file_urls[0])}
+                                        </Typography>
+                                    </CardContent>
+                                </Box>
+                            </CardActionArea>
+                        </Card>
+                    </Typography>
+                </AccordionDetails>
+            )}
+
             <AccordionDetails sx={{ borderTop: '1px solid #b5bec9' }}>
                 <Typography>
                     <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '8px' }}>

@@ -113,41 +113,45 @@ function Assignment({ data }) {
                         </ul>
                     </div>
 
-                    <Card sx={{ width: '400px', height: '90px' }}>
-                        <CardActionArea
-                            component={Link}
-                            to={assignment.file_urls[0]}
-                            target="_blank"
-                            sx={{ display: 'flex', justifyContent: 'flex-start', width: '400px', height: '90px' }}
-                        >
-                            {extractFileNameExtension(assignment.file_urls[0]) === 'Image' ? (
-                                <CardMedia
-                                    component="img"
-                                    sx={{ width: 150 }}
-                                    image={assignment.file_urls[0]}
-                                    alt="Image"
-                                />
-                            ) : (
-                                <CardMedia
-                                    component="img"
-                                    sx={{ width: 150 }}
-                                    image={GoogleDriveImage}
-                                    alt="Google Drive"
-                                />
-                            )}
-                            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                <CardContent sx={{ flex: '1 0 auto' }}>
-                                    <Typography component="div" sx={{ fontSize: '16px', color: '#3C3034' }}>
-                                        <FileName filename={extractFileName(assignment.file_urls[0])} maxLength={25} />
-                                    </Typography>
-                                    <Typography sx={{ fontSize: '14px', color: '#5F6368' }} component="div">
-                                        {extractFileNameExtension(assignment.file_urls[0])}
-                                    </Typography>
-                                </CardContent>
-                            </Box>
-                        </CardActionArea>
-                        {/* </Link> */}
-                    </Card>
+                    {assignment.file_urls[0] && (
+                        <Card sx={{ width: '400px', height: '90px' }}>
+                            <CardActionArea
+                                component={Link}
+                                to={assignment.file_urls[0]}
+                                target="_blank"
+                                sx={{ display: 'flex', justifyContent: 'flex-start', width: '400px', height: '90px' }}
+                            >
+                                {extractFileNameExtension(assignment.file_urls[0]) === 'Image' ? (
+                                    <CardMedia
+                                        component="img"
+                                        sx={{ width: 150 }}
+                                        image={assignment.file_urls[0]}
+                                        alt="Image"
+                                    />
+                                ) : (
+                                    <CardMedia
+                                        component="img"
+                                        sx={{ width: 150 }}
+                                        image={GoogleDriveImage}
+                                        alt="Google Drive"
+                                    />
+                                )}
+                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                    <CardContent sx={{ flex: '1 0 auto' }}>
+                                        <Typography component="div" sx={{ fontSize: '16px', color: '#3C3034' }}>
+                                            <FileName
+                                                filename={extractFileName(assignment.file_urls[0])}
+                                                maxLength={25}
+                                            />
+                                        </Typography>
+                                        <Typography sx={{ fontSize: '14px', color: '#5F6368' }} component="div">
+                                            {extractFileNameExtension(assignment.file_urls[0])}
+                                        </Typography>
+                                    </CardContent>
+                                </Box>
+                            </CardActionArea>
+                        </Card>
+                    )}
                 </Typography>
             </AccordionDetails>
             <AccordionDetails sx={{ borderTop: '1px solid #b5bec9' }}>

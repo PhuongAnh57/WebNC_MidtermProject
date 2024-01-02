@@ -9,16 +9,15 @@ initializeApp(config.firebaseConfig);
 // initialize cloud storage and get a reference to the service
 const storage = getStorage();
 
-const currentDateTime = () => {
-    const today = new Date();
-    const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-    const time = today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
-    return date + ' ' + time;
-};
+// const currentDateTime = () => {
+//     const today = new Date();
+//     const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+//     const time = today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
+//     return date + ' ' + time;
+// };
 
-const uploadFileToFirebase = async (classID, id, file, path) => {
-    const datetime = currentDateTime();
-    const storageRef = ref(storage, `${path + file.originalname + '      ' + datetime}`);
+const uploadFileToFirebase = async (file, path) => {
+    const storageRef = ref(storage, `${path + file.originalname}`);
 
     // Create file metadata including the content type
     const metadata = {
@@ -95,12 +94,7 @@ exports.postAddFile = async (req, res) => {
                 return res.status(400).json({ message: 'resource not found' });
             }
 
-            const url = await uploadFileToFirebase(
-                resource.class_id,
-                resource.id,
-                file,
-                `resources/${'class-' + classID}/attach/`,
-            );
+            const url = await uploadFileToFirebase(file, `resources/${'class-' + classID}/attach/`);
             fileUrls.push(url);
 
             const newResource = {
@@ -197,7 +191,7 @@ exports.putEditResource = async (req, res) => {
                 // Use Promise.all to wait for all uploads to finish
                 fileUrls = await Promise.all(
                     file.map(async (file) => {
-                        const url = await uploadFileToFirebase(classID, id, file, 'resources/attach/');
+                        const url = await uploadFileToFirebase(file, 'resources/attach/');
                         return url;
                     }),
                 );

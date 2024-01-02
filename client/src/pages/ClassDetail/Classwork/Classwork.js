@@ -51,6 +51,8 @@ export default function Classwork({ classDetail }) {
 
     const axiosPrivate = useAxiosPrivate();
 
+    // console.log('render');
+
     React.useEffect(() => {
         const loadMaterials = async () => {
             try {
@@ -121,19 +123,21 @@ export default function Classwork({ classDetail }) {
                 </MenuItem>
             </Menu>
 
-            <CreateAssignment
-                classDetail={classDetail}
-                open={openAssignment}
-                onUpdateClassworks={handleUpdateClassworks}
-                onCloseAssignment={handleCloseAssignment}
-            />
+            {openAssignment && (
+                <CreateAssignment
+                    classDetail={classDetail}
+                    onUpdateClassworks={handleUpdateClassworks}
+                    onCloseAssignment={handleCloseAssignment}
+                />
+            )}
 
-            <CreateMaterial
-                classDetail={classDetail}
-                open={openMaterial}
-                onUpdateClassworks={handleUpdateClassworks}
-                onCloseMaterial={handleCloseMaterial}
-            />
+            {openMaterial && (
+                <CreateMaterial
+                    classDetail={classDetail}
+                    onUpdateClassworks={handleUpdateClassworks}
+                    onCloseMaterial={handleCloseMaterial}
+                />
+            )}
 
             {/* Input Select */}
             <FormControl sx={{ mt: 7, ml: -10, mb: 2, minWidth: 300 }}>
