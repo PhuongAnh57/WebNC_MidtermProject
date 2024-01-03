@@ -29,7 +29,6 @@ exports.getAllClasses = async (req, res) => {
             res.json({ message: 'User does not have any courses' });
         } else {
             const classesData = [...ownedClasses, ...joinedClasses];
-
             res.json({ message: 'Classes', classesData });
         }
     } catch (error) {
