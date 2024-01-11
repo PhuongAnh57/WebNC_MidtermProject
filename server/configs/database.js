@@ -5,7 +5,7 @@ const connection = {
     host: 'localhost',
     port: '5432',
     user: 'postgres',
-    password: '123',
+    password: '20120275',
     database: 'WebNC',
 };
 
