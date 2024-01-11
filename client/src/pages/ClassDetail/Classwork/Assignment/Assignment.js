@@ -124,14 +124,14 @@ function Assignment({ data }) {
                                 {extractFileNameExtension(assignment.file_urls[0]) === 'Image' ? (
                                     <CardMedia
                                         component="img"
-                                        sx={{ width: 150 }}
+                                        sx={{ width: 150, height: '100%' }}
                                         image={assignment.file_urls[0]}
                                         alt="Image"
                                     />
                                 ) : (
                                     <CardMedia
                                         component="img"
-                                        sx={{ width: 150 }}
+                                        sx={{ width: 150, height: '100%' }}
                                         image={GoogleDriveImage}
                                         alt="Google Drive"
                                     />
