@@ -44,6 +44,11 @@ export default function LogIn() {
     const [accountDoesNotExit, setAccountDoesNotExist] = useState(false);
     const [invalidPassword, setInvalidPassword] = useState(false);
 
+    const [formErrors, setFormErrors] = useState({
+        username: '',
+        password: '',
+    });
+
     const { dispatch } = useContext(AuthContext);
 
     if (localStorage.getItem('accessToken')) {
@@ -54,17 +59,46 @@ export default function LogIn() {
             return <Navigate to={nextURL} />;
         }
         return <Navigate to="/home" />;
-    }
+    }   
+
+    const validateForm = () => {
+        const errors = {};
+
+        // Validate each field
+
+        if (!user.username.trim()) {
+            errors.username = 'Tên đăng nhập không được để trống';
+        }
+        else if (accountDoesNotExit) {
+            errors.username = 'Tên đăng nhập không tồn tại';
+        }
+
+        if (user.password.length < 6) {
+            errors.password = 'Mật khẩu phải có ít nhất 6 ký tự';
+        }
+
+        return errors;
+    };
 
     const handleChange = (e) => {
+        const { name, value } = e.target;
         setUser((prev) => ({
             ...prev,
-            [e.target.name]: e.target.value,
+            [name]: value,
+        }));
+
+        // Clear the error message when the user starts typing
+        setFormErrors((prev) => ({
+            ...prev,
+            [name]: '',
         }));
     };
 
     const handleSubmit = (event, type = '') => {
         event.preventDefault();
+
+        const formErrors = validateForm();
+        setFormErrors(formErrors);
 
         if (type !== '') {
             return window.open(`${SERVER_URL}/auth/${type}`, '_self');
@@ -83,7 +117,7 @@ export default function LogIn() {
                         username: '',
                         password: '',
                     });
-                }   
+                }
 
                 if (response.data.message === 'Password is invalid') {
                     setInvalidPassword(true);
@@ -129,12 +163,14 @@ export default function LogIn() {
                             autoFocus
                             value={user.username}
                             onChange={handleChange}
+                            error={!!formErrors.username}
+                            helperText={formErrors.username}
                         />
-                        {accountDoesNotExit && (
+                        {/* {accountDoesNotExit && (
                             <>
                                 <span style={{ color: 'red' }}>Tên đăng nhập không tồn tại</span>
                             </>
-                        )}
+                        )} */}
                         <TextField
                             margin="normal"
                             required
@@ -146,6 +182,8 @@ export default function LogIn() {
                             autoComplete="current-password"
                             value={user.password}
                             onChange={handleChange}
+                            error={!!formErrors.password}
+                            helperText={formErrors.password}
                         />
 
                         {invalidPassword && (
