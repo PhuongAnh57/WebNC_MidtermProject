@@ -45,15 +45,79 @@ export default function SignUp() {
     const [alreadyExists, setAlreadyExists] = useState(false);
     const [emailActivation, setEmailActivation] = useState(false);
 
+    const [formErrors, setFormErrors] = useState({
+        firstName: '',
+        lastName: '',
+        username: '',
+        password: '',
+        email: '',
+    });
+
+    const validateEmail = (email) => {
+        // Implement your email validation logic
+        // For example, you can use a regular expression
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    const validatePassword = (password) => {
+        // Implement your password validation logic
+        // For example, require a minimum length
+        return password.length >= 6;
+    };
+
+    const validateForm = () => {
+        const errors = {};
+
+        // Validate each field
+        if (!user.firstName.trim()) {
+            errors.firstName = 'Họ không được để trống';
+        }
+
+        if (!user.lastName.trim()) {
+            errors.lastName = 'Tên không được để trống';
+        }
+
+        if (!user.username.trim()) {
+            errors.username = 'Tên đăng nhập không được để trống';
+        }
+
+        if (!validatePassword(user.password)) {
+            errors.password = 'Mật khẩu phải có ít nhất 6 ký tự';
+        }
+
+        if (!validateEmail(user.email)) {
+            errors.email = 'Email không hợp lệ';
+        }
+
+        return errors;
+    };
+
     const handleChange = (e) => {
+        const { name, value } = e.target;
         setUser((prev) => ({
             ...prev,
-            [e.target.name]: e.target.value,
+            [name]: value,
+        }));
+
+        // Clear the error message when the user starts typing
+        setFormErrors((prev) => ({
+            ...prev,
+            [name]: '',
         }));
     };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+
+        const formErrors = validateForm();
+        setFormErrors(formErrors);
+
+        if (Object.keys(formErrors).length > 0) {
+            // Display errors to the user or handle them as needed
+            console.log('Validation errors:', formErrors);
+            return;
+        }
 
         try {
             await axios.post('/api/signup', { user }).then((response) => {
@@ -116,6 +180,8 @@ export default function SignUp() {
                                             autoFocus
                                             value={user.lastName}
                                             onChange={handleChange}
+                                            error={!!formErrors.lastName}
+                                            helperText={formErrors.lastName}
                                         />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
@@ -128,6 +194,8 @@ export default function SignUp() {
                                             autoComplete="family-name"
                                             value={user.firstName}
                                             onChange={handleChange}
+                                            error={!!formErrors.firstName}
+                                            helperText={formErrors.firstName}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -140,6 +208,8 @@ export default function SignUp() {
                                             autoComplete="username"
                                             value={user.username}
                                             onChange={handleChange}
+                                            error={!!formErrors.username}
+                                            helperText={formErrors.username}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -153,6 +223,8 @@ export default function SignUp() {
                                             autoComplete="new-password"
                                             value={user.password}
                                             onChange={handleChange}
+                                            error={!!formErrors.password}
+                                            helperText={formErrors.password}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -166,6 +238,8 @@ export default function SignUp() {
                                             autoComplete="email"
                                             value={user.email}
                                             onChange={handleChange}
+                                            error={!!formErrors.email}
+                                            helperText={formErrors.email}
                                         />
                                     </Grid>
 
