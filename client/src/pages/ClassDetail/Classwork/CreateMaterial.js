@@ -33,10 +33,6 @@ import FormControl from '@mui/material/FormControl';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Fab from '@mui/material/Fab';
-
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
 
 import styles from './CreateAssignment.module.scss';
 
@@ -64,7 +60,7 @@ const Item = styled(Paper)(({ theme }) => ({
 //     width: 1,
 // });
 
-export default function CreateDocument({ classDetail, open, onCloseDocument }) {
+export default function CreateMaterial({ classDetail, open, onCloseDocument }) {
     const handleUploadFile = () => {
         const inputElement = document.createElement('input');
 
@@ -91,10 +87,10 @@ export default function CreateDocument({ classDetail, open, onCloseDocument }) {
                             <CloseIcon />
                         </IconButton>
                         <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                            Bài tập
+                            Tài liệu
                         </Typography>
                         <Button autoFocus color="inherit" onClick={onCloseDocument}>
-                            Giao bài tập
+                            Đăng tài liệu
                         </Button>
                     </Toolbar>
                 </AppBar>

@@ -13,6 +13,7 @@ passport.use(
             clientID: FACEBOOK_APP_ID,
             clientSecret: FACEBOOK_APP_SECRET,
             callbackURL: '/auth/facebook/callback',
+            debug: true,
             profileFields: ['id', 'displayName', 'name', 'gender', 'profileUrl', 'emails', 'photos'],
         },
         function (accessToken, refreshToken, profile, done) {

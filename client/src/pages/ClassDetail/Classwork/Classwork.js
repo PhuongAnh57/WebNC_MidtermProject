@@ -1,4 +1,5 @@
 import * as React from 'react';
+import Assignment from './Assignment';
 import Material from './Material';
 
 import Button from '@mui/material/Button';
@@ -20,7 +21,7 @@ import Paper from '@mui/material/Paper';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import CreateAssignment from './CreateAssignment';
-import CreateDocument from './CreateDocument';
+import CreateMaterial from './CreateMaterial';
 
 export default function Classwork({ classDetail }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -94,8 +95,8 @@ export default function Classwork({ classDetail }) {
                 </MenuItem>
             </Menu>
 
-            {<CreateAssignment open={openAssignment} onCloseAssignment={handleCloseAssignment}/>}
-            {<CreateDocument open={openDocument} onCloseDocument={handleCloseDocument}/>}
+            <CreateAssignment open={openAssignment} onCloseAssignment={handleCloseAssignment}/>
+            <CreateMaterial open={openDocument} onCloseDocument={handleCloseDocument}/>
 
             {/* Input Select */}
             <FormControl sx={{ mt: 7, ml: -10, mb: 2, minWidth: 300 }}>
@@ -107,9 +108,9 @@ export default function Classwork({ classDetail }) {
                 </Select>
             </FormControl>
 
-            {<Material />}
-            {<Material />}
-            {<Material />}
+            <Assignment classDetail={classDetail}/>
+            <Assignment classDetail={classDetail}/>
+            <Material classDetail={classDetail}/>
 
             {/* Chủ đề */}
             <Paper 
@@ -121,8 +122,8 @@ export default function Classwork({ classDetail }) {
                     <span style={{ alignSelf: 'center' }}>{<MoreVertIcon sx={{color: '#4285f4'}} />}</span>
                 </div>
 
-                {<Material />}
-                {<Material />}
+                <Assignment classDetail={classDetail}/>
+                <Assignment classDetail={classDetail}/>
             </Paper>
         </div>
     );
