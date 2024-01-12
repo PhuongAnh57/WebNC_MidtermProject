@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import background from '../../../assets/images/classroom.jpg';
-import ImageList from '@mui/material/ImageList';
+
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import IconButton from '@mui/material/IconButton';
@@ -14,11 +14,14 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import ImageIcon from '@mui/icons-material/Image';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
+
+import { Card, CardActions, CardContent, Typography } from '@mui/material';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import CropFreeIcon from '@mui/icons-material/CropFree';
+
+import ClassCode from 'components/Class/ClassCode/ClassCode';
+import Upcoming from 'components/Class/Upcoming/Upcoming';
+import ClassCodeModal from 'components/Class/ClassCode/ClassCodeModal';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -30,15 +33,17 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function BasicGrid({ classDetail }) {
+    const [openModal, setOpenModal] = React.useState(false);
+    const handleOpen = () => setOpenModal(true);
+    const handleClose = () => setOpenModal(false);
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
                 <Grid item xs={12}>
                     <Item>
-                        {/* <ImageList sx={{ width: '200%', height: 300 }}> */}
                         <ImageListItem>
                             <img
-                                // srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
                                 src={background}
                                 alt="background"
                                 loading="lazy"
@@ -62,22 +67,10 @@ export default function BasicGrid({ classDetail }) {
                         {/* </ImageList> */}
                     </Item>
                 </Grid>
+
                 <Grid item xs={3}>
-                    <Grid item>
-                        <Card sx={{ marginBottom: '10px' }}>
-                            <CardContent>
-                                <Typography variant="h6" component="div">
-                                    Sắp đến hạn
-                                </Typography>
-                                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                    Không có bài tập sắp đến hạn
-                                </Typography>
-                            </CardContent>
-                            <CardActions>
-                                <Button size="small">Xem tất cả</Button>
-                            </CardActions>
-                        </Card>
-                    </Grid>
+                    {classDetail.role === 'teacher' && <ClassCode classDetail={classDetail} />}
+                    <Upcoming classDetail={classDetail} />
                 </Grid>
                 <Grid item xs={9}>
                     <Grid item>

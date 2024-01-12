@@ -44,9 +44,9 @@ export default function LogIn() {
     const [accountDoesNotExit, setAccountDoesNotExist] = useState(false);
     const [invalidPassword, setInvalidPassword] = useState(false);
 
-    const { dispatch } = useContext(AuthContext);
+    const { user: auth, dispatch } = useContext(AuthContext);
 
-    if (localStorage.getItem('accessToken')) {
+    if (localStorage.getItem('accessToken') && auth.user) {
         if (localStorage.getItem('nextURL')) {
             const nextURL = localStorage.getItem('nextURL').split('http://localhost:3000')[1];
             localStorage.removeItem('nextURL');
@@ -83,7 +83,7 @@ export default function LogIn() {
                         username: '',
                         password: '',
                     });
-                }   
+                }
 
                 if (response.data.message === 'Password is invalid') {
                     setInvalidPassword(true);

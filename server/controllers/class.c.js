@@ -5,6 +5,8 @@ const invitationM = require('../models/invitation.m');
 const classM = require('../models/class.m');
 const userM = require('../models/user.m');
 
+const { CLASS_CODE_LENGTH } = require('../utils/constant');
+
 exports.getAllClasses = async (req, res) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader.split(' ')[1];
@@ -59,8 +61,16 @@ exports.postCreateClass = async (req, res) => {
             }
         });
 
+        let uniqueCode;
+        let codeExists = '';
+        do {
+            uniqueCode = generateCode();
+            codeExists = classes.find((classDetail) => classDetail.code === uniqueCode);
+        } while (codeExists);
+
         const newClass = {
             class_id,
+            code: uniqueCode,
             lecturer_id,
             class_name: name,
             part,
@@ -199,6 +209,7 @@ exports.postAddMemberToClass = async (req, res) => {
 
         if (!allMembers) {
             console.log('something went wrong');
+            return res.status(400).json({ message: 'something went wrong' });
         }
 
         let id;
@@ -217,6 +228,60 @@ exports.postAddMemberToClass = async (req, res) => {
 
         await classM.addStudentIntoClass(data);
         await invitationM.removeInvitation(user.email);
+
+        res.status(200).json({ message: 'Add member to class successfully' });
+    } catch (err) {
+        console.log(err);
+        res.status(400).json({ messag: 'Something went wrong!' });
+    }
+};
+
+exports.postAddMemberToClassByCode = async (req, res) => {
+    const { classCode, userID, role } = req.body.data;
+    console.log(classCode, userID, role);
+
+    try {
+        if (!classCode || !userID || !role) {
+            console.log('class data, user or role is invalid');
+            return res.status(400).json({ message: 'Invalid data sent' });
+        }
+
+        const classData = await classM.getClassByCode(classCode).catch((err) => {});
+        if (!classData) {
+            console.log('Class not found');
+            return res.status(400).json({ message: 'Class not found' });
+        }
+
+        console.log(classData.class_id);
+
+        const memberExists = await classM.getMemberInClass(classData.class_id, userID).catch((err) => {});
+        if (memberExists) {
+            console.log('User has already been in this class');
+            return res.status(400).json({ message: 'User has already been in this class' });
+        }
+
+        const allMembers = await classM.getAllMembersInClass(classData.class_id).catch((err) => {});
+
+        if (!allMembers) {
+            console.log('something went wrong');
+            return res.status(400).json({ message: 'something went wrong' });
+        }
+
+        let id;
+        if (!allMembers || !allMembers?.length) {
+            id = 0;
+        } else {
+            id = allMembers[allMembers.length - 1].id + 1;
+        }
+
+        const data = {
+            id,
+            ...classData,
+            member_id: userID,
+            role,
+        };
+
+        await classM.addStudentIntoClass(data);
 
         res.status(200).json({ message: 'Add member to class successfully' });
     } catch (err) {
@@ -253,3 +318,15 @@ exports.getAllMembers = async (req, res) => {
         console.log(error);
     }
 };
+
+function generateCode() {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let code = '';
+
+    for (let i = 0; i < CLASS_CODE_LENGTH; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        code += characters.charAt(randomIndex);
+    }
+
+    return code;
+}

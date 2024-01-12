@@ -88,12 +88,6 @@ exports.getEmailActivationConfirmation = async (req, res) => {
             newID = users[users.length - 1].user_id + 1;
         }
 
-        // const role = '';
-
-        // if (pendingUserExists.username === 'admin') {
-
-        // }
-
         const newUser = {
             ...pendingUserExists,
             id: newID,
@@ -133,6 +127,7 @@ exports.postLogin = async (req, res) => {
     } else {
         const payload = {
             id: userDB.user_id,
+            role: userDB.role,
         };
 
         try {
@@ -148,7 +143,10 @@ exports.postLogin = async (req, res) => {
                 message: 'Verification successfully',
                 user: {
                     user_id: userDB.user_id,
+                    firstName: userDB.first_name,
                     lastName: userDB.last_name,
+                    email: userDB.email,
+                    role: userDB.role,
                 },
                 accessToken: token,
                 refreshToken: refreshToken,

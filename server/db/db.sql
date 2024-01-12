@@ -38,6 +38,7 @@ DROP TABLE IF EXISTS classes;
 
 CREATE TABLE classes (
 	class_id INT PRIMARY KEY,
+	code VARCHAR (7) NOT NULL,
 	lecturer_id INT NOT NULL,
 	class_name VARCHAR ( 100 ) NOT NULL,
 	part VARCHAR ( 50 ),
@@ -52,7 +53,6 @@ CREATE TABLE class_members (
 	class_id INT NOT NULL,
 	member_id INT NOT NULL,
 	role VARCHAR(10) NOT NULL
--- 	accept_token VARCHAR ( 100 )  NOT NULL
 );
 
 DROP TABLE IF EXISTS invitations;
@@ -96,15 +96,15 @@ ALTER TABLE invitations ADD CONSTRAINT "FK_invitations_classes" FOREIGN KEy (cla
 
 -- ALTER TABLE classes DROP CONSTRAINT "FK_classes_accounts";
 -- ALTER TABLE class_members DROP CONSTRAINT "FK_class_members_accounts";
--- ALTER TABLE class_members DROP CONSTRAINT "FK_class_members_classes";
+ALTER TABLE class_members DROP CONSTRAINT "FK_class_members_classes";
 -- ALTER TABLE access_tokens DROP CONSTRAINT "FK_access_tokens_accounts";
--- ALTER TABLE resources DROP CONSTRAINT "FK_resources_classes";
+ALTER TABLE resources DROP CONSTRAINT "FK_resources_classes";
 -- INSERT INTO classes(class_id, lecturer_id, class_name, part, topic, room) VALUES ('0', '0', 'Test class', '', '', '')
 
--- delete from classes where class_id = 0
+delete from classes where class_id = 0
 delete from assignments where class_id = 0
 
--- delete from class_members where id = 1
+delete from class_members where id = 0
 -- delete from invitations where email = 'bkdhcmus@gmail.com'
 
 -- delete from access_tokens where user_id = 1

@@ -32,6 +32,11 @@ router.get(
 
 router.post('/check-invitation', passport.authenticate('jwt', { session: false }), userC.checkInvitation);
 router.post('/class/add-member', passport.authenticate('jwt', { session: false }), classC.postAddMemberToClass);
+router.post(
+    '/class/add-member/class-code',
+    passport.authenticate('jwt', { session: false }),
+    classC.postAddMemberToClassByCode,
+);
 
 //-------------------------Class Management------------------------------------------------------------------------
 router.get('/all-classes', passport.authenticate('jwt', { session: false }), classC.getAllClasses);

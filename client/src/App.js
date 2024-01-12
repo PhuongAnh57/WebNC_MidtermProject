@@ -15,6 +15,7 @@ import JoinedLink from 'pages/JoinedLink/JoinedLink';
 
 import ClassDetail from 'pages/ClassDetail/ClassDetail';
 import ClassworkDetail from 'pages/ClassDetail/Classwork/ClassworkDetail';
+import Calendar from 'pages/Calendar/Calendar';
 
 function App() {
     return (
@@ -51,7 +52,9 @@ function App() {
                         {/* Nếu người dùng nhập một đường dẫn không khớp, thông báo page not found */}
                         <Route path="*" element={<PageNotFound />} />
 
-                        <Route path="/classwork-detail" element={<ClassworkDetail/>} />
+                        <Route path="/classwork-detail" element={<ClassworkDetail />} />
+
+                        <Route path="/calendar" element={<Calendar />} />
                     </Routes>
                 </div>
             </BrowserRouter>
