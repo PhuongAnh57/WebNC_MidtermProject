@@ -188,6 +188,10 @@ export default function User() {
                         <Link to="/home" style={{ textDecoration: 'none', color: 'white' }}>
                             Google Classroom
                         </Link>
+                        {/* <span> / </span>
+                        <Link to={`/class/0`} style={{ textDecoration: 'none', color: 'white' }}>
+                            Về lớp học
+                        </Link> */}
                     </Typography>
                     <Search>
                         <SearchIconWrapper>

@@ -122,7 +122,7 @@ export default function Home() {
 
             <div style={{ display: 'flex', flexWrap: 'wrap', clear: 'both' }}>
                 {classes &&
-                    classes.map((classDetail) => <CourseCard key={classDetail.class_id} classDetail={classDetail} />)}
+                    classes.map((classDetail) => <CourseCard key={classDetail.class_id} classDetail={classDetail}/>)}
             </div>
             {renderMenu}
         </MainLayout>

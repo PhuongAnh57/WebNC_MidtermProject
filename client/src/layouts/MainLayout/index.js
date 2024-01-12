@@ -35,7 +35,6 @@ export default function MainLayout({ children }) {
                     </Grid>
                 </Container>
             </div>
-            <Footer />
         </div>
     );
 }

@@ -115,7 +115,7 @@ function Assignment({ data, classDetail }) {
                             </Card>
                         )}
                         <Divider sx={{ margin: '10px 0' }} />
-                        <Link to={`/class/${classDetail.class_id}/classwork/${data.id}/detail`}>
+                        <Link to={`/class/${classDetail.class_id}/student/classwork/${data.id}/instruction`}>
                             <Button variant="text">Xem chi tiết</Button>
                         </Link>
                     </AccordionDetails>
@@ -247,9 +247,12 @@ function Assignment({ data, classDetail }) {
                     <AccordionDetails sx={{ borderTop: '1px solid #b5bec9' }}>
                         <Typography>
                             <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '8px' }}>
-                                <Button variant="text" sx={{ color: '#518cdd' }}>
-                                    Xem hướng dẫn
-                                </Button>
+                                <Link to={`/class/${classDetail.class_id}/teacher/classwork/${data.id}/instruction`}>
+                                    <Button variant="text" sx={{ color: '#518cdd' }}>
+                                        Xem hướng dẫn
+                                    </Button>
+                                </Link>
+
                                 <Button variant="contained" sx={{ padding: '8px 24px' }}>
                                     Đánh giá bài tập
                                 </Button>

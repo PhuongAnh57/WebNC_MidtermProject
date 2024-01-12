@@ -28,7 +28,7 @@ const Item = styled(Paper)(({ theme }) => ({
     marginBottom: '10px',
 }));
 
-export default function ClassworkDetail() {
+export default function InstructionStudent() {
     return (
         <MainLayout>
             <Box sx={{ flexGrow: 1 }}>
