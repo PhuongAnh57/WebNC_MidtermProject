@@ -14,6 +14,9 @@ import JoinedEmail from 'pages/JoinedEmail/JoinedEmail';
 import JoinedLink from 'pages/JoinedLink/JoinedLink';
 
 import ClassDetail from 'pages/ClassDetail/ClassDetail';
+import Instruction from 'pages/ClassDetail/Classwork/ClassworkDetail';
+import MaterialDetail from 'pages/ClassDetail/Classwork/MaterialDetail';
+import GradeDetail from 'pages/ClassDetail/Grade/GradeDetail';
 
 function App() {
     return (
@@ -46,6 +49,12 @@ function App() {
                         <Route exact path="/api/class/:classID/invite/accept-token/:token" element={<JoinedEmail />} />
 
                         <Route exact path="/class/:classID/invite" element={<JoinedLink />} />
+
+                        <Route exact path="/class/:classID/assignment-instruction" element={<Instruction />} />
+
+                        <Route exact path="/class/:classID/material" element={<MaterialDetail />} />
+
+                        <Route exact path="/class/:classID/:fullname" element={<GradeDetail />} />
 
                         {/* Nếu người dùng nhập một đường dẫn không khớp, thông báo page not found */}
                         <Route path="*" element={<PageNotFound />} />

@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
@@ -13,7 +14,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 
-export default function Material({ classDetail }) {
+export default function Assignment({classDetail}) {
     const [click, setClick] = useState(false);
 
     const handleAccordionClick = () => {
@@ -52,17 +53,59 @@ export default function Material({ classDetail }) {
                         mr: 2,
                     }}
                 >
-                    {<AssignmentIcon sx={{ color: 'white' }} />}
+                    <AssignmentIcon sx={{ color: 'white' }} />
                 </Typography>
-                <Typography sx={{ width: '80%', alignSelf: 'center' }}>Tài liệu Cuối kỳ</Typography>
+                <Typography sx={{ width: '80%', alignSelf: 'center' }}>Bài tập 1</Typography>
                 <Typography sx={{ width: '20%', color: '#0000008C', alignSelf: 'center', fontSize: '12px' }}>
                     Đã đăng vào 27/12/2023
                 </Typography>
-                <Typography sx={{ alignSelf: 'center' }}>{<MoreVertIcon />}</Typography>
+                <Typography sx={{ alignSelf: 'center' }}><MoreVertIcon /></Typography>
             </AccordionSummary>
 
             <AccordionDetails sx={{ borderTop: '1px solid #b5bec9' }}>
                 <Typography sx={{ padding: '16px 24px' }}>
+                    <div style={{ fontSize: '12px', color: '#5f6368' }}>Đã đăng vào 27/12/2024</div>
+                    <div style={{ textAlign: 'right' }}>
+                        <ul style={{ listStyleType: 'none', display: 'flex', justifyContent: 'flex-end' }}>
+                            <li
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'flex-start',
+                                    padding: '0px 16px',
+                                    borderLeft: '1px solid #b5bec9',
+                                }}
+                            >
+                                <span style={{ fontSize: '2rem' }}>0</span>
+                                <span>Đã nộp</span>
+                            </li>
+                            <li
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'flex-start',
+                                    padding: '0px 16px',
+                                    borderLeft: '1px solid #b5bec9',
+                                }}
+                            >
+                                <span style={{ fontSize: '2rem' }}>0</span>
+                                <span>Đã giao</span>
+                            </li>
+                            <li
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'flex-start',
+                                    paddingLeft: '16px',
+                                    borderLeft: '1px solid #b5bec9',
+                                }}
+                            >
+                                <span style={{ fontSize: '2rem' }}>0</span>
+                                <span>Đã chấm điểm</span>
+                            </li>
+                        </ul>
+                    </div>
+
                     <Card sx={{ display: 'flex', width: '400px' }}>
                         <CardMedia
                             component="img"
@@ -73,7 +116,7 @@ export default function Material({ classDetail }) {
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <CardContent sx={{ flex: '1 0 auto' }}>
                                 <Typography component="div" sx={{ fontSize: '16px', color: '#3C3034' }}>
-                                    <FileName filename='Hướng dẫn Bài tập 1.docx' maxLength={25} />
+                                    <FileName filename='Bài tập 1.docx' maxLength={25} />
                                 </Typography>
                                 <Typography sx={{ fontSize: '14px', color: '#5F6368' }} component="div">
                                     Word
@@ -86,15 +129,18 @@ export default function Material({ classDetail }) {
             <AccordionDetails sx={{ borderTop: '1px solid #b5bec9' }}>
                 <Typography>
                     <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '8px' }}>
-                        <Link to={`/class/${classDetail.class_id}/material`}>
+                        <Link to={`/class/${classDetail.class_id}/assignment-instruction`}>
                             <Button variant="text" sx={{ color: '#518cdd' }}>
-                                Xem tài liệu
+                                Xem hướng dẫn
                             </Button>
                         </Link>
+                        
+                        <Button variant="contained" sx={{ padding: '8px 24px' }}>
+                            Đánh giá bài tập
+                        </Button>
                     </div>
                 </Typography>
             </AccordionDetails>
         </Accordion>
     );
 }
-

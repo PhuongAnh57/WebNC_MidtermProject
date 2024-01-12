@@ -12,6 +12,7 @@ import Stack from '@mui/material/Stack';
 import ClassInfo from '../ClassInfo';
 import Members from '../Members';
 import Classwork from '../Classwork/Classwork';
+import Grade from '../Grade';
 import useAxiosPrivate from 'hooks/useAxiosPrivate';
 
 import LoadingSpinner from 'components/LoadingSpinner/LoadingSpinner';
@@ -94,8 +95,9 @@ export default function BasicTabs({ classID }) {
                         <Stack direction="row">
                             <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                                 <Tab label="Bảng tin" {...a11yProps(0)} />
-                                <Tab label="Bài tập" {...a11yProps(1)} />
+                                <Tab label="Bài tập trên lớp" {...a11yProps(1)} />
                                 <Tab label="Mọi người" {...a11yProps(2)} />
+                                <Tab label="Điểm" {...a11yProps(3)} />
                             </Tabs>
                             <IconButton aria-label="delete" onClick={handleOpen}>
                                 <SettingsIcon />
@@ -111,6 +113,9 @@ export default function BasicTabs({ classID }) {
                     </TabPanel>
                     <TabPanel value={value} index={2}>
                         <Members classDetail={classDetail} />
+                    </TabPanel>
+                    <TabPanel value={value} index={3}>
+                        <Grade classDetail={classDetail} />
                     </TabPanel>
                 </Box>
             )}
