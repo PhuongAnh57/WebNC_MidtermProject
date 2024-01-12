@@ -40,6 +40,7 @@ import MenuItem from '@mui/material/MenuItem';
 
 import styles from './CreateAssignment.module.scss';
 import useAxiosPrivate from 'hooks/useAxiosPrivate';
+import { GoogleDriveImage } from 'assets/images';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -190,6 +191,15 @@ export default function CreateAssignment({ classDetail, onUpdateClassworks, onCl
         setFilesUpload(newFilesUpload);
     };
 
+    let image;
+    if (filesUpload.length > 0) {
+        console.log(filesUpload[0].file);
+        const isImage = filesUpload[0].type === 'Image';
+        if (isImage) {
+            image = URL.createObjectURL(filesUpload[0].file);
+        }
+    }
+
     const renderFilesUpload = () => {
         return (
             <>
@@ -197,8 +207,8 @@ export default function CreateAssignment({ classDetail, onUpdateClassworks, onCl
                     <Card key={index} sx={{ display: 'flex' }}>
                         <CardMedia
                             component="img"
-                            sx={{ width: 100 }}
-                            image="https://png.pngtree.com/thumb_back/fw800/background/20210920/pngtree-school-classroom-blackboard-desk-education-course-training-class-classroom-background-image_904108.png"
+                            sx={{ width: 100, height: 100 }}
+                            image={image || GoogleDriveImage}
                             alt="Live from space album cover"
                         />
                         <Box sx={{ width: '82%' }}>

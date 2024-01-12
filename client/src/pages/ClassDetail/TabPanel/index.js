@@ -11,7 +11,9 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import Stack from '@mui/material/Stack';
 import ClassInfo from '../ClassInfo';
 import Members from '../Members';
-import Classwork from '../Classwork/Classwork';
+import ClassworkTeacher from '../Classwork/ClassworkTeacher';
+import ClassworkStudent from '../Classwork/ClassworkStudent';
+
 import useAxiosPrivate from 'hooks/useAxiosPrivate';
 
 import LoadingSpinner from 'components/LoadingSpinner/LoadingSpinner';
@@ -50,8 +52,6 @@ function a11yProps(index) {
 }
 
 export default function BasicTabs({ classID }) {
-    // const { user } = React.useContext(AuthContext);
-
     const [value, setValue] = React.useState(0);
     const [open, setOpen] = useState(false);
     const [classDetail, setClassDetail] = useState({});
@@ -100,7 +100,7 @@ export default function BasicTabs({ classID }) {
                     <BulletinBoard classDetail={classDetail} />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <Classwork classDetail={classDetail} />
+                    <ClassworkStudent classDetail={classDetail} />
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                     <Members classDetail={classDetail} />
@@ -129,7 +129,7 @@ export default function BasicTabs({ classID }) {
                     <BulletinBoard classDetail={classDetail} />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <Classwork classDetail={classDetail} />
+                    <ClassworkTeacher classDetail={classDetail} />
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                     <Members classDetail={classDetail} />

@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 
 import MainLayout from 'layouts/MainLayout';
 import CourseCard from './CourseCard';
@@ -10,7 +10,6 @@ import CreateClass from 'components/CreateClass';
 import useAxiosPrivate from 'hooks/useAxiosPrivate';
 import { Button, Menu, MenuItem } from '@mui/material';
 import JoinCode from 'components/JoinCode/JoinCode';
-import { AuthContext } from 'context/AuthProvider';
 
 export default function Home() {
     const [openCreate, setOpenCreate] = useState(false);
@@ -19,7 +18,6 @@ export default function Home() {
     const [classes, setClasses] = useState([]);
     const [anchorEl, setAnchorEl] = useState(null);
 
-    const { user: auth } = useContext(AuthContext);
     const axiosPrivate = useAxiosPrivate();
 
     const isMenuOpen = Boolean(anchorEl);
@@ -67,7 +65,7 @@ export default function Home() {
         localStorage.setItem('user', JSON.stringify(user));
     }
 
-    if (!localStorage.getItem('accessToken') || !auth.user) {
+    if (!localStorage.getItem('accessToken')) {
         // redirect to landing page
         return <Navigate to="/landing" />;
     }

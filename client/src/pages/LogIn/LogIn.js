@@ -44,9 +44,9 @@ export default function LogIn() {
     const [accountDoesNotExit, setAccountDoesNotExist] = useState(false);
     const [invalidPassword, setInvalidPassword] = useState(false);
 
-    const { user: auth, dispatch } = useContext(AuthContext);
+    const { dispatch } = useContext(AuthContext);
 
-    if (localStorage.getItem('accessToken') && auth.user) {
+    if (localStorage.getItem('accessToken')) {
         if (localStorage.getItem('nextURL')) {
             const nextURL = localStorage.getItem('nextURL').split('http://localhost:3000')[1];
             localStorage.removeItem('nextURL');

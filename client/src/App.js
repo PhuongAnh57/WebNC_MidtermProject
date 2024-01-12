@@ -52,7 +52,7 @@ function App() {
                         {/* Nếu người dùng nhập một đường dẫn không khớp, thông báo page not found */}
                         <Route path="*" element={<PageNotFound />} />
 
-                        <Route path="/classwork-detail" element={<ClassworkDetail />} />
+                        <Route path="/class/:classID/classwork/:classworkID/detail" element={<ClassworkDetail />} />
 
                         <Route path="/calendar" element={<Calendar />} />
                     </Routes>

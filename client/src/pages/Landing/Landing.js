@@ -1,13 +1,9 @@
 import DefaultLayout from 'layouts/DefaultLayout';
-import { useContext } from 'react';
 import { Navigate } from 'react-router';
 import { BackgroundLanding } from 'assets/images';
-import { AuthContext } from 'context/AuthProvider';
 
 export default function Landing() {
-    const { user: auth } = useContext(AuthContext);
-
-    if (localStorage.getItem('accessToken') && auth.user) {
+    if (localStorage.getItem('accessToken')) {
         console.log(localStorage.getItem('accessToken'));
         return <Navigate to="/home" />;
     }
