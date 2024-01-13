@@ -20,6 +20,9 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { AuthContext } from 'context/AuthProvider';
 import { LOGOUT } from 'utils/constants';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import {useTranslation} from 'react-i18next';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -62,12 +65,19 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function User() {
+    const { t, i18n } = useTranslation();
     const { dispatch } = useContext(AuthContext);
     const [anchorEl, setAnchorEl] = useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+    const [lng, setLng] = useState('vi');
+
+    const handleChange = (event) => {
+        setLng(event.target.value);
+      };
 
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -118,18 +128,19 @@ export default function User() {
         >
             <MenuItem onClick={handleMenuClose} style={{ color: 'back' }}>
                 <Link to="/edit-account" style={{ textDecoration: 'none', color: 'inherit' }}>
-                    Edit account
+                    {t('edit account')}
                 </Link>
             </MenuItem>
             <MenuItem onClick={handleMenuClose} style={{ color: 'back' }}>
                 <Link onClick={handleLogOut} style={{ textDecoration: 'none', color: 'inherit' }}>
-                    Log out
+                    {t('log out')}
                 </Link>
             </MenuItem>
         </Menu>
     );
 
     const mobileMenuId = 'primary-search-account-menu-mobile';
+
     const renderMobileMenu = (
         <Menu
             anchorEl={mobileMoreAnchorEl}
@@ -174,8 +185,13 @@ export default function User() {
                 </IconButton>
                 <p>Profile</p>
             </MenuItem>
+            <MenuItem></MenuItem>
         </Menu>
     );
+
+    const changeLanguage = (lng) => {
+        i18n.changeLanguage(lng);
+    }
 
     return (
         <Box sx={{ flexGrow: 1, mb: 2 }}>
@@ -196,6 +212,18 @@ export default function User() {
                         <StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} />
                     </Search>
                     <Box sx={{ flexGrow: 1 }} />
+                    <FormControl sx={{ m: 1, height:50, minWidth: 120}}>
+                        <Select
+                            value={lng}
+                            onChange={handleChange}
+                            displayEmpty
+                            inputProps={{ 'aria-label': 'Without label' }}
+                            sx = {{color: 'white'}}
+                        >
+                            <MenuItem value="vi" onClick={() => changeLanguage('vi')}>Tiếng Việt</MenuItem>
+                            <MenuItem value='en' onClick={() => changeLanguage('en')}>English</MenuItem>
+                        </Select>
+                    </FormControl>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
                             <Badge badgeContent={0} color="error">
@@ -233,6 +261,7 @@ export default function User() {
                     </Box>
                 </Toolbar>
             </AppBar>
+
             {renderMobileMenu}
             {renderMenu}
         </Box>

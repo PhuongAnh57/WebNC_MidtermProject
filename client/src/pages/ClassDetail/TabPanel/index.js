@@ -15,6 +15,7 @@ import Classwork from '../Classwork/Classwork';
 import useAxiosPrivate from 'hooks/useAxiosPrivate';
 
 import LoadingSpinner from 'components/LoadingSpinner/LoadingSpinner';
+import {useTranslation} from 'react-i18next';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -51,6 +52,7 @@ function a11yProps(index) {
 
 export default function BasicTabs({ classID }) {
     // const { user } = React.useContext(AuthContext);
+    const { t } = useTranslation();
 
     const [value, setValue] = React.useState(0);
     const [open, setOpen] = useState(false);
@@ -93,9 +95,9 @@ export default function BasicTabs({ classID }) {
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                         <Stack direction="row">
                             <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                                <Tab label="Bảng tin" {...a11yProps(0)} />
-                                <Tab label="Bài tập" {...a11yProps(1)} />
-                                <Tab label="Mọi người" {...a11yProps(2)} />
+                                <Tab label={t('stream')} {...a11yProps(0)} />
+                                <Tab label={t('classwork')} {...a11yProps(1)} />
+                                <Tab label={t('people')} {...a11yProps(2)} />
                             </Tabs>
                             <IconButton aria-label="delete" onClick={handleOpen}>
                                 <SettingsIcon />

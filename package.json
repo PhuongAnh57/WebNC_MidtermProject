@@ -1,5 +1,7 @@
 {
     "dependencies": {
-        "nodemailer": "^6.9.7"
+        "i18next": "^23.7.16",
+        "nodemailer": "^6.9.7",
+        "react-i18next": "^14.0.0"
     }
 }

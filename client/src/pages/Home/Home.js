@@ -8,8 +8,10 @@ import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import CreateClass from 'components/CreateClass';
 import useAxiosPrivate from 'hooks/useAxiosPrivate';
+import {useTranslation} from 'react-i18next';
 
 export default function Home() {
+    const { t } = useTranslation();
     const [open, setOpen] = useState(false);
     const [classes, setClasses] = useState([]);
     const axiosPrivate = useAxiosPrivate();
@@ -62,7 +64,7 @@ export default function Home() {
                 startIcon={<AddIcon />}
                 onClick={handleOpen}
             >
-                tạo lớp học
+                {t('create class')}
             </Button>
             <CreateClass open={open} onClose={handleClose} />
 

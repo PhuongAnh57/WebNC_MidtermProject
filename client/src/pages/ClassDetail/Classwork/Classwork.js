@@ -24,8 +24,10 @@ import CardMedia from '@mui/material/CardMedia';
 import Background from '../../../assets/images/classroom.jpg';
 import Divider from '@mui/material/Divider';
 import { Link, Navigate } from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 
 export default function Classwork() {
+    const { t } = useTranslation();
     const [age, setAge] = React.useState('');
 
     const handleChange = (event) => {
@@ -36,7 +38,7 @@ export default function Classwork() {
         <Grid container spacing={2}>
             <Grid item xs={12}>
                 <Button variant="text" startIcon={<AssignmentIndIcon />}>
-                    Xem tất cả bài tập của bạn
+                    {t('view your work')}
                 </Button>
             </Grid>
             <Grid item xs={12}>
@@ -48,7 +50,7 @@ export default function Classwork() {
                         inputProps={{ 'aria-label': 'Without label' }}
                     >
                         <MenuItem value="">
-                            <em>Tất cả chủ đề</em>
+                            <em>{t('all topics')}</em>
                         </MenuItem>
                         <MenuItem value={10}>Assignments</MenuItem>
                         <MenuItem value={20}>Projects</MenuItem>

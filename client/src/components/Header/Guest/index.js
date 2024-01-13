@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
 export default function Guest() {
+
     return (
         <Box sx={{ flexGrow: 1, mb: 2 }}>
             <AppBar position="static">

@@ -18,12 +18,14 @@ import InviteStudentModal from 'components/InviteModal/InviteStudentModal';
 import InviteTeacherModal from 'components/InviteModal/InviteTeacherModal';
 import LoadingSpinner from 'components/LoadingSpinner/LoadingSpinner';
 import useAxiosPrivate from 'hooks/useAxiosPrivate';
+import {useTranslation} from 'react-i18next';
 
 const Demo = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
 }));
 
 export default function InteractiveList({ classDetail }) {
+    const { t } = useTranslation();
     const [openStudentModal, setOpenStudentModal] = useState(false);
     const [openTeacherModal, setOpenTeacherModal] = useState(false);
     const [teachers, setTeachers] = useState([]);
@@ -99,7 +101,7 @@ export default function InteractiveList({ classDetail }) {
                                 <Grid container alignItems="center">
                                     <Grid item xs>
                                         <Typography gutterBottom variant="h5" component="div">
-                                            Giáo viên
+                                            {t('teachers')}
                                         </Typography>
                                     </Grid>
                                     <Grid item>
@@ -131,7 +133,7 @@ export default function InteractiveList({ classDetail }) {
                                 <Grid container alignItems="center">
                                     <Grid item xs>
                                         <Typography gutterBottom variant="h5" component="div">
-                                            Sinh viên
+                                            {t('students')}
                                         </Typography>
                                     </Grid>
                                     <Grid item>

@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import background from '../../../assets/images/classroom.jpg';
-import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import IconButton from '@mui/material/IconButton';
@@ -19,6 +18,7 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
+import {useTranslation} from 'react-i18next';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -30,6 +30,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function BasicGrid({ classDetail }) {
+    const { t } = useTranslation();
     return (
         <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
@@ -67,14 +68,14 @@ export default function BasicGrid({ classDetail }) {
                         <Card sx={{ marginBottom: '10px' }}>
                             <CardContent>
                                 <Typography variant="h6" component="div">
-                                    Sắp đến hạn
+                                    {t('upcoming')}
                                 </Typography>
                                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                    Không có bài tập sắp đến hạn
+                                    {t('no work due soon')}
                                 </Typography>
                             </CardContent>
                             <CardActions>
-                                <Button size="small">Xem tất cả</Button>
+                                <Button size="small">{t('view all')}</Button>
                             </CardActions>
                         </Card>
                     </Grid>

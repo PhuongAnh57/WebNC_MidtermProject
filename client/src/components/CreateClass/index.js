@@ -9,8 +9,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Box from '@mui/material/Box';
 import useAxiosPrivate from 'hooks/useAxiosPrivate';
+import {useTranslation} from 'react-i18next';
 
 function CreateClass({ open, onClose }) {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [classData, setClassData] = useState({
         name: '',
@@ -60,7 +62,7 @@ function CreateClass({ open, onClose }) {
     return (
         <div>
             <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Tạo lớp học</DialogTitle>
+                <DialogTitle id="form-dialog-title">{t('create class')}</DialogTitle>
                 <DialogContent>
                     <Box
                         component="form"
