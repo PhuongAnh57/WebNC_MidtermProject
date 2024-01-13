@@ -33,9 +33,16 @@ router.post('/api/create-class', passport.authenticate('jwt', { session: false }
 router.get('/api/class/:classID/:userID', passport.authenticate('jwt', { session: false }), classC.getClassDetail);
 router.get('/api/all-members/:classID', passport.authenticate('jwt', { session: false }), classC.getAllMembers);
 
+//-------------------------Admin------------------------------------------------------------------------
+// manage user accounts
 router.get('/api/get-accounts/:role', passport.authenticate('jwt', { session: false }), adminC.getMembersByRole);
 router.get('/api/get-accounts/:role/:keyword/:type', passport.authenticate('jwt', { session: false }), adminC.getMembersByKeyWord);
 router.get('/api/get-account/:userID', passport.authenticate('jwt', { session: false }), adminC.getMemberByID);
 router.post('/api/delete-account/:userID', passport.authenticate('jwt', { session: false }), adminC.deleteMemberByID);
+
+// manage classses
+router.get('/api/get-classes/:sortType', passport.authenticate('jwt', { session: false }), adminC.getClassesBySortType);
+router.get('/api/get-classes/:sortType/:keyword', passport.authenticate('jwt', { session: false }), adminC.getClassesByKeyWord);
+router.get('/api/get-class/:classID', passport.authenticate('jwt', { session: false }), adminC.getClassByID);
 
 module.exports = router;
