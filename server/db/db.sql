@@ -96,20 +96,17 @@ ALTER TABLE invitations ADD CONSTRAINT "FK_invitations_classes" FOREIGN KEy (cla
 
 -- ALTER TABLE classes DROP CONSTRAINT "FK_classes_accounts";
 -- ALTER TABLE class_members DROP CONSTRAINT "FK_class_members_accounts";
-ALTER TABLE class_members DROP CONSTRAINT "FK_class_members_classes";
+-- ALTER TABLE class_members DROP CONSTRAINT "FK_class_members_classes";
 -- ALTER TABLE access_tokens DROP CONSTRAINT "FK_access_tokens_accounts";
-ALTER TABLE resources DROP CONSTRAINT "FK_resources_classes";
+-- ALTER TABLE resources DROP CONSTRAINT "FK_resources_classes";
+
 -- INSERT INTO classes(class_id, lecturer_id, class_name, part, topic, room) VALUES ('0', '0', 'Test class', '', '', '')
-
-delete from classes where class_id = 0
-delete from assignments where class_id = 0
-
-delete from class_members where id = 0
+INSERT INTO accounts(user_id, username, password, first_name, last_name, gender, email,	date_of_birth,	address, role, verify_token) VALUES (0, 'admin', '', 'admin', 'admin', '','admin@gmail.com','01/01/2024','','admin','admin')
+-- delete from classes where class_id = 2
+-- delete from assignments where class_id = 0
+-- delete from class_members where id = 0
 -- delete from invitations where email = 'bkdhcmus@gmail.com'
-
 -- delete from access_tokens where user_id = 1
-	
--- delete from accounts where user_id = 2
-
+delete from accounts where user_id = 0
 -- delete from pending_users where user_id = 0
 
