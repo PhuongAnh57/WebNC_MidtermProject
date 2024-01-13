@@ -49,4 +49,7 @@ module.exports = {
     editPassword: async (user) => {
         await db.none('UPDATE accounts SET password=$1 WHERE user_id=$2', [user.password, user.user_id]);
     },
+    removeUser: async (id) => {
+        await db.none('DELETE FROM accounts WHERE user_id=$1', [id]);
+    },
 };

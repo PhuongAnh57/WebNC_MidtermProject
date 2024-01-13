@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userC = require('../controllers/user.c');
 const classC = require('../controllers/class.c');
+const adminC = require('../controllers/admin.c');
 const { passport } = require('../middlewares/passport');
 
 router.post('/api/signup', userC.postSignup);
@@ -32,6 +33,9 @@ router.post('/api/create-class', passport.authenticate('jwt', { session: false }
 router.get('/api/class/:classID/:userID', passport.authenticate('jwt', { session: false }), classC.getClassDetail);
 router.get('/api/all-members/:classID', passport.authenticate('jwt', { session: false }), classC.getAllMembers);
 
-
+router.get('/api/get-accounts/:role', passport.authenticate('jwt', { session: false }), adminC.getMembersByRole);
+router.get('/api/get-accounts/:role/:keyword/:type', passport.authenticate('jwt', { session: false }), adminC.getMembersByKeyWord);
+router.get('/api/get-account/:userID', passport.authenticate('jwt', { session: false }), adminC.getMemberByID);
+router.post('/api/delete-account/:userID', passport.authenticate('jwt', { session: false }), adminC.deleteMemberByID);
 
 module.exports = router;

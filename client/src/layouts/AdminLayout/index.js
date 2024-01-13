@@ -1,8 +1,8 @@
 import Footer from 'components/Footer';
 import Header from 'components/Header';
-import SideBar from 'layouts/MainLayout/SideBar';
+import SideBar from 'layouts/AdminLayout/SideBar';
 import classNames from 'classnames/bind';
-import styles from './MainLayout.module.scss';
+import styles from './AdminLayout.module.scss';
 
 import Paper from '@mui/material/Paper';
 import Container from '@mui/material/Container';
@@ -11,7 +11,7 @@ import Main from './Main';
 
 const cx = classNames.bind(styles);
 
-export default function MainLayout({ children }) {
+export default function AdminLayout({ children }) {
     return (
         <div className={cx('wrapper')}>
             <Header />
