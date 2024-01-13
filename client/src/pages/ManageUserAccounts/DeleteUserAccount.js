@@ -14,6 +14,7 @@ export default function DeleteUserAccount({ open, handleClose, userID }) {
         try {
             const response = await axiosPrivate.post(`/api/delete-account/${userID}`);
             if (response.status === 200) {
+                handleClose();
                 return <Navigate to="/manage-accounts" />;
             }
         } catch (err) {

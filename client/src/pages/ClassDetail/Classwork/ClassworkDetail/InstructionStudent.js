@@ -18,6 +18,12 @@ import List from '@mui/material/List';
 import Background from '../../../../assets/images/classroom.jpg';
 import AddIcon from '@mui/icons-material/Add';
 import Stack from '@mui/material/Stack';
+import { useParams } from 'react-router';
+import useAxiosPrivate from 'hooks/useAxiosPrivate';
+import { extractFileName, extractFileNameExtension } from 'utils/filename';
+import { Card, CardContent, CardMedia } from '@mui/material';
+import { GoogleDriveImage } from 'assets/images';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -29,6 +35,26 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function InstructionStudent() {
+    const { classID, classworkID } = useParams();
+    const [classwork, setClasswork] = React.useState();
+    const axiosPrivate = useAxiosPrivate();
+
+    React.useEffect(() => {
+        const loadAssignment = async () => {
+            try {
+                const response = await axiosPrivate.get(`/api/class/${classID}/resource/${classworkID}/detail`);
+
+                if (response.status === 200) {
+                    setClasswork(response.data.resource);
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        };
+
+        loadAssignment();
+    }, [classID, classworkID]);
+
     return (
         <MainLayout>
             <Box sx={{ flexGrow: 1 }}>
@@ -49,14 +75,48 @@ export default function InstructionStudent() {
                                                     <Typography gutterBottom variant="h4" component="div">
                                                         Assignment
                                                     </Typography>
-                                                    <Typography color="text.secondary" variant="body2">
-                                                        Khánh Duy - 23 thg 12
-                                                    </Typography>
+                                                    <span>
+                                                        {classwork &&
+                                                            classwork.owner_lastName + ' ' + classwork.owner_firstName}
+                                                    </span>
+                                                    <NavigateNextIcon sx={{ alignSelf: 'center' }} />
+                                                    <span>{classwork && new Date(classwork.date).toUTCString()}</span>
                                                 </ListItemText>
                                             </ListItem>
                                         </Grid>
                                     </Grid>
                                 </Box>
+
+                                {classwork && classwork.file_urls[0] && (
+                                    <Card sx={{ display: 'flex', width: '400px', mt: '16px', mb: '16px' }}>
+                                        {extractFileNameExtension(classwork.file_urls[0]) === 'Image' ? (
+                                            <CardMedia
+                                                component="img"
+                                                sx={{ width: 150, height: '100%' }}
+                                                image={classwork.file_urls[0]}
+                                                alt="Image"
+                                            />
+                                        ) : (
+                                            <CardMedia
+                                                component="img"
+                                                sx={{ width: 150, height: '100%' }}
+                                                image={GoogleDriveImage}
+                                                alt="Google Drive"
+                                            />
+                                        )}
+                                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                            <CardContent sx={{ flex: '1 0 auto' }}>
+                                                <Typography component="div" sx={{ fontSize: '16px', color: '#3C3034' }}>
+                                                    filename={extractFileName(classwork.file_urls[0])}
+                                                </Typography>
+                                                <Typography sx={{ fontSize: '14px', color: '#5F6368' }} component="div">
+                                                    {extractFileNameExtension(classwork.file_urls[0])}
+                                                </Typography>
+                                            </CardContent>
+                                        </Box>
+                                    </Card>
+                                )}
+
                                 <Divider variant="middle" />
                                 <Box sx={{ m: 2, display: 'flex', alignItems: 'center' }}>
                                     <PeopleIcon />

@@ -33,13 +33,11 @@ import FormControl from '@mui/material/FormControl';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Fab from '@mui/material/Fab';
 
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
 import useAxiosPrivate from 'hooks/useAxiosPrivate';
 
 import styles from './CreateMaterial.module.scss';
+import { GoogleDriveImage } from 'assets/images';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -65,7 +63,6 @@ function CreateMaterial({ classDetail, onUpdateClassworks, onCloseMaterial }) {
         date: new Date(),
     });
 
-    // console.log('render');
 
     const handleChange = (event) => {
         setMaterial((prev) => ({
@@ -186,6 +183,15 @@ function CreateMaterial({ classDetail, onUpdateClassworks, onCloseMaterial }) {
         setFilesUpload(newFilesUpload);
     };
 
+    let image;
+    if (filesUpload.length > 0) {
+        // console.log(filesUpload[0].file);
+        const isImage = filesUpload[0].type === 'Image';
+        if (isImage) {
+            image = URL.createObjectURL(filesUpload[0].file);
+        }
+    }
+
     const renderFilesUpload = () => {
         return (
             <>
@@ -194,7 +200,7 @@ function CreateMaterial({ classDetail, onUpdateClassworks, onCloseMaterial }) {
                         <CardMedia
                             component="img"
                             sx={{ width: 100 }}
-                            image="https://png.pngtree.com/thumb_back/fw800/background/20210920/pngtree-school-classroom-blackboard-desk-education-course-training-class-classroom-background-image_904108.png"
+                            image={image || GoogleDriveImage}
                             alt="Live from space album cover"
                         />
                         <Box sx={{ width: '82%' }}>

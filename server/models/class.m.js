@@ -27,6 +27,13 @@ module.exports = {
         const result = await db.one('SELECT * FROM classes WHERE code=$1', [code]);
         return result;
     },
+    getTeacherByClass: async (classID) => {
+        const result = db.one(
+            'SELECT * FROM accounts a JOIN classes c ON c.lecturer_id = a.user_id WHERE class_id=$1',
+            [classID],
+        );
+        return result;
+    },
     addNewClass: async (classData) => {
         const result = await db.one(
             'INSERT INTO classes(class_id, code, lecturer_id, class_name, part, topic, room) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *',

@@ -94,12 +94,12 @@ router.get('/get-account/:userID', passport.authenticate('jwt', { session: false
 router.post('/delete-account/:userID', passport.authenticate('jwt', { session: false }), adminC.deleteMemberByID);
 
 // manage classses
-router.get('/api/get-classes/:sortType', passport.authenticate('jwt', { session: false }), adminC.getClassesBySortType);
+router.get('/get-classes/:sortType', passport.authenticate('jwt', { session: false }), adminC.getClassesBySortType);
 router.get(
-    '/api/get-classes/:sortType/:keyword',
+    '/get-classes/:sortType/:keyword',
     passport.authenticate('jwt', { session: false }),
     adminC.getClassesByKeyWord,
 );
-router.get('/api/get-class/:classID', passport.authenticate('jwt', { session: false }), adminC.getClassByID);
+router.get('/get-class/:classID', passport.authenticate('jwt', { session: false }), adminC.getClassByID);
 
 module.exports = router;

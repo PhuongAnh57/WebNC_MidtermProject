@@ -27,7 +27,7 @@ const FileName = ({ filename, maxLength }) => {
     return <span>{filename}</span>;
 };
 
-export default function Material({ data }) {
+export default function Material({ data, classDetail }) {
     const [click, setClick] = useState(false);
     const [material, setMaterial] = useState(data);
 
@@ -116,9 +116,11 @@ export default function Material({ data }) {
             <AccordionDetails sx={{ borderTop: '1px solid #b5bec9' }}>
                 <Typography>
                     <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '8px' }}>
-                        <Button variant="text" sx={{ color: '#518cdd' }}>
-                            Xem tài liệu
-                        </Button>
+                        <Link to={`/class/${classDetail.class_id}/material`}>
+                            <Button variant="text" sx={{ color: '#518cdd' }}>
+                                Xem tài liệu
+                            </Button>
+                        </Link>
                     </div>
                 </Typography>
             </AccordionDetails>

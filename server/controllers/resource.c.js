@@ -2,6 +2,7 @@ const resourceM = require('../models/resource.m');
 const { initializeApp } = require('firebase/app');
 const { getStorage, ref, getDownloadURL, uploadBytesResumable, deleteObject } = require('firebase/storage');
 const config = require('../configs/firebase');
+const classM = require('../models/class.m');
 
 // initialize a firebase application
 initializeApp(config.firebaseConfig);
@@ -146,10 +147,15 @@ exports.getDetailResource = async (req, res) => {
     try {
         const resource = await resourceM.getDetailResource(resourceID, classID).catch((err) => {});
         // handle file url
+        const teacher = await classM.getTeacherByClass(classID);
 
         if (!resource) {
             res.status(400).json({ message: 'Resource not found' });
         } else {
+            resource['owner_id'] = teacher.user_id;
+            resource['owner_firstName'] = teacher.first_name;
+            resource['owner_lastName'] = teacher.last_name;
+
             res.status(200).json({ message: 'Resource found', resource });
         }
     } catch (err) {

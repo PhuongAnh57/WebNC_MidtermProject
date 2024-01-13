@@ -68,7 +68,7 @@ export default function ClassworkTeacher({ classDetail }) {
                         return <Assignment classDetail={classDetail} data={classwork} key={index} />;
                     }
 
-                    return <Material data={classwork} key={index} />;
+                    return <Material classDetail={classDetail} data={classwork} key={index} />;
                 })}
             </Grid>
         </Grid>

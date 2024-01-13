@@ -17,6 +17,10 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
+import { useParams } from 'react-router';
+import useAxiosPrivate from 'hooks/useAxiosPrivate';
+import { extractFileName, extractFileNameExtension } from 'utils/filename';
+import { GoogleDriveImage } from 'assets/images';
 
 export default function InstructionTeacher() {
     const FileName = ({ filename, maxLength }) => {
@@ -28,6 +32,26 @@ export default function InstructionTeacher() {
         }
         return <span>{filename}</span>;
     };
+
+    const { classID, classworkID } = useParams();
+    const [classwork, setClasswork] = React.useState(null);
+    const axiosPrivate = useAxiosPrivate();
+
+    React.useEffect(() => {
+        const loadAssignment = async () => {
+            try {
+                const response = await axiosPrivate.get(`/api/class/${classID}/resource/${classworkID}/detail`);
+
+                if (response.status === 200) {
+                    setClasswork(response.data.resource);
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        };
+
+        loadAssignment();
+    }, [classID, classworkID]);
 
     const MoreIcon = () => {
         const [anchorEl, setAnchorEl] = React.useState(null);
@@ -73,16 +97,16 @@ export default function InstructionTeacher() {
                         <AssignmentOutlinedIcon />
                     </Fab>
                     <span style={{ fontSize: '32px', fontWeight: '400', color: '#4285f4', alignSelf: 'center' }}>
-                        Bài tập 1
+                        {classwork && classwork.title}
                     </span>
                 </div>
                 <MoreIcon sx={{ color: '#4285f4' }} />
             </div>
             <Box sx={{ ml: '58px', fontSize: '14px' }}>
                 <div style={{ color: '#5F6368', display: 'flex', alignItems: 'center' }}>
-                    <span>Nguyễn Phương Anh</span>
+                    <span>{classwork && classwork.owner_lastName + ' ' + classwork.owner_firstName}</span>
                     <NavigateNextIcon sx={{ alignSelf: 'center' }} />
-                    <span> Ngày 27/12/2023</span>
+                    <span>{classwork && new Date(classwork.date).toUTCString()}</span>
                 </div>
                 <div
                     style={{
@@ -99,24 +123,35 @@ export default function InstructionTeacher() {
                 </div>
                 <Divider />
 
-                <Card sx={{ display: 'flex', width: '400px', mt: '16px', mb: '16px' }}>
-                    <CardMedia
-                        component="img"
-                        sx={{ width: 151 }}
-                        image="https://png.pngtree.com/thumb_back/fw800/background/20210920/pngtree-school-classroom-blackboard-desk-education-course-training-class-classroom-background-image_904108.png"
-                        alt="Live from space album cover"
-                    />
-                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                        <CardContent sx={{ flex: '1 0 auto' }}>
-                            <Typography component="div" sx={{ fontSize: '16px', color: '#3C3034' }}>
-                                <FileName filename="Bài tập 1.docx" maxLength={25} />
-                            </Typography>
-                            <Typography sx={{ fontSize: '14px', color: '#5F6368' }} component="div">
-                                Word
-                            </Typography>
-                        </CardContent>
-                    </Box>
-                </Card>
+                {classwork && classwork.file_urls[0] && (
+                    <Card sx={{ display: 'flex', width: '400px', mt: '16px', mb: '16px' }}>
+                        {extractFileNameExtension(classwork.file_urls[0]) === 'Image' ? (
+                            <CardMedia
+                                component="img"
+                                sx={{ width: 150, height: '100%' }}
+                                image={classwork.file_urls[0]}
+                                alt="Image"
+                            />
+                        ) : (
+                            <CardMedia
+                                component="img"
+                                sx={{ width: 150, height: '100%' }}
+                                image={GoogleDriveImage}
+                                alt="Google Drive"
+                            />
+                        )}
+                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                            <CardContent sx={{ flex: '1 0 auto' }}>
+                                <Typography component="div" sx={{ fontSize: '16px', color: '#3C3034' }}>
+                                    filename={extractFileName(classwork.file_urls[0])}
+                                </Typography>
+                                <Typography sx={{ fontSize: '14px', color: '#5F6368' }} component="div">
+                                    {extractFileNameExtension(classwork.file_urls[0])}
+                                </Typography>
+                            </CardContent>
+                        </Box>
+                    </Card>
+                )}
                 <Divider />
 
                 <div

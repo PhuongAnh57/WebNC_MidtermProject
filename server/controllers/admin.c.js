@@ -91,8 +91,8 @@ exports.deleteMemberByID = async (req, res) => {
 
         // console.log(joinedClasses);
         if (joinedClasses) {
-            [...joinedClasses].forEach(async (joinedClasses) => {
-                const classID = joinedClasses.class_id;
+            [...joinedClasses].forEach(async (joinedClass) => {
+                const classID = joinedClass.class_id;
                 await classM.removeMemberInClass(classID, userID);
             });
         }
@@ -111,7 +111,7 @@ exports.getClassesBySortType = async (req, res) => {
     const { sortType } = req.params;
 
     try {
-        const classes = await classM.getAllClasses();   
+        const classes = await classM.getAllClasses();
 
         if (sortType === 'asc') {
             const classes_asc = classes.slice().sort((x, y) => x.class_name.localeCompare(y.class_name));
@@ -136,14 +136,14 @@ exports.getClassesByKeyWord = async (req, res) => {
 
         if (sortType === 'asc') {
             const classes_asc = classes.slice().sort((x, y) => x.class_name.localeCompare(y.class_name));
-            classesData = classes_asc.filter(c => c.class_name.includes(keyword));
+            classesData = classes_asc.filter((c) => c.class_name.includes(keyword));
             res.json({ message: 'classname by asc', classesData });
         } else if (sortType === 'desc') {
             const classes_desc = classes.slice().sort((x, y) => y.class_name.localeCompare(x.class_name));
-            classesData = classes_desc.filter(c => c.class_name.includes(keyword));
+            classesData = classes_desc.filter((c) => c.class_name.includes(keyword));
             res.json({ message: 'classname by desc', classesData });
         } else {
-            classesData = classes.filter(c => c.class_name.includes(keyword));
+            classesData = classes.filter((c) => c.class_name.includes(keyword));
             res.json({ message: 'all classes', classesData });
         }
     } catch (error) {
@@ -159,7 +159,7 @@ exports.getClassByID = async (req, res) => {
         // const users = await userM.getAllUsers();
         // const owner = await userM.getUserByID(Class.lecturer_id);
         // const members = await classM.getAllMembersInClass(classID);
-        
+
         // const lecturers = members.filter(m => m.role === 'teacher');
         // const students = members.filter(m => m.role === 'student');
 
@@ -171,11 +171,11 @@ exports.getClassByID = async (req, res) => {
         const owner = await userM.getUserByID(Class.lecturer_id);
         const members = await classM.getAllMembersInClass(classID);
 
-        const lecturers = members.filter(m => m.role === 'teacher');
-        const students = members.filter(m => m.role === 'student');
+        const lecturers = members.filter((m) => m.role === 'teacher');
+        const students = members.filter((m) => m.role === 'student');
 
-        const list_lecturers = users.filter(u => lecturers.map(lec => lec.member_id).includes(u.user_id));
-        const list_students = users.filter(u => students.map(std => std.member_id).includes(u.user_id));
+        const list_lecturers = users.filter((u) => lecturers.map((lec) => lec.member_id).includes(u.user_id));
+        const list_students = users.filter((u) => students.map((std) => std.member_id).includes(u.user_id));
 
         const classInfo = {
             class_id: Class.class_id,
@@ -185,13 +185,13 @@ exports.getClassByID = async (req, res) => {
             room: Class.room,
             owner: `${owner.last_name} ${owner.first_name}`,
             numberOfLecturers: lecturers.length,
-            numberOfStudents: students.length
+            numberOfStudents: students.length,
         };
         // console.log(classInfo);
         // console.log(list_lecturers);
         // console.log(list_students);
-        
-        res.json({ message: "Class and members of this class", classInfo, list_lecturers, list_students });
+
+        res.json({ message: 'Class and members of this class', classInfo, list_lecturers, list_students });
     } catch (error) {
         console.log(error);
     }
