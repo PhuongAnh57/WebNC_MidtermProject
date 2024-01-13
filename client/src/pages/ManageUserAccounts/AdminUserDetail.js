@@ -50,6 +50,7 @@ export default function AdminUserDetail() {
             }
         };
         getAccountByID();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     if (!localStorage.getItem('accessToken')) {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams, Navigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
@@ -16,6 +16,7 @@ import Divider from '@mui/material/Divider';
 
 import AdminLayout from 'layouts/AdminLayout';
 import Background from '../../assets/images/classroom.jpg';
+import useAxiosPrivate from 'hooks/useAxiosPrivate';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -30,6 +31,32 @@ const Demo = styled('div')(({ theme }) => ({
 }));
 
 export default function AdminClassDetail() {
+    const { classID } = useParams();
+    const [Class, setClass] = React.useState([]);
+    const [students, setStudents] = React.useState([]);
+    const [lecturers, setLecturers] = React.useState([]);
+    const axiosPrivate = useAxiosPrivate();
+
+    React.useEffect(() => {
+        const getClassByID = async () => {
+            try {
+                const response = await axiosPrivate.get(`/api/get-class/${classID}`);
+                if (response.status === 200) {
+                    setClass(response.data.classInfo);
+                    setLecturers(response.data.list_lecturers);
+                    setStudents(response.data.list_students);
+                }
+            } catch (err) {
+                console.log(err);
+                if (err.response.status === 401) {
+                    return <Navigate to="/login" />;
+                }
+            }
+        };
+        getClassByID();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
         <AdminLayout>
             <Box sx={{ width: '50%', mx: 'auto', marginTop: '20px' }}>
@@ -48,18 +75,39 @@ export default function AdminClassDetail() {
                             id="classname"
                             name="classname"
                             label="Tên lớp học"
-                            value=""
+                            value={`${Class.class_name}`}
                             variant="filled"
                         />
-                        <TextField disabled id="part" name="part" label="Phần" value="" variant="filled" />
-                        <TextField disabled id="topic" name="topic" label="Chủ đề" value="" variant="filled" />
-                        <TextField disabled id="room" name="room" label="Phòng" value="" variant="filled" />
                         <TextField
                             disabled
-                            id="numberOfMembers"
-                            name="numberOfMembers"
-                            label="Số lượng thành viên"
-                            value=""
+                            id="part"
+                            name="part"
+                            label="Phần"
+                            value={`${Class.part}`}
+                            variant="filled"
+                        />
+                        <TextField
+                            disabled
+                            id="topic"
+                            name="topic"
+                            label="Chủ đề"
+                            value={`${Class.topic}`}
+                            variant="filled"
+                        />
+                        <TextField
+                            disabled
+                            id="room"
+                            name="room"
+                            label="Phòng"
+                            value={`${Class.room}`}
+                            variant="filled"
+                        />
+                        <TextField
+                            disabled
+                            id="owner"
+                            name="owner"
+                            label="Giáo viên sở hữu"
+                            value={`${Class.owner}`}
                             variant="filled"
                         />
                         <TextField
@@ -67,7 +115,7 @@ export default function AdminClassDetail() {
                             id="numberOfTeachers"
                             name="numberOfTeachers"
                             label="Số lượng giáo viên"
-                            value=""
+                            value={`${Class.numberOfLecturers}`}
                             variant="filled"
                         />
                         <TextField
@@ -75,7 +123,7 @@ export default function AdminClassDetail() {
                             id="numberOfStudents"
                             name="numberOfStudents"
                             label="Số lượng học sinh"
-                            value=""
+                            value={`${Class.numberOfStudents}`}
                             variant="filled"
                         />
                     </Box>
@@ -96,22 +144,16 @@ export default function AdminClassDetail() {
                         <Divider />
                         <Demo>
                             <List>
-                                {/* {teachers.map((lecturer, index) => (
-                                    <ListItem key={index}>
-                                        <ListItemAvatar>
-                                            <Avatar alt="Remy Sharp" src={Background} />
-                                        </ListItemAvatar>
-                                        <ListItemText primary={`${lecturer.firstname} ${lecturer.lastname}`} />
-                                    </ListItem>
-                                ))} */}
-                                <Link to='/manage-accounts/userID'>
-                                    <ListItem>
-                                        <ListItemAvatar>
-                                            <Avatar alt="Remy Sharp" src={Background} />
-                                        </ListItemAvatar>
-                                        <ListItemText primary='anh'/>
-                                    </ListItem>
-                                </Link>
+                                {lecturers.map((lecturer, index) => (
+                                    <Link to={`/manage-accounts/${lecturer.user_id}`}>
+                                        <ListItem key={index}>
+                                            <ListItemAvatar>
+                                                <Avatar alt="Remy Sharp" src={Background} />
+                                            </ListItemAvatar>
+                                            <ListItemText primary={`${lecturer.last_name} ${lecturer.first_name}`} />
+                                        </ListItem>
+                                    </Link>
+                                ))}
                             </List>
                         </Demo>
                     </Grid>
@@ -131,22 +173,16 @@ export default function AdminClassDetail() {
                         <Divider />
                         <Demo>
                             <List>
-                                {/* {students.map((student, index) => (
-                                    <ListItem key={index}>
-                                        <ListItemAvatar>
-                                            <Avatar alt="Remy Sharp" src={Background} />
-                                        </ListItemAvatar>
-                                        <ListItemText primary={`${student.firstname} ${student.lastname}`} />
-                                    </ListItem>
-                                ))} */}
-                                <Link to='/manage-accounts/userID'>
-                                    <ListItem>
-                                        <ListItemAvatar>
-                                            <Avatar alt="Remy Sharp" src={Background} />
-                                        </ListItemAvatar>
-                                        <ListItemText primary='anh' />
-                                    </ListItem>
-                                </Link>
+                                {students.map((student, index) => (
+                                    <Link to={`/manage-accounts/${student.user_id}`}>
+                                        <ListItem key={index}>
+                                            <ListItemAvatar>
+                                                <Avatar alt="Remy Sharp" src={Background} />
+                                            </ListItemAvatar>
+                                            <ListItemText primary={`${student.last_name} ${student.first_name}`} />
+                                        </ListItem>
+                                    </Link>
+                                ))}
                             </List>
                         </Demo>
                     </Grid>

@@ -74,7 +74,7 @@ function App() {
                         <Route exact path="/manage-accounts/:userID" element={<AdminUserDetail />} />
 
                         <Route exact path="/manage-classes" element={<ManageClasses />} />
-                        <Route exact path="/manage-classes/classID" element={<AdminClassDetail />} />
+                        <Route exact path="/manage-classes/:classID" element={<AdminClassDetail />} />
 
                         {/* Nếu người dùng nhập một đường dẫn không khớp, thông báo page not found */}
                         <Route path="*" element={<PageNotFound />} />
