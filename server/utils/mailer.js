@@ -23,6 +23,7 @@ const sendEmail = async (message) => {
 
 module.exports = {
     sendConfirmationEmail: (user, token) => {
+        console.log(user.email);
         const message = {
             from: process.env.USER,
             to: user.email,
@@ -82,6 +83,7 @@ module.exports = {
     },
 
     sendResetPasswordEmail: (user, token) => {
+        console.log(user.email);
         const message = {
             from: process.env.USER,
             to: user.email,
@@ -106,7 +108,7 @@ module.exports = {
                     style="padding: 36px 36px 0;"
                 >
                     <h3 style="color: rgba(0,0,0,0.87); margin: 4px 0;">
-                        Hello  ${email},
+                        Hello  ${user.email},
                     </h3>
                     <p style="margin: 4px 0;">Click on the button below to reset your password.</p>
                     <div

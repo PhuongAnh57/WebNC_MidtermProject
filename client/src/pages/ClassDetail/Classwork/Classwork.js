@@ -24,7 +24,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Background from '../../../assets/images/classroom.jpg';
 import Divider from '@mui/material/Divider';
 import { Link, Navigate } from 'react-router-dom';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 export default function Classwork() {
     const { t } = useTranslation();
@@ -138,51 +138,6 @@ export default function Classwork() {
                     </AccordionDetails>
                 </Accordion>
             </Grid>
-            {/* <Grid item xs={12}>
-                <Grid item xs>
-                    <Grid container alignItems="center" marginTop={'30px'}>
-                        <Grid item xs>
-                            <Typography gutterBottom variant="h5" component="div">
-                                Assignments
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Button size="small">
-                                <MoreVertIcon />
-                            </Button>
-                        </Grid>
-                    </Grid>
-                    <Accordion>
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="panel2a-content"
-                            id="panel2a-header-2"
-                            sx={{ height: 70 }}
-                        >
-                            <List>
-                                <ListItem>
-                                    <ListItem>
-                                        <ListItemAvatar>
-                                            <Avatar>
-                                                <AssignmentIcon />
-                                            </Avatar>
-                                        </ListItemAvatar>
-                                        <ListItemText primary="React tutorial" secondary="" />
-                                    </ListItem>
-                                </ListItem>
-                            </List>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <Typography>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                                sit amet blandit leo lobortis eget.
-                            </Typography>
-                            <Divider sx={{ margin: '10px 0' }}/>
-                        <Button variant="text">Xem chi tiết</Button>
-                        </AccordionDetails>
-                    </Accordion>
-                </Grid>
-            </Grid> */}
         </Grid>
     );
 }

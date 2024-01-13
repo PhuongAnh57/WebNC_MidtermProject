@@ -171,6 +171,14 @@ exports.postResetPassword = async (req, res) => {
 
     try {
         const userExists = await userM.getUserByEmail(email);
+        const tokens = await access_tokenM.getAllTokens();
+
+        let id;
+        if (!tokens || !tokens?.length) {
+            id = 0;
+        } else {
+            id = tokens[tokens.length - 1].id + 1;
+        }
 
         if (!userExists) {
             return res.status(400).json({ message: 'Account does not exist' });
@@ -183,6 +191,7 @@ exports.postResetPassword = async (req, res) => {
         }
 
         const newToken = {
+            id,
             user_id: userExists.user_id,
             token: jwt.sign({ id: userExists.user_id }, process.env.RESET_PASSWORD_KEY, { expiresIn: '20m' }),
         };

@@ -14,7 +14,8 @@ module.exports = {
         return result;
     },
     addNewToken: async (token) => {
-        const result = await db.one('INSERT INTO access_tokens(user_id, token) VALUES($1, $2) RETURNING *', [
+        const result = await db.one('INSERT INTO access_tokens(id, user_id, token) VALUES($1, $2,$3) RETURNING *', [
+            token.id,
             token.user_id,
             token.token,
         ]);
