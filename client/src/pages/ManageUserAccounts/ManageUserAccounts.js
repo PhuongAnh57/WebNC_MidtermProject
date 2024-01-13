@@ -88,6 +88,7 @@ export default function ManageUserAccounts() {
             }
         };
         getAccountsByRole();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [role]);
 
     const [open, setOpen] = React.useState(false);
