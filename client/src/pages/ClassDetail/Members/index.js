@@ -33,17 +33,23 @@ export default function InteractiveList({ classDetail }) {
     const [isLoading, setIsLoading] = useState(true);
     const axiosPrivate = useAxiosPrivate();
 
-
     const currentURL = window.location.href;
     const classID = currentURL.split('/').pop();
 
     useEffect(() => {
         const getAllMembers = async () => {
-            await axiosPrivate.get(`/api/all-members/${classID}`).then((response) => {
-                setTeachers(response.data.teachers);
-                setStudents(response.data.students);
-                setIsLoading(false);
-            });
+            await axiosPrivate
+                .get(`/api/all-members/${classID}`)
+                .then((response) => {
+                    setTeachers(response.data.teachers);
+                    setStudents(response.data.students);
+                    setIsLoading(false);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    localStorage.clear();
+                    <Navigate to="/landing" />;
+                });
         };
 
         getAllMembers();

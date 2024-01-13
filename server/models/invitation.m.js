@@ -15,8 +15,8 @@ module.exports = {
     },
     addNewInvitation: async (invitation) => {
         await db.one(
-            'INSERT INTO invitations(email, class_id, role, accept_token) VALUES($1, $2, $3, $4) RETURNING *',
-            [invitation.email, invitation.classID, invitation.role, invitation.token],
+            'INSERT INTO invitations(id, email, class_id, role, accept_token) VALUES($1, $2, $3, $4, $5) RETURNING *',
+            [invitation.id, invitation.email, invitation.classID, invitation.role, invitation.token],
         );
     },
     removeInvitation: async (email) => {

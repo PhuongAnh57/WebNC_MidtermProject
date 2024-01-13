@@ -37,6 +37,8 @@ export default function AdminClassDetail() {
     const [lecturers, setLecturers] = React.useState([]);
     const axiosPrivate = useAxiosPrivate();
 
+    console.log(Class);
+
     React.useEffect(() => {
         const getClassByID = async () => {
             try {
@@ -49,7 +51,7 @@ export default function AdminClassDetail() {
             } catch (err) {
                 console.log(err);
                 if (err.response.status === 401) {
-                    return <Navigate to="/login" />;
+                    <Navigate to="/login" />;
                 }
             }
         };
@@ -76,7 +78,7 @@ export default function AdminClassDetail() {
                             name="classname"
                             label="Tên lớp học"
                             value={`${Class.class_name}`}
-                            variant="filled"
+                            variant="outlined"
                         />
                         <TextField
                             disabled
@@ -84,7 +86,7 @@ export default function AdminClassDetail() {
                             name="part"
                             label="Phần"
                             value={`${Class.part}`}
-                            variant="filled"
+                            variant="outlined"
                         />
                         <TextField
                             disabled
@@ -92,7 +94,7 @@ export default function AdminClassDetail() {
                             name="topic"
                             label="Chủ đề"
                             value={`${Class.topic}`}
-                            variant="filled"
+                            variant="outlined"
                         />
                         <TextField
                             disabled
@@ -100,7 +102,7 @@ export default function AdminClassDetail() {
                             name="room"
                             label="Phòng"
                             value={`${Class.room}`}
-                            variant="filled"
+                            variant="outlined"
                         />
                         <TextField
                             disabled
@@ -108,7 +110,7 @@ export default function AdminClassDetail() {
                             name="owner"
                             label="Giáo viên sở hữu"
                             value={`${Class.owner}`}
-                            variant="filled"
+                            variant="outlined"
                         />
                         <TextField
                             disabled
@@ -116,7 +118,7 @@ export default function AdminClassDetail() {
                             name="numberOfTeachers"
                             label="Số lượng giáo viên"
                             value={`${Class.numberOfLecturers}`}
-                            variant="filled"
+                            variant="outlined"
                         />
                         <TextField
                             disabled
@@ -124,7 +126,7 @@ export default function AdminClassDetail() {
                             name="numberOfStudents"
                             label="Số lượng học sinh"
                             value={`${Class.numberOfStudents}`}
-                            variant="filled"
+                            variant="outlined"
                         />
                     </Box>
                 </Item>

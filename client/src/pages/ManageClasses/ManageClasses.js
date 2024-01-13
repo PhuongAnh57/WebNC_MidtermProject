@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
@@ -41,12 +40,12 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function ManageClas() {
     const axiosPrivate = useAxiosPrivate();
-    const [classes, setClasses] = React.useState([]);;
+    const [classes, setClasses] = React.useState([]);
 
     const [keyword, setKeyWord] = React.useState('');
     const handleClickSearch = async () => {
         try {
-            const response = await axiosPrivate.get(`/api/get-classes/${sortType}/${keyword}`);   
+            const response = await axiosPrivate.get(`/api/get-classes/${sortType}/${keyword}`);
             if (response.status === 200) {
                 // console.log(response.data.userAccountsData);
                 setClasses(response.data.classesData);
@@ -57,7 +56,7 @@ export default function ManageClas() {
                 return <Navigate to="/login" />;
             }
         }
-    }
+    };
 
     // Select input
     const [sortType, setSort] = React.useState('all');
@@ -69,7 +68,7 @@ export default function ManageClas() {
         setKeyWord('');
         const getClassesBySortType = async () => {
             try {
-                const response = await axiosPrivate.get(`/api/get-classes/${sortType}`);   
+                const response = await axiosPrivate.get(`/api/get-classes/${sortType}`);
                 if (response.status === 200) {
                     setClasses(response.data.classesData);
                 }
@@ -81,8 +80,13 @@ export default function ManageClas() {
             }
         };
         getClassesBySortType();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sortType]);
+
+    if (!localStorage.getItem('accessToken')) {
+        // redirect to landing page
+        return <Navigate to="/landing" />;
+    }
 
     return (
         <AdminLayout>
@@ -114,7 +118,9 @@ export default function ManageClas() {
                         value={keyword}
                         onChange={(e) => setKeyWord(e.target.value)}
                     />
-                    <Button variant="contained" onClick={handleClickSearch}>Tìm kiếm</Button>
+                    <Button variant="contained" onClick={handleClickSearch}>
+                        Tìm kiếm
+                    </Button>
                 </Box>
             </form>
 
@@ -132,7 +138,10 @@ export default function ManageClas() {
                         {classes.map((Class) => (
                             <StyledTableRow key={Class.class_id}>
                                 <StyledTableCell component="th" scope="row">
-                                    <Link to={`/manage-classes/${Class.class_id}`} style={{textDecoration: 'none', color: 'black'}}>
+                                    <Link
+                                        to={`/manage-classes/${Class.class_id}`}
+                                        style={{ textDecoration: 'none', color: 'black' }}
+                                    >
                                         {Class.class_name}
                                     </Link>
                                 </StyledTableCell>

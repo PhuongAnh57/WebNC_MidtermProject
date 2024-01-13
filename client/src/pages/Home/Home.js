@@ -45,11 +45,9 @@ export default function Home() {
                     setClasses(response.data.classesData);
                 }
             } catch (err) {
-                if (err.response.status === 401) {
-                    console.log(err);
-                    localStorage.clear();
-                    return <Navigate to="/landing" />;
-                }
+                console.log(err);
+                localStorage.clear();
+                return <Navigate to="/landing" />;
             }
         };
 

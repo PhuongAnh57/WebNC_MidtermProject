@@ -155,6 +155,7 @@ exports.getClassByID = async (req, res) => {
     const { classID } = req.params;
 
     try {
+        // console.log(classID);
         // const Class = await classM.getClassByID(classID);
         // const users = await userM.getAllUsers();
         // const owner = await userM.getUserByID(Class.lecturer_id);

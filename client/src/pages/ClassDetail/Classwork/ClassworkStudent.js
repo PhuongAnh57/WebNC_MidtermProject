@@ -10,6 +10,7 @@ import useAxiosPrivate from 'hooks/useAxiosPrivate';
 import Material from './Material/Material';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import Grid from '@mui/material/Grid';
+import { Navigate } from 'react-router';
 
 export default function ClassworkTeacher({ classDetail }) {
     const [classworks, setClassworks] = React.useState([]);
@@ -31,6 +32,8 @@ export default function ClassworkTeacher({ classDetail }) {
                 }
             } catch (err) {
                 console.log('Error loading classworks', err);
+                localStorage.clear();
+                <Navigate to="/landing" />;
             }
         };
 

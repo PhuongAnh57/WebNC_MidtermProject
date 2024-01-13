@@ -104,7 +104,11 @@ export default function EditForm() {
 
     return (
         <>
-            {editResponse !== '' ? <span sx={{ color: '#1976D2' }}>{editResponse}</span> : <></>}
+            {editResponse !== '' ? (
+                <span style={{ color: '#1976D2', textAlign: 'center' }}>{editResponse}</span>
+            ) : (
+                <></>
+            )}
             <React.Fragment>
                 <Grid container spacing={3}>
                     <Grid item xs={12} sm={6}>

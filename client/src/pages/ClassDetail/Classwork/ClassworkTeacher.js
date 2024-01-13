@@ -19,6 +19,7 @@ import CreateAssignment from './Assignment/CreateAssignment';
 import CreateMaterial from './Material/CreateMaterial';
 import useAxiosPrivate from 'hooks/useAxiosPrivate';
 import Material from './Material/Material';
+import { Navigate } from 'react-router';
 
 export default function ClassworkTeacher({ classDetail }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -59,6 +60,8 @@ export default function ClassworkTeacher({ classDetail }) {
                 }
             } catch (err) {
                 console.log('Error loading classworks', err);
+                localStorage.clear();
+                <Navigate to="/landing" />;
             }
         };
 

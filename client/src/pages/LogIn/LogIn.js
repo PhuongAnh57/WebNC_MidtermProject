@@ -59,7 +59,7 @@ export default function LogIn() {
             return <Navigate to={nextURL} />;
         }
         return <Navigate to="/home" />;
-    }   
+    }
 
     const validateForm = () => {
         const errors = {};
@@ -69,9 +69,10 @@ export default function LogIn() {
         if (!user.username.trim()) {
             errors.username = 'Tên đăng nhập không được để trống';
         }
-        else if (accountDoesNotExit) {
-            errors.username = 'Tên đăng nhập không tồn tại';
-        }
+
+        // else if (accountDoesNotExit) {
+        //     errors.username = 'Tên đăng nhập không tồn tại';
+        // }
 
         if (user.password.length < 6) {
             errors.password = 'Mật khẩu phải có ít nhất 6 ký tự';
@@ -166,11 +167,20 @@ export default function LogIn() {
                             error={!!formErrors.username}
                             helperText={formErrors.username}
                         />
-                        {/* {accountDoesNotExit && (
+                        {accountDoesNotExit && (
                             <>
-                                <span style={{ color: 'red' }}>Tên đăng nhập không tồn tại</span>
+                                <span
+                                    style={{
+                                        color: '#d32f2f',
+                                        marginLeft: '16px',
+                                        marginTop: '-8px',
+                                        fontSize: '12px',
+                                    }}
+                                >
+                                    Tên đăng nhập không tồn tại
+                                </span>
                             </>
-                        )} */}
+                        )}
                         <TextField
                             margin="normal"
                             required
@@ -185,12 +195,12 @@ export default function LogIn() {
                             error={!!formErrors.password}
                             helperText={formErrors.password}
                         />
-
+                        {/* 
                         {invalidPassword && (
                             <>
                                 <span style={{ color: 'red' }}>Sai mật khẩu</span>
                             </>
-                        )}
+                        )} */}
                         <div sx={{ marginBottom: -4 }}>
                             <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Ghi nhớ" />
                         </div>
