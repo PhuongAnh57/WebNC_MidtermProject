@@ -84,8 +84,6 @@ CREATE TABLE resources (
 );
 
 
-
-
 ALTER TABLE classes ADD CONSTRAINT "FK_classes_accounts" FOREIGN KEY (lecturer_id) REFERENCES accounts (user_id);
 ALTER TABLE class_members ADD CONSTRAINT "FK_class_members_accounts" FOREIGN KEY (member_id) REFERENCES accounts (user_id);
 ALTER TABLE class_members ADD CONSTRAINT "FK_class_members_classes" FOREIGN KEY (class_id) REFERENCES classes (class_id);

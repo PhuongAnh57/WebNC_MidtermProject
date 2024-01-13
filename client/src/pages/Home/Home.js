@@ -12,6 +12,7 @@ import { Button, Menu, MenuItem } from '@mui/material';
 import JoinCode from 'components/JoinCode/JoinCode';
 
 import ManageUserAccounts from 'pages/ManageUserAccounts/ManageUserAccounts';
+import {useTranslation} from 'react-i18next';
 
 export default function Home() {
     const [openCreate, setOpenCreate] = useState(false);

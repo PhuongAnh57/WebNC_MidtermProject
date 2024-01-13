@@ -19,6 +19,7 @@ import Grade from '../Grade';
 import useAxiosPrivate from 'hooks/useAxiosPrivate';
 
 import LoadingSpinner from 'components/LoadingSpinner/LoadingSpinner';
+import {useTranslation} from 'react-i18next';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -54,6 +55,9 @@ function a11yProps(index) {
 }
 
 export default function BasicTabs({ classID }) {
+    // const { user } = React.useContext(AuthContext);
+    const { t } = useTranslation();
+
     const [value, setValue] = React.useState(0);
     const [open, setOpen] = useState(false);
     const [classDetail, setClassDetail] = useState({});

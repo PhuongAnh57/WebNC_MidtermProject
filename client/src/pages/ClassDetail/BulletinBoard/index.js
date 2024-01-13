@@ -22,7 +22,7 @@ import CropFreeIcon from '@mui/icons-material/CropFree';
 import ClassCode from 'components/Class/ClassCode/ClassCode';
 import Upcoming from 'components/Class/Upcoming/Upcoming';
 import ClassCodeModal from 'components/Class/ClassCode/ClassCodeModal';
-
+import { useTranslation } from 'react-i18next';
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
     ...theme.typography.body2,
@@ -33,6 +33,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function BasicGrid({ classDetail }) {
+    const { t } = useTranslation();
     const [openModal, setOpenModal] = React.useState(false);
     const handleOpen = () => setOpenModal(true);
     const handleClose = () => setOpenModal(false);

@@ -19,9 +19,13 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 
 import styles from './Sidebar.module.scss';
 import classNames from 'classnames/bind';
+import {useTranslation} from 'react-i18next';
+
 const cx = classNames.bind(styles);
 
 export default function BasicList() {
+    const { t } = useTranslation();
+
     return (
         <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
             <nav aria-label="main mailbox folders">
@@ -33,7 +37,7 @@ export default function BasicList() {
                                 <ListItemIcon>
                                     <HomeIcon />
                                 </ListItemIcon>
-                                <ListItemText primary="Màn hình chính" />
+                                <ListItemText primary={t('home')}/>
                             </ListItemButton>
                         </ListItem>
                         )}
@@ -45,7 +49,7 @@ export default function BasicList() {
                                 <ListItemIcon>
                                     <CalendarMonthIcon />
                                 </ListItemIcon>
-                                <ListItemText primary="Lịch" />
+                                <ListItemText primary={t('calendar')} />
                             </ListItemButton>
                         </ListItem>
                     </NavLink>
@@ -61,7 +65,7 @@ export default function BasicList() {
                             <ListItemIcon>
                                 <PeopleAltIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Giảng dạy" />
+                            <ListItemText primary={t('teaching')} />
                         </ListItemButton>
                     </ListItem>
                 </List>
@@ -76,7 +80,7 @@ export default function BasicList() {
                             <ListItemIcon>
                                 <SchoolIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Đã đăng ký" />
+                            <ListItemText primary={t('enrolled')} />
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
@@ -84,7 +88,7 @@ export default function BasicList() {
                             <ListItemIcon>
                                 <AddTaskIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Việc cần làm" />
+                            <ListItemText primary={t('to do')} />
                         </ListItemButton>
                     </ListItem>
                 </List>
@@ -99,7 +103,7 @@ export default function BasicList() {
                             <ListItemIcon>
                                 <ArchiveIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Lớp học đã lưu trữ" />
+                            <ListItemText primary={t('archived classes')} />
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
@@ -107,7 +111,7 @@ export default function BasicList() {
                             <ListItemIcon>
                                 <SettingsIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Cài đặt" />
+                            <ListItemText primary={t('settings')}/>
                         </ListItemButton>
                     </ListItem>
                 </List>
