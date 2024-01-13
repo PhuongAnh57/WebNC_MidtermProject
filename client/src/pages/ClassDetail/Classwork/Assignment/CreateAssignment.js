@@ -193,7 +193,7 @@ export default function CreateAssignment({ classDetail, onUpdateClassworks, onCl
 
     let image;
     if (filesUpload.length > 0) {
-        console.log(filesUpload[0].file);
+        // console.log(filesUpload[0].file);
         const isImage = filesUpload[0].type === 'Image';
         if (isImage) {
             image = URL.createObjectURL(filesUpload[0].file);

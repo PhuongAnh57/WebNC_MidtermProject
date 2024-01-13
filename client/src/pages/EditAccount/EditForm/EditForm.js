@@ -62,6 +62,8 @@ export default function EditForm() {
                 }
             } catch (err) {
                 console.log(err);
+                localStorage.clear();
+                return <Navigate to="/landing" />;
             }
         };
 

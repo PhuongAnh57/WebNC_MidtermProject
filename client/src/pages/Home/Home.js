@@ -11,6 +11,8 @@ import useAxiosPrivate from 'hooks/useAxiosPrivate';
 import { Button, Menu, MenuItem } from '@mui/material';
 import JoinCode from 'components/JoinCode/JoinCode';
 
+import ManageUserAccounts from 'pages/ManageUserAccounts/ManageUserAccounts';
+
 export default function Home() {
     const [openCreate, setOpenCreate] = useState(false);
     const [openJoin, setOpenJoin] = useState(false);
@@ -45,6 +47,7 @@ export default function Home() {
             } catch (err) {
                 if (err.response.status === 401) {
                     console.log(err);
+                    localStorage.clear();
                     return <Navigate to="/landing" />;
                 }
             }
@@ -100,31 +103,41 @@ export default function Home() {
         </Menu>
     );
 
-    return (
-        <MainLayout>
-            <Button
-                size="large"
-                edge="end"
-                aria-label="add or join class"
-                aria-controls={menuId}
-                aria-haspopup="true"
-                onClick={handleAddMenuOpen}
-                style={{ float: 'right', marginBottom: '20px' }}
-                color="primary"
-                variant="outlined"
-                startIcon={<AddIcon />}
-            >
-                Lớp
-            </Button>
+    const userView = () => {
+        return (
+            <MainLayout>
+                <Button
+                    size="large"
+                    edge="end"
+                    aria-label="add or join class"
+                    aria-controls={menuId}
+                    aria-haspopup="true"
+                    onClick={handleAddMenuOpen}
+                    style={{ float: 'right', marginBottom: '20px' }}
+                    color="primary"
+                    variant="outlined"
+                    startIcon={<AddIcon />}
+                >
+                    Lớp
+                </Button>
 
-            <CreateClass open={openCreate} onClose={handleCreateClose} />
-            <JoinCode open={openJoin} onClose={handleJoinClose} />
+                <CreateClass open={openCreate} onClose={handleCreateClose} />
+                <JoinCode open={openJoin} onClose={handleJoinClose} />
 
-            <div style={{ display: 'flex', flexWrap: 'wrap', clear: 'both' }}>
-                {classes &&
-                    classes.map((classDetail) => <CourseCard key={classDetail.class_id} classDetail={classDetail}/>)}
-            </div>
-            {renderMenu}
-        </MainLayout>
-    );
+                <div style={{ display: 'flex', flexWrap: 'wrap', clear: 'both' }}>
+                    {classes &&
+                        classes.map((classDetail) => (
+                            <CourseCard key={classDetail.class_id} classDetail={classDetail} />
+                        ))}
+                </div>
+                {renderMenu}
+            </MainLayout>
+        );
+    };
+
+    const adminView = () => {
+        return <ManageUserAccounts />;
+    };
+
+    return <>{localStorage.getItem('role') === 'admin' ? adminView() : userView()}</>;
 }

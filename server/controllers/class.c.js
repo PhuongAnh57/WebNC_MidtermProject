@@ -24,8 +24,8 @@ exports.getAllClasses = async (req, res) => {
     });
 
     try {
-        const ownedClasses = await classM.getOwnedClasses(userID);
-        const joinedClasses = await classM.getJoinedClasses(userID);
+        const ownedClasses = await classM.getOwnedClasses(userID).catch((err) => {});
+        const joinedClasses = await classM.getJoinedClasses(userID).catch((err) => {});
 
         if (!ownedClasses && !joinedClasses) {
             res.json({ message: 'User does not have any courses' });
@@ -205,7 +205,7 @@ exports.postAddMemberToClass = async (req, res) => {
             return res.status(400).json({ message: 'Invalid data sent' });
         }
 
-        const allMembers = await classM.getAllMembersInClass(classData.class_id);
+        const allMembers = await classM.getAllClass_Members(classData.class_id).catch((err) => {});
 
         if (!allMembers) {
             console.log('something went wrong');
@@ -238,7 +238,6 @@ exports.postAddMemberToClass = async (req, res) => {
 
 exports.postAddMemberToClassByCode = async (req, res) => {
     const { classCode, userID, role } = req.body.data;
-    console.log(classCode, userID, role);
 
     try {
         if (!classCode || !userID || !role) {
@@ -252,15 +251,13 @@ exports.postAddMemberToClassByCode = async (req, res) => {
             return res.status(400).json({ message: 'Class not found' });
         }
 
-        console.log(classData.class_id);
-
         const memberExists = await classM.getMemberInClass(classData.class_id, userID).catch((err) => {});
         if (memberExists) {
             console.log('User has already been in this class');
             return res.status(400).json({ message: 'User has already been in this class' });
         }
 
-        const allMembers = await classM.getAllMembersInClass(classData.class_id).catch((err) => {});
+        const allMembers = await classM.getAllClass_Members(classData.class_id).catch((err) => {});
 
         if (!allMembers) {
             console.log('something went wrong');
@@ -283,7 +280,7 @@ exports.postAddMemberToClassByCode = async (req, res) => {
 
         await classM.addStudentIntoClass(data);
 
-        res.status(200).json({ message: 'Add member to class successfully' });
+        res.status(200).json({ message: 'Add member to class successfully', classID: classData.class_id });
     } catch (err) {
         console.log(err);
         res.status(400).json({ messag: 'Something went wrong!' });

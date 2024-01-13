@@ -63,7 +63,7 @@ export default function JoinCode({ open, onClose }) {
                 setErrorMsg(response.data.mesage);
             } else if (response.status === 200) {
                 setErrorMsg(null);
-                const classID = response.data;
+                const classID = response.data.classID;
                 navigate(`/class/${classID}`, { replace: true });
             }
         } catch (err) {

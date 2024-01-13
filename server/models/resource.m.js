@@ -58,4 +58,7 @@ module.exports = {
     removeResource: async (resourceID, classID) => {
         await db.none('DELETE FROM resources WHERE id=$1 and class_id=$2', [resourceID, classID]);
     },
+    removeResourceInClass: async (classID) => {
+        await db.none('DELETE FROM resources WHERE class_id=$1', [classID]);
+    },
 };

@@ -65,7 +65,7 @@ function CreateMaterial({ classDetail, onUpdateClassworks, onCloseMaterial }) {
         date: new Date(),
     });
 
-    console.log('render');
+    // console.log('render');
 
     const handleChange = (event) => {
         setMaterial((prev) => ({
@@ -139,7 +139,7 @@ function CreateMaterial({ classDetail, onUpdateClassworks, onCloseMaterial }) {
                 },
             );
 
-            console.log(sendFiles.data.message);
+            // console.log(sendFiles.data.message);
         } catch (err) {
             console.log(err.message);
         }

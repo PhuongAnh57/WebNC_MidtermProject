@@ -21,7 +21,6 @@ const reducer = (state, action) => {
             localStorage.setItem('accessToken', action.payload.accessToken);
             localStorage.setItem('refreshToken', action.payload.refreshToken);
 
-            console.log(action.payload.user);
             return {
                 ...state,
                 user: action.payload.user,

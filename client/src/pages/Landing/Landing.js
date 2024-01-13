@@ -4,7 +4,6 @@ import { BackgroundLanding } from 'assets/images';
 
 export default function Landing() {
     if (localStorage.getItem('accessToken')) {
-        console.log(localStorage.getItem('accessToken'));
         return <Navigate to="/home" />;
     }
 

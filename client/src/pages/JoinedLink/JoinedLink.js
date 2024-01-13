@@ -86,10 +86,8 @@ function JoinedLink() {
                 if (!joined) {
                     await axiosPrivate.post('/api/class/add-member', { data }).then((response) => {
                         if (response.status === 200) {
-                            console.log('added to class');
+                            // console.log('added to class');
                             setJoined(true);
-                        } else {
-                            console.log('someting went wrong');
                         }
                     });
                 }

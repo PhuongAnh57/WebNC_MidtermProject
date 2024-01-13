@@ -66,7 +66,7 @@ export default function ClassworkTeacher({ classDetail }) {
     }, []);
 
     const handleUpdateClassworks = (newClasswork) => {
-        console.log(newClasswork);
+        // console.log(newClasswork);
         setClassworks((prev) => [newClasswork, ...prev]);
     };
 

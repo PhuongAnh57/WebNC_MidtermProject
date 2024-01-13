@@ -76,7 +76,7 @@ function JoinedEmail() {
     }
 
     if (isInvited === false) {
-        console.log(isInvited);
+        // console.log(isInvited);
         return <Navigate to="/home" />;
     }
 

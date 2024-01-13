@@ -5,6 +5,18 @@ module.exports = {
         const result = await db.any('SELECT * FROM accounts ORDER BY user_id ASC');
         return result;
     },
+    getTeachers: async () => {
+        const result = await db.any(
+            "SELECT * FROM accounts c WHERE EXISTS (SELECT * FROM class_members cm WHERE cm.role = 'teacher' AND cm.member_id = c.user_id ) ORDER BY user_id ASC",
+        );
+        return result;
+    },
+    getStudents: async () => {
+        const result = await db.any(
+            "SELECT * FROM accounts c WHERE EXISTS (SELECT * FROM class_members cm WHERE cm.role = 'student' AND cm.member_id = c.user_id ) ORDER BY user_id ASC",
+        );
+        return result;
+    },
     getUserByID: async (id) => {
         const result = await db.one('SELECT * FROM accounts WHERE user_id=$1', [id]);
         return result;
@@ -23,7 +35,7 @@ module.exports = {
     },
     addNewUser: async (user) => {
         const result = await db.one(
-            'INSERT INTO accounts(user_id,  username, password, first_name, last_name, gender, email, date_of_birth, address, verify_token) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *',
+            'INSERT INTO accounts(user_id,  username, password, first_name, last_name, gender, email, date_of_birth, address, role, verify_token) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *',
             [
                 user.id,
                 user.username,
@@ -34,6 +46,7 @@ module.exports = {
                 user.email,
                 user.dateOfBirth,
                 user.address,
+                user.role,
                 user.verify_token,
             ],
         );
@@ -48,5 +61,8 @@ module.exports = {
     },
     editPassword: async (user) => {
         await db.none('UPDATE accounts SET password=$1 WHERE user_id=$2', [user.password, user.user_id]);
+    },
+    removeUser: async (id) => {
+        await db.none('DELETE FROM accounts WHERE user_id=$1', [id]);
     },
 };

@@ -4,6 +4,7 @@ const router = express.Router();
 const userC = require('../controllers/user.c');
 const classC = require('../controllers/class.c');
 const resourceC = require('../controllers/resource.c');
+const adminC = require('../controllers/admin.c');
 const { passport } = require('../middlewares/passport');
 
 // Multer configuration
@@ -82,6 +83,14 @@ router.delete(
     resourceC.deleteRemoveResource,
 );
 
-
+// ------------------- Admin management ----------------------
+router.get('/get-accounts/:role', passport.authenticate('jwt', { session: false }), adminC.getMembersByRole);
+router.get(
+    '/get-accounts/:role/:keyword/:type',
+    passport.authenticate('jwt', { session: false }),
+    adminC.getMembersByKeyWord,
+);
+router.get('/get-account/:userID', passport.authenticate('jwt', { session: false }), adminC.getMemberByID);
+router.post('/delete-account/:userID', passport.authenticate('jwt', { session: false }), adminC.deleteMemberByID);
 
 module.exports = router;

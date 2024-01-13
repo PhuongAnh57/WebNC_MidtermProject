@@ -79,7 +79,7 @@ function ClassCodeModal({ classDetail, open, handleClose }) {
                         </Typography>
 
                         <Box sx={style.modalFooter}>
-                            <Typography variant="p" component="h3" color="primary">
+                            <Typography variant="p" component="h3" color="primary" sx={{ lineHeight: 1.6 }}>
                                 {classDetail.class_name}
                             </Typography>
                             <Typography variant="h6" component="h1" color="primary">

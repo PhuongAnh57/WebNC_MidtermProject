@@ -79,4 +79,13 @@ module.exports = {
         );
         return result;
     },
+    removeMemberInClass: async (classID, userID) => {
+        await db.none('DELETE FROM class_members WHERE class_id=$1 and member_id=$2', [classID, userID]);
+    },
+    removeMembersInClass: async (classID) => {
+        await db.none('DELETE FROM class_members WHERE class_id=$1', [classID]);
+    },
+    removeClass: async (classID) => {
+        await db.none('DELETE FROM classes WHERE class_id=$1', [classID]);
+    },
 };

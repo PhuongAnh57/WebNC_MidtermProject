@@ -28,7 +28,7 @@ module.exports = {
             to: user.email,
             subject: 'Activate Your Classroom Account',
             html: `
-            <div id="container" style=" display: flex; justify-content: center;">
+            <div id="container">
             <div
                 id="invitation"
                 style="font-family: Roboto; 
@@ -44,10 +44,10 @@ module.exports = {
                 </div>
                 <div
                     id="body"
-                    style="padding: 36px 36px 0;display: flex;"
+                    style="padding: 36px 36px 0; display: block;"
                 >
                     <h3 style="color: rgba(0,0,0,0.87); margin: 4px 0;">
-                        Hello  ${email},
+                        Hello  ${user.email},
                     </h3>
                     <p style="margin: 4px 0;">Thank you for registering into our application. Click on the link below to verify your email.</p>
                     <div
@@ -87,7 +87,7 @@ module.exports = {
             to: user.email,
             subject: 'Reset your Classroom password',
             html: `
-            <div id="container" style=" display: flex; justify-content: center;">
+            <div id="container">
             <div
                 id="invitation"
                 style="font-family: Roboto; 
@@ -148,7 +148,7 @@ module.exports = {
             to: email,
             subject: `Joining Mail`,
             html: `
-            <div id="container" style="display: flex; justify-content: center;">
+            <div id="container">
                 <div id="invitation" 
                     style=" 
                     font-family: Roboto; 
