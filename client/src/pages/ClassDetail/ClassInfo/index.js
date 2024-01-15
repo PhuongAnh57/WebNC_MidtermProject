@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -33,6 +34,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function FullScreenDialog({ open, onClose }) {
+    const { t } = useTranslation();
     const [classData, setClassData] = useState({
         name: '',
         part: '',
@@ -81,10 +83,10 @@ export default function FullScreenDialog({ open, onClose }) {
                             <CloseIcon />
                         </IconButton>
                         <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                            Cài đặt lớp học
+                            {t('class settings')}
                         </Typography>
                         <Button autoFocus color="inherit" onClick={onClose}>
-                            lưu
+                            {t('save')}
                         </Button>
                     </Toolbar>
                 </AppBar>
@@ -100,12 +102,12 @@ export default function FullScreenDialog({ open, onClose }) {
                                 noValidate
                                 autoComplete="off"
                             >
-                                <h1>Thông tin chi tiết về lớp học</h1>
+                                <h1>{t('class details')}</h1>
                                 <TextField
                                     required
                                     id="name"
                                     name="name"
-                                    label="Tên lớp học"
+                                    label={t('class name')}
                                     value={classData.name}
                                     onChange={handleChange}
                                     variant="filled"
@@ -113,7 +115,7 @@ export default function FullScreenDialog({ open, onClose }) {
                                 <TextField
                                     id="part"
                                     name="part"
-                                    label="Phần"
+                                    label={t('section')}
                                     value={classData.part}
                                     onChange={handleChange}
                                     variant="filled"
@@ -121,7 +123,7 @@ export default function FullScreenDialog({ open, onClose }) {
                                 <TextField
                                     id="topic"
                                     name="topic"
-                                    label="Chủ đề"
+                                    label={t('subject')}
                                     value={classData.topic}
                                     onChange={handleChange}
                                     variant="filled"
@@ -129,7 +131,7 @@ export default function FullScreenDialog({ open, onClose }) {
                                 <TextField
                                     id="room"
                                     name="room"
-                                    label="Phòng"
+                                    label={t('room')}
                                     value={classData.room}
                                     onChange={handleChange}
                                     variant="filled"
@@ -138,22 +140,61 @@ export default function FullScreenDialog({ open, onClose }) {
                         </Item>
                         <Item>
                             <div style={{ margin: '12px' }}>
-                                <h1>Chấm điểm</h1>
-                                <div style={{ textAlign: 'left', fontSize: '22px', fontWeight: '400', color: '#3c4043' }}>Tính tổng điểm theo trọng số</div>
-                                <div style={{margin: '12px 0px', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                                    <span style={{fontSize: '14px', color: '#3c4043'}}>Hiển thị tổng điểm cho học sinh</span>
-                                    <span style={{alignSelf: 'center'}}>{<SwitchIcon />}</span>
+                                <h1>{t('grading')}</h1>
+                                <div
+                                    style={{ textAlign: 'left', fontSize: '22px', fontWeight: '400', color: '#3c4043' }}
+                                >
+                                    {t('overall grade calculation')}
+                                </div>
+                                <div
+                                    style={{
+                                        margin: '12px 0px',
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <span style={{ fontSize: '14px', color: '#3c4043' }}>
+                                        {t('show overall grade to students')}
+                                    </span>
+                                    <span style={{ alignSelf: 'center' }}>{<SwitchIcon />}</span>
                                 </div>
 
                                 <Divider />
 
-                                <div style={{ textAlign: 'left', fontSize: '22px', fontWeight: '400', color: '#3c4043', marginTop: '18px' }}>Loại điểm</div>
-                                <div style={{ textAlign: 'left', fontSize: '12px', color: '#5f6368', margin: '16px 0px' }}>Loại điểm phải có tổng là 100%</div>
-                                <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginBottom: '16px' }}>
+                                <div
+                                    style={{
+                                        textAlign: 'left',
+                                        fontSize: '22px',
+                                        fontWeight: '400',
+                                        color: '#3c4043',
+                                        marginTop: '18px',
+                                    }}
+                                >
+                                    {t('grade categories')}
+                                </div>
+                                <div
+                                    style={{
+                                        textAlign: 'left',
+                                        fontSize: '12px',
+                                        color: '#5f6368',
+                                        margin: '16px 0px',
+                                    }}
+                                >
+                                    {t('grade categories must add up to 100%')}
+                                </div>
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        justifyContent: 'flex-start',
+                                        alignItems: 'center',
+                                        marginBottom: '16px',
+                                    }}
+                                >
                                     <TextField
                                         id=""
                                         name=""
-                                        label="Danh mục điểm*"
+                                        label={t('grade category') + '*'}
                                         value=""
                                         variant="filled"
                                         sx={{ mr: 3 }}
@@ -161,18 +202,25 @@ export default function FullScreenDialog({ open, onClose }) {
                                     <TextField
                                         id=""
                                         name=""
-                                        label="Phần trăm*"
+                                        label={t('percentage') + '*'}
                                         value=""
                                         variant="filled"
                                         sx={{ mr: 4 }}
                                     />
-                                    <span style={{alignSelf: 'center'}}>{<ClearIcon />}</span>
+                                    <span style={{ alignSelf: 'center' }}>{<ClearIcon />}</span>
                                 </div>
-                                <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginBottom: '16px' }}>
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        justifyContent: 'flex-start',
+                                        alignItems: 'center',
+                                        marginBottom: '16px',
+                                    }}
+                                >
                                     <TextField
                                         id=""
                                         name=""
-                                        label="Danh mục điểm*"
+                                        label={t('grade category') + '*'}
                                         value=""
                                         variant="filled"
                                         sx={{ mr: 3 }}
@@ -180,18 +228,24 @@ export default function FullScreenDialog({ open, onClose }) {
                                     <TextField
                                         id=""
                                         name=""
-                                        label="Phần trăm*"
+                                        label={t('percentage') + '*'}
                                         value=""
                                         variant="filled"
                                         sx={{ mr: 4 }}
                                     />
-                                    <span style={{alignSelf: 'center'}}>{<ClearIcon />}</span>
+                                    <span style={{ alignSelf: 'center' }}>{<ClearIcon />}</span>
                                 </div>
-                                <div style={{ textAlign: 'left', fontSize: '12px', color: '#5f6368'}}>Phần trăm còn lại <span>0%</span></div>
-                                <Button size="large" sx={{ float: 'left', marginLeft: '-12px', fontSize: '14px', color: '#1967d2'}}>Thêm loại điểm</Button>
+                                <div style={{ textAlign: 'left', fontSize: '12px', color: '#5f6368' }}>
+                                    {t('remaining')} <span>0%</span>
+                                </div>
+                                <Button
+                                    size="large"
+                                    sx={{ float: 'left', marginLeft: '-12px', fontSize: '14px', color: '#1967d2' }}
+                                >
+                                    {t('add grade category')}
+                                </Button>
                             </div>
                         </Item>
-                        <Item>Item 3</Item>
                     </Stack>
                 </Box>
             </Dialog>

@@ -1,6 +1,7 @@
-import { Link, Navigate } from 'react-router-dom';
 import React, { useContext, useState } from 'react';
+import { Link, Navigate } from 'react-router-dom';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
@@ -20,6 +21,8 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { AuthContext } from 'context/AuthProvider';
 import { LOGOUT } from 'utils/constants';
+import { FormControl, Select } from '@mui/material';
+import i18n from 'i18n/i18n';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -62,9 +65,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function User() {
+    const { t } = useTranslation();
     const { dispatch } = useContext(AuthContext);
     const [anchorEl, setAnchorEl] = useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+
+    const [lng, setLng] = useState('vi');
+    const handleChange = (event) => {
+        setLng(event.target.value);
+    };
 
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -118,12 +127,12 @@ export default function User() {
         >
             <MenuItem onClick={handleMenuClose} style={{ color: 'back' }}>
                 <Link to="/edit-account" style={{ textDecoration: 'none', color: 'inherit' }}>
-                    Edit account
+                    {t('edit account')}
                 </Link>
             </MenuItem>
             <MenuItem onClick={handleMenuClose} style={{ color: 'back' }}>
                 <Link onClick={handleLogOut} style={{ textDecoration: 'none', color: 'inherit' }}>
-                    Log out
+                    {t('log out')}
                 </Link>
             </MenuItem>
         </Menu>
@@ -177,6 +186,10 @@ export default function User() {
         </Menu>
     );
 
+    const changeLanguage = (lng) => {
+        i18n.changeLanguage(lng);
+    };
+
     return (
         <Box sx={{ flexGrow: 1, mb: 2 }}>
             <AppBar position="static" elevation={0}>
@@ -188,10 +201,6 @@ export default function User() {
                         <Link to="/home" style={{ textDecoration: 'none', color: 'white' }}>
                             Google Classroom
                         </Link>
-                        {/* <span> / </span>
-                        <Link to={`/class/0`} style={{ textDecoration: 'none', color: 'white' }}>
-                            Về lớp học
-                        </Link> */}
                     </Typography>
                     <Search>
                         <SearchIconWrapper>
@@ -200,6 +209,22 @@ export default function User() {
                         <StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} />
                     </Search>
                     <Box sx={{ flexGrow: 1 }} />
+                    <FormControl sx={{ m: 1, height: 50, minWidth: 120 }}>
+                        <Select
+                            value={lng}
+                            onChange={handleChange}
+                            displayEmpty
+                            inputProps={{ 'aria-label': 'Without label' }}
+                            sx={{ color: 'white' }}
+                        >
+                            <MenuItem value="vi" onClick={() => changeLanguage('vi')}>
+                                Tiếng Việt
+                            </MenuItem>
+                            <MenuItem value="en" onClick={() => changeLanguage('en')}>
+                                English
+                            </MenuItem>
+                        </Select>
+                    </FormControl>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
                             <Badge badgeContent={0} color="error">

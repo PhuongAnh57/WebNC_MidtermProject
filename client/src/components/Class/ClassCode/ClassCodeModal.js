@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -45,6 +46,7 @@ function ClassCodeModal({ classDetail, open, handleClose }) {
     const handleCopyToClipboard = () => {
         navigator.clipboard.writeText(classDetail.code);
     };
+    const { t } = useTranslation();
 
     return (
         <div>
@@ -86,7 +88,7 @@ function ClassCodeModal({ classDetail, open, handleClose }) {
                                 <Button size="small" sx={{ textTransform: 'none' }} onClick={handleCopyToClipboard}>
                                     <ContentCopyIcon sx={{ fontSize: '20px', mx: 1 }} />
                                     <Typography variant="p" component="h3" color="primary">
-                                        Sao chép
+                                        {t('copy')}
                                     </Typography>
                                 </Button>
                             </Typography>

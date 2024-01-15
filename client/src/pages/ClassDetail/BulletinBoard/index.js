@@ -15,13 +15,8 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import ImageIcon from '@mui/icons-material/Image';
 
-import { Card, CardActions, CardContent, Typography } from '@mui/material';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import CropFreeIcon from '@mui/icons-material/CropFree';
-
 import ClassCode from 'components/Class/ClassCode/ClassCode';
 import Upcoming from 'components/Class/Upcoming/Upcoming';
-import ClassCodeModal from 'components/Class/ClassCode/ClassCodeModal';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -33,10 +28,6 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function BasicGrid({ classDetail }) {
-    const [openModal, setOpenModal] = React.useState(false);
-    const handleOpen = () => setOpenModal(true);
-    const handleClose = () => setOpenModal(false);
-
     return (
         <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>

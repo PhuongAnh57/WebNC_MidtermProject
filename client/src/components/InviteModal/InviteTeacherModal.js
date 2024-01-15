@@ -1,6 +1,7 @@
 import { memo, useState } from 'react';
 import { Navigate } from 'react-router';
 import classNames from 'classnames/bind';
+import { useTranslation } from 'react-i18next';
 
 import { Modal, Box, FormControl, Chip } from '@mui/material';
 import Button from '@mui/material/Button';
@@ -12,6 +13,7 @@ const cx = classNames.bind(styles);
 function InviteTeacherModal({ classID, open, handleClose }) {
     const [values, setValues] = useState([]);
     const [currentValue, setCurrentValue] = useState('');
+    const { t } = useTranslation();
 
     if (!localStorage.getItem('accessToken')) {
         return <Navigate to="/" />;
@@ -73,7 +75,7 @@ function InviteTeacherModal({ classID, open, handleClose }) {
             >
                 <Box className={cx('modal-box')}>
                     <h3 id="child-modal-title" style={{ fontSize: '18px', margin: '16px 0' }}>
-                        Mời giáo viên?
+                        {t('invite teacher?')}
                     </h3>
                     <div style={{ margin: 0, padding: '8px 0' }}>
                         <FormControl className={cx('form-control')}>
@@ -83,7 +85,7 @@ function InviteTeacherModal({ classID, open, handleClose }) {
                                 ))}
                             </div>
                             <input
-                                placeholder="Nhập email"
+                                placeholder={t('enter email')}
                                 variant="standard"
                                 value={currentValue}
                                 onChange={handleChange}
@@ -93,10 +95,10 @@ function InviteTeacherModal({ classID, open, handleClose }) {
                     </div>
                     <div className={cx('modal-button')}>
                         <Button className={cx('cancel-btn')} onClick={handleClose}>
-                            Thoát
+                            {t('cancel')}
                         </Button>
                         <Button type="submit" onClick={handleInvite}>
-                            Mời
+                            {t('invite')}
                         </Button>
                     </div>
                 </Box>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -11,6 +12,7 @@ import Box from '@mui/material/Box';
 import useAxiosPrivate from 'hooks/useAxiosPrivate';
 
 function CreateClass({ open, onClose }) {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [classData, setClassData] = useState({
         name: '',
@@ -19,7 +21,7 @@ function CreateClass({ open, onClose }) {
         room: '',
     });
     const [disabled, setDisabled] = useState(false);
-    const [status, setStatus] = useState('tạo');
+    const [status, setStatus] = useState(`${t('create')}`);
     const axiosPrivate = useAxiosPrivate();
 
     const handleChange = (e) => {
@@ -36,7 +38,7 @@ function CreateClass({ open, onClose }) {
 
         try {
             setDisabled(true);
-            setStatus('Đang tạo');
+            setStatus(`${t('creating...')}`);
 
             await axiosPrivate
                 .post('/api/create-class', { classData })
@@ -60,7 +62,7 @@ function CreateClass({ open, onClose }) {
     return (
         <div>
             <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Tạo lớp học</DialogTitle>
+                <DialogTitle id="form-dialog-title">{t('create class')}</DialogTitle>
                 <DialogContent>
                     <Box
                         component="form"
@@ -74,7 +76,7 @@ function CreateClass({ open, onClose }) {
                             required
                             id="name"
                             name="name"
-                            label="Tên lớp học"
+                            label={t('class name')}
                             value={classData.name}
                             onChange={handleChange}
                             variant="filled"
@@ -83,7 +85,7 @@ function CreateClass({ open, onClose }) {
                         <TextField
                             id="part"
                             name="part"
-                            label="Phần"
+                            label={t('section')}
                             value={classData.part}
                             onChange={handleChange}
                             variant="filled"
@@ -92,7 +94,7 @@ function CreateClass({ open, onClose }) {
                         <TextField
                             id="topic"
                             name="topic"
-                            label="Chủ đề"
+                            label={t('subject')}
                             value={classData.topic}
                             onChange={handleChange}
                             variant="filled"
@@ -101,7 +103,7 @@ function CreateClass({ open, onClose }) {
                         <TextField
                             id="room"
                             name="room"
-                            label="Phòng"
+                            label={t('room')}
                             value={classData.room}
                             onChange={handleChange}
                             variant="filled"
@@ -111,14 +113,14 @@ function CreateClass({ open, onClose }) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={onClose} color="primary" disabled={disabled}>
-                        hủy
+                        {t('create')}
                     </Button>
                     {classData.name ? (
                         <Button onClick={handleSubmit} color="primary" disabled={disabled}>
                             {status}
                         </Button>
                     ) : (
-                        <Button disabled>tạo</Button>
+                        <Button disabled>{t('cancel')}</Button>
                     )}
                 </DialogActions>
             </Dialog>
