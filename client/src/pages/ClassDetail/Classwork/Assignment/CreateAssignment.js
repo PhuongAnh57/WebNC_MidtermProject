@@ -69,8 +69,6 @@ const Item = styled(Paper)(({ theme }) => ({
     color: theme.palette.text.secondary,
 }));
 
-const names = ['Tất cả học sinh', 'Nguyễn Phương Anh', 'Trần Thị Mỹ Trinh', 'Bùi Khánh Duy'];
-
 export default function CreateAssignment({ classDetail, onUpdateClassworks, onCloseAssignment }) {
     const { t } = useTranslation();
     const axiosPrivate = useAxiosPrivate();
@@ -88,6 +86,7 @@ export default function CreateAssignment({ classDetail, onUpdateClassworks, onCl
         rubric: '',
     });
     const [disabled, setDisabled] = React.useState(false);
+    const names = [t('all students')];
 
     const handleChange = (event) => {
         setAssignment((prev) => ({
@@ -291,7 +290,7 @@ export default function CreateAssignment({ classDetail, onUpdateClassworks, onCl
                             <CloseIcon />
                         </IconButton>
                         <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                            {t('classwork')}
+                            {t('assignment')}
                         </Typography>
 
                         {!disabled ? (
@@ -408,11 +407,12 @@ export default function CreateAssignment({ classDetail, onUpdateClassworks, onCl
                             <Item sx={{ height: 'calc(100vh - 64px)' }}>
                                 <div style={{ margin: '16px' }}>
                                     <div style={{ textAlign: 'left', marginBottom: '8px', fontWeight: 600 }}>
-                                        Dành cho
+                                        {t('for')}
                                     </div>
                                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                         <FormControl sx={{ width: 150 }}>
                                             <Select
+                                                disabled
                                                 size="small"
                                                 value={classes}
                                                 onChange={handleChangeClasses}
@@ -420,9 +420,6 @@ export default function CreateAssignment({ classDetail, onUpdateClassworks, onCl
                                                 inputProps={{ 'aria-label': 'Without label' }}
                                             >
                                                 <MenuItem value="all-classes">Web</MenuItem>
-                                                <MenuItem value={10}>Ten</MenuItem>
-                                                <MenuItem value={20}>Twenty</MenuItem>
-                                                <MenuItem value={30}>Thirty</MenuItem>
                                             </Select>
                                         </FormControl>
 
@@ -460,7 +457,7 @@ export default function CreateAssignment({ classDetail, onUpdateClassworks, onCl
                                 <div style={{ margin: '16px', display: 'flex', justifyContent: 'space-between' }}>
                                     <div>
                                         <div style={{ textAlign: 'left', marginBottom: '8px', fontWeight: 600 }}>
-                                            Danh mục điểm
+                                            {t('grade category')}
                                         </div>
                                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                             <FormControl sx={{ width: 150 }}>
@@ -471,16 +468,14 @@ export default function CreateAssignment({ classDetail, onUpdateClassworks, onCl
                                                     displayEmpty
                                                     inputProps={{ 'aria-label': 'Without label' }}
                                                 >
-                                                    <MenuItem value="no-category">Không có loại nào</MenuItem>
-                                                    <MenuItem value="midterm">Giữa kỳ</MenuItem>
-                                                    <MenuItem value="seminar">Seminar</MenuItem>
+                                                    <MenuItem value="no-category">{t('no category')}</MenuItem>
                                                 </Select>
                                             </FormControl>
                                         </div>
                                     </div>
                                     <div>
                                         <div style={{ textAlign: 'left', marginBottom: '8px', fontWeight: 600 }}>
-                                            Điểm
+                                            {t('points')}
                                         </div>
                                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                             <TextField
@@ -497,7 +492,7 @@ export default function CreateAssignment({ classDetail, onUpdateClassworks, onCl
 
                                 <div style={{ margin: '16px' }}>
                                     <div style={{ textAlign: 'left', marginBottom: '8px', fontWeight: 600 }}>
-                                        Hạn nộp
+                                        {t('due')}
                                     </div>
                                     <FormControl fullWidth>
                                         <Select
@@ -507,14 +502,14 @@ export default function CreateAssignment({ classDetail, onUpdateClassworks, onCl
                                             displayEmpty
                                             inputProps={{ 'aria-label': 'Without label' }}
                                         >
-                                            <MenuItem value="no-due-date">Không có ngày đến hạn</MenuItem>
+                                            <MenuItem value="no-due-date">{t('no due date')}</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </div>
 
                                 <div style={{ margin: '16px' }}>
                                     <div style={{ textAlign: 'left', marginBottom: '8px', fontWeight: 600 }}>
-                                        Chủ đề
+                                        {t('topic')}
                                     </div>
                                     <FormControl fullWidth>
                                         <Select
@@ -524,17 +519,15 @@ export default function CreateAssignment({ classDetail, onUpdateClassworks, onCl
                                             displayEmpty
                                             inputProps={{ 'aria-label': 'Without label' }}
                                         >
-                                            <MenuItem value="no-topic">Không có chủ đề</MenuItem>
+                                            <MenuItem value="no-topic">{t('no topic')}</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </div>
 
                                 <div style={{ margin: '16px', textAlign: 'left' }}>
-                                    <div style={{ marginBottom: '8px', fontWeight: 600 }}>
-                                        Tiêu chí chấm điểm
-                                    </div>
+                                    <div style={{ marginBottom: '8px', fontWeight: 600 }}>{t('rubric')}</div>
                                     <Button variant="outlined" startIcon={<AddIcon />}>
-                                        Tiêu chí chấm điểm
+                                        {t('rubric')}
                                     </Button>
                                 </div>
                             </Item>

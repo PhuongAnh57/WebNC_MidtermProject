@@ -21,9 +21,9 @@ import CreateMaterial from './Material/CreateMaterial';
 import useAxiosPrivate from 'hooks/useAxiosPrivate';
 import Material from './Material/Material';
 import { Navigate } from 'react-router';
-import { t } from 'i18next';
 
 export default function ClassworkTeacher({ classDetail }) {
+    const { t } = useTranslation();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [classworks, setClassworks] = React.useState([]);
 
@@ -87,7 +87,7 @@ export default function ClassworkTeacher({ classDetail }) {
                 startIcon={<AddIcon />}
                 sx={{ padding: '8px 12px', borderRadius: '20px' }}
             >
-                Tạo
+                {t('create')}
             </Button>
             <Menu
                 id="fade-menu"
