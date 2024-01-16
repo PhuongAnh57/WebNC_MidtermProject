@@ -41,6 +41,22 @@ import useAxiosPrivate from 'hooks/useAxiosPrivate';
 import styles from './CreateMaterial.module.scss';
 import { GoogleDriveImage } from 'assets/images';
 
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemText from '@mui/material/ListItemText';
+import Checkbox from '@mui/material/Checkbox';
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250,
+        },
+    },
+};
+
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -52,6 +68,8 @@ const Item = styled(Paper)(({ theme }) => ({
     textAlign: 'center',
     color: theme.palette.text.secondary,
 }));
+
+const names = ['Tất cả học sinh', 'Nguyễn Phương Anh', 'Trần Thị Mỹ Trinh', 'Bùi Khánh Duy'];
 
 function CreateMaterial({ classDetail, onUpdateClassworks, onCloseMaterial }) {
     const { t } = useTranslation();
@@ -235,6 +253,23 @@ function CreateMaterial({ classDetail, onUpdateClassworks, onCloseMaterial }) {
         );
     };
 
+    const [classes, setClasses] = React.useState('all-classes');
+    const handleChangeClasses = (event) => setClasses(event.target.value);
+
+    const [personName, setPersonName] = React.useState([]);
+    const handleChangeStudents = (event) => {
+        const {
+            target: { value },
+        } = event;
+        setPersonName(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+    };
+
+    const [topic, setTopic] = React.useState('no-topic');
+    const handleChangeTopic = (event) => setTopic(event.target.value);
+
     return (
         <React.Fragment>
             <Dialog fullScreen open={true} onClose={onCloseMaterial} TransitionComponent={Transition}>
@@ -358,7 +393,75 @@ function CreateMaterial({ classDetail, onUpdateClassworks, onCloseMaterial }) {
                         </Grid>
 
                         <Grid item xs={3}>
-                            <Item sx={{ height: 'calc(100vh - 64px)' }}>{/*  */}</Item>
+                            <Item sx={{ height: 'calc(100vh - 64px)' }}>
+                                <div style={{ margin: '16px' }}>
+                                    <div style={{ textAlign: 'left', marginBottom: '8px', fontWeight: 600 }}>
+                                        Dành cho
+                                    </div>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                        <FormControl sx={{ width: 150 }}>
+                                            <Select
+                                                size="small"
+                                                value={classes}
+                                                onChange={handleChangeClasses}
+                                                displayEmpty
+                                                inputProps={{ 'aria-label': 'Without label' }}
+                                            >
+                                                <MenuItem value="all-classes">Web</MenuItem>
+                                                <MenuItem value={10}>Ten</MenuItem>
+                                                <MenuItem value={20}>Twenty</MenuItem>
+                                                <MenuItem value={30}>Thirty</MenuItem>
+                                            </Select>
+                                        </FormControl>
+
+                                        <FormControl sx={{ width: 150 }}>
+                                            <InputLabel
+                                                sx={{
+                                                    position: 'absolute',
+                                                    top: '50%',
+                                                    transform: 'translateY(-50%)',
+                                                    marginLeft: 1, // Điều chỉnh khoảng cách từ viền trái
+                                                }}
+                                                id="demo-multiple-checkbox-label"
+                                            ></InputLabel>
+                                            <Select
+                                                size="small"
+                                                labelId="demo-multiple-checkbox-label"
+                                                id="demo-multiple-checkbox"
+                                                multiple
+                                                value={personName}
+                                                onChange={handleChangeStudents}
+                                                renderValue={(selected) => selected.join(', ')}
+                                                MenuProps={MenuProps}
+                                            >
+                                                {names.map((name) => (
+                                                    <MenuItem key={name} value={name}>
+                                                        <Checkbox checked={personName.indexOf(name) > -1} />
+                                                        <ListItemText primary={name} />
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </div>
+                                </div>
+
+                                <div style={{ margin: '16px' }}>
+                                    <div style={{ textAlign: 'left', marginBottom: '8px', fontWeight: 600 }}>
+                                        Chủ đề
+                                    </div>
+                                    <FormControl fullWidth>
+                                        <Select
+                                            size="small"
+                                            value={topic}
+                                            onChange={handleChangeTopic}
+                                            displayEmpty
+                                            inputProps={{ 'aria-label': 'Without label' }}
+                                        >
+                                            <MenuItem value="no-topic">Không có chủ đề</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </div>
+                            </Item>
                         </Grid>
                     </Grid>
                 </Box>
