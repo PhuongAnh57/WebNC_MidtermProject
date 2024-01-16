@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Assignment from './Assignment/Assignment';
 
@@ -13,6 +14,7 @@ import Grid from '@mui/material/Grid';
 import { Navigate } from 'react-router';
 
 export default function ClassworkTeacher({ classDetail }) {
+    const { t } = useTranslation();
     const [classworks, setClassworks] = React.useState([]);
     const axiosPrivate = useAxiosPrivate();
 
@@ -44,7 +46,7 @@ export default function ClassworkTeacher({ classDetail }) {
         <Grid container spacing={2}>
             <Grid item xs={12}>
                 <Button variant="text" startIcon={<AssignmentIndIcon />}>
-                    Xem tất cả bài tập của bạn
+                    {t('all classworks')}
                 </Button>
             </Grid>
             <Grid item xs={12}>
@@ -56,11 +58,11 @@ export default function ClassworkTeacher({ classDetail }) {
                         inputProps={{ 'aria-label': 'Without label' }}
                     >
                         <MenuItem value="">
-                            <em>Tất cả chủ đề</em>
+                            <em>{t('all subjects')}</em>
                         </MenuItem>
-                        <MenuItem value={10}>Assignments</MenuItem>
-                        <MenuItem value={20}>Projects</MenuItem>
-                        <MenuItem value={30}>Seminar</MenuItem>
+                        <MenuItem value={10}>{t('assignments')}</MenuItem>
+                        <MenuItem value={20}>{t('projects')}</MenuItem>
+                        <MenuItem value={30}>{t('seminars')}</MenuItem>
                     </Select>
                 </FormControl>
             </Grid>

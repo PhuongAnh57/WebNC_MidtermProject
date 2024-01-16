@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
+
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import { styled } from '@mui/material/styles';
@@ -55,6 +57,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function CreateAssignment({ classDetail, onUpdateClassworks, onCloseAssignment }) {
+    const { t } = useTranslation();
     const axiosPrivate = useAxiosPrivate();
     const [filesUpload, setFilesUpload] = React.useState([]);
     const [assignment, setAssignment] = React.useState({
@@ -250,16 +253,16 @@ export default function CreateAssignment({ classDetail, onUpdateClassworks, onCl
                             <CloseIcon />
                         </IconButton>
                         <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                            Bài tập
+                            {t('classwork')}
                         </Typography>
 
                         {!disabled ? (
                             <Button autoFocus color="inherit" onClick={handleAssignAssignment}>
-                                Giao bài tập
+                                {t('assign')}
                             </Button>
                         ) : (
                             <Button autoFocus color="success" onClick={handleAssignAssignment} disabled>
-                                Đang giao...
+                                {t('assigning...')}
                             </Button>
                         )}
                     </Toolbar>
@@ -283,7 +286,7 @@ export default function CreateAssignment({ classDetail, onUpdateClassworks, onCl
                                             <TextField
                                                 name="title"
                                                 id="filled-basic"
-                                                label="Tiêu đề"
+                                                label={t('title')}
                                                 variant="filled"
                                                 value={assignment.title}
                                                 onChange={handleChange}
@@ -291,7 +294,7 @@ export default function CreateAssignment({ classDetail, onUpdateClassworks, onCl
 
                                             <FormControl sx={{ m: 1, width: '25ch' }} variant="filled">
                                                 <InputLabel htmlFor="filled-adornment-instruction">
-                                                    Hướng dẫn (Không bắt buộc)
+                                                    {t('instructions') + ' (' + t('optional') + ')'}
                                                 </InputLabel>
                                                 <FilledInput
                                                     id="filled-adornment-instruction"
@@ -321,7 +324,7 @@ export default function CreateAssignment({ classDetail, onUpdateClassworks, onCl
                                     </Item>
 
                                     <Item>
-                                        <div className={styles['attached']}>Đính kèm</div>
+                                        <div className={styles['attached']}>{t('attach')}</div>
                                         <div className={styles['listTypes']}>
                                             <div className={styles['box']}>
                                                 <IconButton aria-label="" className={styles['icon']}>
@@ -339,7 +342,7 @@ export default function CreateAssignment({ classDetail, onUpdateClassworks, onCl
                                                 <IconButton aria-label="" className={styles['icon']}>
                                                     <AddIcon />
                                                 </IconButton>
-                                                Tạo
+                                                {t('create')}
                                             </div>
                                             <div className={styles['box']}>
                                                 <IconButton
@@ -349,18 +352,17 @@ export default function CreateAssignment({ classDetail, onUpdateClassworks, onCl
                                                 >
                                                     <CloudUploadIcon />
                                                 </IconButton>
-                                                Tải lên
+                                                {t('upload')}
                                             </div>
                                             <div className={styles['box']}>
                                                 <IconButton aria-label="" className={styles['icon']}>
                                                     <LinkIcon />
                                                 </IconButton>
-                                                Liên kết
+                                                {t('link')}
                                             </div>
                                         </div>
                                     </Item>
                                 </Stack>
-                                {/* </Box> */}
                             </Item>
                         </Grid>
 

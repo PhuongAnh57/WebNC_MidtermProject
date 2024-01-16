@@ -1,5 +1,7 @@
-import Box from '@mui/material/Box';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
+
+import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Fab from '@mui/material/Fab';
 import TextField from '@mui/material/TextField';
@@ -20,6 +22,7 @@ import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 
 export default function MaterialDetail() {
+    const { t } = useTranslation();
     const FileName = ({ filename, maxLength }) => {
         // Kiểm tra độ dài của tên file
         if (filename.length > maxLength) {
@@ -58,9 +61,9 @@ export default function MaterialDetail() {
                     onClose={handleClose}
                     sx={{ left: '-100px' }}
                 >
-                    <MenuItem onClick={handleClose}>Chỉnh sửa</MenuItem>
-                    <MenuItem onClick={handleClose}>Xóa</MenuItem>
-                    <MenuItem onClick={handleClose}>Sao chép đường liên kết</MenuItem>
+                    <MenuItem onClick={handleClose}>{t('edit')}</MenuItem>
+                    <MenuItem onClick={handleClose}>{t('delete')}</MenuItem>
+                    <MenuItem onClick={handleClose}>{t('copy link')}</MenuItem>
                 </Menu>
             </div>
         );
@@ -75,7 +78,7 @@ export default function MaterialDetail() {
                             <ClassOutlinedIcon />
                         </Fab>
                         <span style={{ fontSize: '32px', fontWeight: '400', color: '#4285f4', alignSelf: 'center' }}>
-                            Tài liệu Cuối kỳ
+                            {t('material')}
                         </span>
                     </div>
                     <MoreIcon sx={{ color: '#4285f4' }} />
@@ -84,7 +87,7 @@ export default function MaterialDetail() {
                     <div style={{ color: '#5F6368', display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
                         <span>Nguyễn Phương Anh</span>
                         <NavigateNextIcon sx={{ alignSelf: 'center' }} />
-                        <span> Ngày 27/12/2023</span>
+                        <span> 27/12/2023</span>
                     </div>
 
                     <Divider />
@@ -119,7 +122,7 @@ export default function MaterialDetail() {
                         }}
                     >
                         <PeopleAltOutlinedIcon />
-                        <span style={{ alignSelf: 'center', marginLeft: '8px' }}>Nhận xét của lớp học</span>
+                        <span style={{ alignSelf: 'center', marginLeft: '8px' }}>{t('class comments')}</span>
                     </div>
 
                     <div
@@ -133,7 +136,7 @@ export default function MaterialDetail() {
                         <Fab size="small" sx={{ background: '#4285f4', color: '#ffffff', mr: 2 }}>
                             <ClassOutlinedIcon />
                         </Fab>
-                        <TextField size="small" fullWidth label="Thêm nhận xét trong lớp học..." id="fullWidth" />
+                        <TextField size="small" fullWidth label={t('add class comment...')} id="fullWidth" />
                         <SendOutlinedIcon sx={{ ml: 2 }} />
                     </div>
                 </Box>

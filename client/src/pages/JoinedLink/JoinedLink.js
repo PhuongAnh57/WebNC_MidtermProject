@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useParams } from 'react-router';
+import { useTranslation } from 'react-i18next';
+
 import { Box, Card, CardContent, Typography, CardActions, Button } from '@mui/material';
 
 import MainLayout from 'layouts/MainLayout';
 import LoadingSpinner from 'components/LoadingSpinner/LoadingSpinner';
 import useAxiosPrivate from 'hooks/useAxiosPrivate';
+import { t } from 'i18next';
 
 function JoinedLink() {
     const { classID } = useParams();
@@ -110,12 +113,11 @@ function JoinedLink() {
             >
                 <Card sx={{ maxWidth: 400, textAlign: 'center' }}>
                     <CardContent>
-                        <h3 style={{ margin: 0, textAlign: 'left', fontWeight: 400 }}>Tham gia lớp học này?</h3>
+                        <h3 style={{ margin: 0, textAlign: 'left', fontWeight: 400 }}>{t('join class')}?</h3>
                         <Typography style={{ margin: 0, marginTop: 8 }}>
-                            Bạn sẽ tham gia lớp <strong>{classData.class_name}</strong> với tư cách học sinh. Bạn đang
-                            đăng nhập với tài khoản
+                            {t("you're join in class") + ' '} <strong>{classData.class_name}</strong>
+                            {' ' + t('as a student')}. {t("you're currently signed in as") + ' '}
                             <strong>
-                                {' '}
                                 {user.username} ({user.email})
                             </strong>
                             .
@@ -123,7 +125,7 @@ function JoinedLink() {
                     </CardContent>
                     <CardActions sx={{ justifyContent: 'center', paddingBottom: 2, paddingTop: 0 }}>
                         <Button variant="contained" onClick={handleAddIntoClass}>
-                            Tham gia
+                            {t('join')}
                         </Button>
                     </CardActions>
                 </Card>

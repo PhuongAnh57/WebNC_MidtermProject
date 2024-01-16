@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
+
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -44,7 +46,7 @@ function a11yProps(index) {
 
 export default function InstructionTabs() {
     const [value, setValue] = React.useState(0);
-
+    const { t } = useTranslation();
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -54,15 +56,15 @@ export default function InstructionTabs() {
             <Box sx={{ width: '100%' }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                        <Tab label="Hướng dẫn" {...a11yProps(0)} />
-                        <Tab label="Bài tập của học viên" {...a11yProps(1)} />
+                        <Tab label={t('instructions')} {...a11yProps(0)} />
+                        <Tab label={t('student work')} {...a11yProps(1)} />
                     </Tabs>
                 </Box>
                 <CustomTabPanel value={value} index={0}>
                     <InstructionTeacher />
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={1}>
-                    Bài tập của học viên
+                    {t('student work')}
                 </CustomTabPanel>
             </Box>
         </MainLayout>

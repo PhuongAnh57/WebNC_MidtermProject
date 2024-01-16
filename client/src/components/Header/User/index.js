@@ -217,7 +217,7 @@ export default function User() {
                             inputProps={{ 'aria-label': 'Without label' }}
                             sx={{ color: 'white' }}
                         >
-                            <MenuItem value="vi" onClick={() => changeLanguage('vi')}>
+                            <MenuItem selected value="vi" onClick={() => changeLanguage('vi')}>
                                 Tiếng Việt
                             </MenuItem>
                             <MenuItem value="en" onClick={() => changeLanguage('en')}>

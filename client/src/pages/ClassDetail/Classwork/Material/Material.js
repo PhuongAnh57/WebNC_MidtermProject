@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+
 import { extractFileName, extractFileNameExtension } from 'utils/filename';
 import { GoogleDriveImage } from 'assets/images';
 
@@ -28,6 +30,7 @@ const FileName = ({ filename, maxLength }) => {
 };
 
 export default function Material({ data, classDetail }) {
+    const { t } = useTranslation();
     const [click, setClick] = useState(false);
     const [material, setMaterial] = useState(data);
 
@@ -63,7 +66,7 @@ export default function Material({ data, classDetail }) {
                 </Typography>
                 <Typography sx={{ width: '80%', alignSelf: 'center' }}>{material.title}</Typography>
                 <Typography sx={{ width: '20%', color: '#0000008C', alignSelf: 'center', fontSize: '12px' }}>
-                    Đã đăng vào {getDateUpload()}
+                    {t('uploaded at') + ' ' + getDateUpload()}
                 </Typography>
                 <Typography sx={{ alignSelf: 'center' }}>{<MoreVertIcon />}</Typography>
             </AccordionSummary>
@@ -118,7 +121,7 @@ export default function Material({ data, classDetail }) {
                     <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '8px' }}>
                         <Link to={`/class/${classDetail.class_id}/material`}>
                             <Button variant="text" sx={{ color: '#518cdd' }}>
-                                Xem tài liệu
+                                {t('view material')}
                             </Button>
                         </Link>
                     </div>

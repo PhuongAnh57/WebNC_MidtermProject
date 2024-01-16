@@ -1,5 +1,6 @@
 import { memo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { extractFileName, extractFileNameExtension } from 'utils/filename';
 
 import Button from '@mui/material/Button';
@@ -32,6 +33,7 @@ const FileName = ({ filename, maxLength }) => {
 function Assignment({ data, classDetail }) {
     const [click, setClick] = useState(false);
     const [assignment, setAssignment] = useState(data);
+    const { t } = useTranslation();
 
     const handleAccordionClick = () => {
         setClick(!click);
@@ -69,7 +71,7 @@ function Assignment({ data, classDetail }) {
                         </List>
                     </AccordionSummary>
                     <AccordionDetails>
-                        <Typography>Đã đăng vào {getDateUpload()}</Typography>
+                        <Typography>{t('uploaded at') + ' ' + getDateUpload()}</Typography>
 
                         {assignment.file_urls[0] && (
                             <Card sx={{ display: 'flex', width: '50%', margin: '20px' }}>
@@ -116,7 +118,7 @@ function Assignment({ data, classDetail }) {
                         )}
                         <Divider sx={{ margin: '10px 0' }} />
                         <Link to={`/class/${classDetail.class_id}/student/classwork/${data.id}/instruction`}>
-                            <Button variant="text">Xem chi tiết</Button>
+                            <Button variant="text">{t('view instructions')}</Button>
                         </Link>
                     </AccordionDetails>
                 </Accordion>
@@ -149,14 +151,16 @@ function Assignment({ data, classDetail }) {
                         </Typography>
                         <Typography sx={{ width: '80%', alignSelf: 'center' }}>{assignment.title}</Typography>
                         <Typography sx={{ width: '20%', color: '#0000008C', alignSelf: 'center', fontSize: '12px' }}>
-                            Đã đăng vào {getDateUpload()}
+                            {t('uploaded at') + ' ' + getDateUpload()}
                         </Typography>
                         <Typography sx={{ alignSelf: 'center' }}>{<MoreVertIcon />}</Typography>
                     </AccordionSummary>
 
                     <AccordionDetails sx={{ borderTop: '1px solid #b5bec9' }}>
                         <Typography sx={{ padding: '16px 24px' }}>
-                            <div style={{ fontSize: '12px', color: '#5f6368' }}>Đã đăng vào {getDateUpload()}</div>
+                            <div style={{ fontSize: '12px', color: '#5f6368' }}>
+                                {t('uploaded at') + ' ' + getDateUpload()}
+                            </div>
                             <div style={{ textAlign: 'right' }}>
                                 <ul style={{ listStyleType: 'none', display: 'flex', justifyContent: 'flex-end' }}>
                                     <li
@@ -169,7 +173,7 @@ function Assignment({ data, classDetail }) {
                                         }}
                                     >
                                         <span style={{ fontSize: '2rem' }}>0</span>
-                                        <span>Đã nộp</span>
+                                        <span>{t('turned in')}</span>
                                     </li>
                                     <li
                                         style={{
@@ -181,7 +185,7 @@ function Assignment({ data, classDetail }) {
                                         }}
                                     >
                                         <span style={{ fontSize: '2rem' }}>0</span>
-                                        <span>Đã giao</span>
+                                        <span>{t('assigned')}</span>
                                     </li>
                                     <li
                                         style={{
@@ -193,7 +197,7 @@ function Assignment({ data, classDetail }) {
                                         }}
                                     >
                                         <span style={{ fontSize: '2rem' }}>0</span>
-                                        <span>Đã chấm điểm</span>
+                                        <span>{t('graded')}</span>
                                     </li>
                                 </ul>
                             </div>
@@ -249,12 +253,12 @@ function Assignment({ data, classDetail }) {
                             <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '8px' }}>
                                 <Link to={`/class/${classDetail.class_id}/teacher/classwork/${data.id}/instruction`}>
                                     <Button variant="text" sx={{ color: '#518cdd' }}>
-                                        Xem hướng dẫn
+                                        {t('view instructions')}
                                     </Button>
                                 </Link>
 
                                 <Button variant="contained" sx={{ padding: '8px 24px' }}>
-                                    Đánh giá bài tập
+                                    {t('review work')}
                                 </Button>
                             </div>
                         </Typography>

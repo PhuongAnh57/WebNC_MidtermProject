@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
+
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import { styled } from '@mui/material/styles';
@@ -52,6 +54,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 function CreateMaterial({ classDetail, onUpdateClassworks, onCloseMaterial }) {
+    const { t } = useTranslation();
     const axiosPrivate = useAxiosPrivate();
     const [filesUpload, setFilesUpload] = React.useState([]);
     const [disabled, setDisabled] = React.useState(false);
@@ -62,7 +65,6 @@ function CreateMaterial({ classDetail, onUpdateClassworks, onCloseMaterial }) {
         type: 'material',
         date: new Date(),
     });
-
 
     const handleChange = (event) => {
         setMaterial((prev) => ({
@@ -185,7 +187,6 @@ function CreateMaterial({ classDetail, onUpdateClassworks, onCloseMaterial }) {
 
     let image;
     if (filesUpload.length > 0) {
-        // console.log(filesUpload[0].file);
         const isImage = filesUpload[0].type === 'Image';
         if (isImage) {
             image = URL.createObjectURL(filesUpload[0].file);
@@ -243,15 +244,15 @@ function CreateMaterial({ classDetail, onUpdateClassworks, onCloseMaterial }) {
                             <CloseIcon />
                         </IconButton>
                         <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                            Tài liệu
+                            {t('material')}
                         </Typography>
                         {!disabled ? (
                             <Button autoFocus color="inherit" onClick={handlePostMaterial}>
-                                Đăng
+                                {t('Upload')}
                             </Button>
                         ) : (
                             <Button autoFocus color="success" onClick={handlePostMaterial} disabled>
-                                Đang đăng...
+                                {t('uploading...')}
                             </Button>
                         )}
                     </Toolbar>
@@ -274,22 +275,16 @@ function CreateMaterial({ classDetail, onUpdateClassworks, onCloseMaterial }) {
                                         >
                                             <TextField
                                                 id="filled-basic"
-                                                label="Tiêu đề"
+                                                label={t('title')}
                                                 name="title"
                                                 variant="filled"
                                                 value={material.title}
                                                 onChange={handleChange}
                                             />
-                                            {/* <TextField
-                                                id="filled-basic"
-                                                label="Hướng dẫn (Không bắt buộc)"
-                                                variant="filled"
-                                                multiline
-                                                rows={6}
-                                            /> */}
+
                                             <FormControl sx={{ m: 1, width: '25ch' }} variant="filled">
                                                 <InputLabel htmlFor="filled-adornment-instruction">
-                                                    Hướng dẫn (Không bắt buộc)
+                                                    {t('instructions') + ' (' + t('optional') + ')'}
                                                 </InputLabel>
                                                 <FilledInput
                                                     id="filled-adornment-instruction"
@@ -337,7 +332,7 @@ function CreateMaterial({ classDetail, onUpdateClassworks, onCloseMaterial }) {
                                                 <IconButton aria-label="" className={styles['icon']}>
                                                     <AddIcon />
                                                 </IconButton>
-                                                Tạo
+                                                {t('create')}
                                             </div>
                                             <div className={styles['box']}>
                                                 <IconButton
@@ -347,13 +342,13 @@ function CreateMaterial({ classDetail, onUpdateClassworks, onCloseMaterial }) {
                                                 >
                                                     <CloudUploadIcon />
                                                 </IconButton>
-                                                Tải lên
+                                                {t('upload')}
                                             </div>
                                             <div className={styles['box']}>
                                                 <IconButton aria-label="" className={styles['icon']}>
                                                     <LinkIcon />
                                                 </IconButton>
-                                                Liên kết
+                                                {t('link')}
                                             </div>
                                         </div>
                                     </Item>

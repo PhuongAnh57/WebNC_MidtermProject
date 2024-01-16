@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
+
 import { Link } from 'react-router-dom';
 import { Box, Divider } from '@mui/material';
 import Avatar from '@mui/material/Avatar';

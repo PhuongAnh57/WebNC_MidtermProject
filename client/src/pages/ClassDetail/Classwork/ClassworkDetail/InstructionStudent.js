@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
+
 import MainLayout from 'layouts/MainLayout';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -35,6 +37,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function InstructionStudent() {
+    const { t } = useTranslation();
     const { classID, classworkID } = useParams();
     const [classwork, setClasswork] = React.useState();
     const axiosPrivate = useAxiosPrivate();
@@ -53,6 +56,7 @@ export default function InstructionStudent() {
         };
 
         loadAssignment();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [classID, classworkID]);
 
     return (
@@ -73,7 +77,7 @@ export default function InstructionStudent() {
                                                 </ListItemAvatar>
                                                 <ListItemText>
                                                     <Typography gutterBottom variant="h4" component="div">
-                                                        Assignment
+                                                        {t('assignment')}
                                                     </Typography>
                                                     <span>
                                                         {classwork &&
@@ -121,7 +125,7 @@ export default function InstructionStudent() {
                                 <Box sx={{ m: 2, display: 'flex', alignItems: 'center' }}>
                                     <PeopleIcon />
                                     <Typography gutterBottom variant="body1">
-                                        Nhân xét về lớp học
+                                        {t('class comments')}
                                     </Typography>
                                 </Box>
                                 <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
@@ -145,7 +149,7 @@ export default function InstructionStudent() {
                                     </ListItem>
                                 </List>
                                 <Box sx={{ mt: 3, ml: 1, mb: 1 }}>
-                                    <Button>Thêm nhận xét về lớp học</Button>
+                                    <Button>{t('add class comment...')}</Button>
                                 </Box>
                             </Box>
                         </Grid>
@@ -156,20 +160,20 @@ export default function InstructionStudent() {
                                 <ListItem>
                                     <Grid item xs>
                                         <Typography gutterBottom variant="h6" component="div">
-                                            Bài tập của bạn
+                                            {t('your work')}
                                         </Typography>
                                     </Grid>
                                     <Grid item>
                                         <Typography gutterBottom variant="h7" component="div">
-                                            Đã giao
+                                            {t('assigned')}
                                         </Typography>
                                     </Grid>
                                 </ListItem>
                                 <Stack spacing={2}>
                                     <Button variant="outlined" startIcon={<AddIcon />}>
-                                        Thêm hoặc tạo
+                                        {t('add or create')}
                                     </Button>
-                                    <Button variant="contained">Đánh dấu là đã hoàn thành</Button>
+                                    <Button variant="contained">{t('mark as done')}</Button>
                                 </Stack>
                             </Item>
                         </Grid>
@@ -178,11 +182,11 @@ export default function InstructionStudent() {
                                 <Box sx={{ m: 2, display: 'flex', alignItems: 'center' }}>
                                     <PeopleIcon />
                                     <Typography gutterBottom variant="body1">
-                                        Nhân xét riêng tư
+                                        {t('private comments')}
                                     </Typography>
                                 </Box>
                                 <Box sx={{ mt: 3, ml: 1, mb: 1 }}>
-                                    <Button>Thêm nhận xét riêng tư</Button>
+                                    <Button>{t('add private comments')}</Button>
                                 </Box>
                             </Item>
                         </Grid>

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Navigate } from 'react-router';
+import { useTranslation } from 'react-i18next';
 
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
@@ -9,6 +10,7 @@ import EditForm from './EditForm/EditForm';
 import DefaultLayout from 'layouts/DefaultLayout';
 
 export default function EditAccount() {
+    const { t } = useTranslation();
     if (!localStorage.getItem('accessToken')) {
         return <Navigate to="/" />;
     }
@@ -19,7 +21,7 @@ export default function EditAccount() {
                 <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
                     <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
                         <Typography component="h1" variant="h4" align="center" mb={2}>
-                            Chỉnh sửa hồ sơ
+                            {t('edit profile')}
                         </Typography>
 
                         <EditForm />

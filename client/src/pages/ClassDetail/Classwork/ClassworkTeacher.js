@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Assignment from './Assignment/Assignment';
 
@@ -20,6 +21,7 @@ import CreateMaterial from './Material/CreateMaterial';
 import useAxiosPrivate from 'hooks/useAxiosPrivate';
 import Material from './Material/Material';
 import { Navigate } from 'react-router';
+import { t } from 'i18next';
 
 export default function ClassworkTeacher({ classDetail }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -103,13 +105,13 @@ export default function ClassworkTeacher({ classDetail }) {
                     <ListItemIcon sx={{ marginRight: '8px' }}>
                         <AssignmentIcon fontSize="small" color="primary" />
                     </ListItemIcon>
-                    <ListItemText>Bài tập</ListItemText>
+                    <ListItemText>{t('assignment')}</ListItemText>
                 </MenuItem>
                 <MenuItem onClick={handleOpenMaterial}>
                     <ListItemIcon sx={{ marginRight: '8px' }}>
                         <BookIcon fontSize="small" color="primary" />
                     </ListItemIcon>
-                    <ListItemText>Tài liệu</ListItemText>
+                    <ListItemText>{t('material')}</ListItemText>
                 </MenuItem>
 
                 <Divider />
@@ -118,7 +120,7 @@ export default function ClassworkTeacher({ classDetail }) {
                     <ListItemIcon sx={{ marginRight: '8px' }}>
                         <ListIcon fontSize="small" color="primary" />
                     </ListItemIcon>
-                    <ListItemText>Chủ đề</ListItemText>
+                    <ListItemText>{t('subjects')}</ListItemText>
                 </MenuItem>
             </Menu>
 
@@ -146,10 +148,12 @@ export default function ClassworkTeacher({ classDetail }) {
                     displayEmpty
                     inputProps={{ 'aria-label': 'Without label' }}
                 >
-                    <MenuItem value="">Tất cả chủ đề</MenuItem>
-                    <MenuItem value="mid">Giữa kỳ</MenuItem>
-                    <MenuItem value="seminar">Seminar</MenuItem>
-                    <MenuItem value="final">Cuối kỳ</MenuItem>
+                    <MenuItem value="">
+                        <em>{t('all subjects')}</em>
+                    </MenuItem>
+                    <MenuItem value={10}>{t('assignments')}</MenuItem>
+                    <MenuItem value={20}>{t('projects')}</MenuItem>
+                    <MenuItem value={30}>{t('seminars')}</MenuItem>
                 </Select>
             </FormControl>
 
