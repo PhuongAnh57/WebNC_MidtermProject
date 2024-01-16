@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
+
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -15,14 +17,9 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import ImageIcon from '@mui/icons-material/Image';
 
-import { Card, CardActions, CardContent, Typography } from '@mui/material';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import CropFreeIcon from '@mui/icons-material/CropFree';
-
 import ClassCode from 'components/Class/ClassCode/ClassCode';
 import Upcoming from 'components/Class/Upcoming/Upcoming';
-import ClassCodeModal from 'components/Class/ClassCode/ClassCodeModal';
-import { useTranslation } from 'react-i18next';
+
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
     ...theme.typography.body2,
@@ -34,10 +31,6 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function BasicGrid({ classDetail }) {
     const { t } = useTranslation();
-    const [openModal, setOpenModal] = React.useState(false);
-    const handleOpen = () => setOpenModal(true);
-    const handleClose = () => setOpenModal(false);
-
     return (
         <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
@@ -82,7 +75,10 @@ export default function BasicGrid({ classDetail }) {
                                         <ImageIcon />
                                     </Avatar>
                                 </ListItemAvatar>
-                                <ListItemText primary="Mỹ Trinh vừa đăng một tài liệu mới" secondary="Jan 9, 2014" />
+                                <ListItemText
+                                    primary={'Mỹ Trinh ' + t('posted a new assignment')}
+                                    secondary="Jan 9, 2014"
+                                />
                             </ListItem>
                         </Item>
                     </Grid>
@@ -109,7 +105,10 @@ export default function BasicGrid({ classDetail }) {
                                         <ImageIcon />
                                     </Avatar>
                                 </ListItemAvatar>
-                                <ListItemText primary="Phương Anh vừa đăng một tài liệu mới" secondary="Jan 9, 2014" />
+                                <ListItemText
+                                    primary={'Phương Anh ' + t('posted a new material')}
+                                    secondary="Jan 9, 2014"
+                                />
                             </ListItem>
                         </Item>
                     </Grid>

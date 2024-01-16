@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 
 import Grid from '@mui/material/Grid';
@@ -10,6 +11,7 @@ import { Button } from '@mui/material';
 import useAxiosPrivate from 'hooks/useAxiosPrivate';
 
 export default function EditForm() {
+    const { t } = useTranslation();
     const [user, setUser] = useState({
         firstName: '',
         lastName: '',
@@ -88,9 +90,9 @@ export default function EditForm() {
             const response = await axiosPrivate.post('/api/edit-profile', { userData });
 
             if (response.data.message === 'Update successfully') {
-                setEditResponse('Chỉnh sửa thành công');
+                setEditResponse(`${t('update successfully')}`);
             } else {
-                setEditResponse('Không thể chỉnh sửa hồ sơ. Vui lòng thử lại!');
+                setEditResponse(`${t('update failed')}`);
             }
         } catch (err) {
             console.log(err);
@@ -116,7 +118,7 @@ export default function EditForm() {
                             required
                             name="lastName"
                             id="lastName"
-                            label="Họ"
+                            label={t('last name')}
                             variant="filled"
                             fullWidth
                             value={user.lastName}
@@ -128,7 +130,7 @@ export default function EditForm() {
                             required
                             name="firstName"
                             id="firstName"
-                            label="Tên"
+                            label={t('first name')}
                             variant="filled"
                             fullWidth
                             value={user.firstName}
@@ -158,7 +160,7 @@ export default function EditForm() {
                             required
                             name="address"
                             id="address"
-                            label="Địa chỉ"
+                            label={t('address')}
                             variant="filled"
                             fullWidth
                             value={user.address}

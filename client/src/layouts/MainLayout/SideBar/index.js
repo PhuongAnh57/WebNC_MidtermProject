@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
@@ -19,7 +20,6 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 
 import styles from './Sidebar.module.scss';
 import classNames from 'classnames/bind';
-import {useTranslation} from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
@@ -30,20 +30,20 @@ export default function BasicList() {
         <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
             <nav aria-label="main mailbox folders">
                 <List>
-                    <NavLink to='/home' className={cx('btn')}>
-                        {isActive => (
-                            <ListItem disablePadding style={{background: isActive? '#e3eefc' : 'none'}}>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <HomeIcon />
-                                </ListItemIcon>
-                                <ListItemText primary={t('home')}/>
-                            </ListItemButton>
-                        </ListItem>
+                    <NavLink to="/home" className={cx('btn')}>
+                        {(isActive) => (
+                            <ListItem disablePadding style={{ background: isActive ? '#e3eefc' : 'none' }}>
+                                <ListItemButton>
+                                    <ListItemIcon>
+                                        <HomeIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary={t('home')} />
+                                </ListItemButton>
+                            </ListItem>
                         )}
                     </NavLink>
 
-                    <NavLink to='/calendar' className={cx('btn')}>
+                    <NavLink to="/calendar" className={cx('btn')}>
                         <ListItem disablePadding>
                             <ListItemButton>
                                 <ListItemIcon>
@@ -88,7 +88,7 @@ export default function BasicList() {
                             <ListItemIcon>
                                 <AddTaskIcon />
                             </ListItemIcon>
-                            <ListItemText primary={t('to do')} />
+                            <ListItemText primary={t('to-do')} />
                         </ListItemButton>
                     </ListItem>
                 </List>
@@ -111,7 +111,7 @@ export default function BasicList() {
                             <ListItemIcon>
                                 <SettingsIcon />
                             </ListItemIcon>
-                            <ListItemText primary={t('settings')}/>
+                            <ListItemText primary={t('settings')} />
                         </ListItemButton>
                     </ListItem>
                 </List>

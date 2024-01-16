@@ -1,6 +1,7 @@
 import * as React from 'react';
-import Card from '@mui/material/Card';
+import { useTranslation } from 'react-i18next';
 
+import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -12,8 +13,8 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import { Link } from 'react-router-dom';
 
 export default function MediaCard({ classDetail }) {
-    const role = classDetail.role === 'student' ? 'Học sinh' : 'Giáo viên';
-
+    const { t } = useTranslation();
+    const role = classDetail.role === 'student' ? t('student') : t('teacher');
     return (
         <Link to={`/class/${classDetail.class_id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
             <Card
@@ -30,7 +31,7 @@ export default function MediaCard({ classDetail }) {
                         {classDetail.class_name}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        Vai trò: {role}
+                        {t('role')}: {role}
                     </Typography>
                 </CardContent>
                 <CardActions style={{ flexDirection: 'row-reverse' }}>

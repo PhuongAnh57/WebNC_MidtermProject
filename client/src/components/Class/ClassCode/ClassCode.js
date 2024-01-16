@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
+
 import { Card, CardActions, CardContent, Grid, IconButton, Typography } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import CropFreeIcon from '@mui/icons-material/CropFree';
@@ -8,6 +10,7 @@ function ClassCode({ classDetail }) {
     const [openModal, setOpenModal] = React.useState(false);
     const handleOpen = () => setOpenModal(true);
     const handleClose = () => setOpenModal(false);
+    const { t } = useTranslation();
 
     return (
         <>
@@ -24,7 +27,7 @@ function ClassCode({ classDetail }) {
                                 alignItems: 'center',
                             }}
                         >
-                            Mã lớp
+                            {t('class code')}
                             <CardActions>
                                 <IconButton size="large">
                                     <MoreVertIcon />

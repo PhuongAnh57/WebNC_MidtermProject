@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Navigate } from 'react-router';
+import { useTranslation } from 'react-i18next';
 
 import { styled } from '@mui/material/styles';
 import { MailOutline } from '@mui/icons-material';
@@ -19,7 +20,6 @@ import InviteStudentModal from 'components/InviteModal/InviteStudentModal';
 import InviteTeacherModal from 'components/InviteModal/InviteTeacherModal';
 import LoadingSpinner from 'components/LoadingSpinner/LoadingSpinner';
 import useAxiosPrivate from 'hooks/useAxiosPrivate';
-import {useTranslation} from 'react-i18next';
 
 const Demo = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
@@ -106,7 +106,7 @@ export default function InteractiveList({ classDetail }) {
                             <Grid container alignItems="center">
                                 <Grid item xs>
                                     <Typography gutterBottom variant="h5" component="div">
-                                        Giáo viên
+                                        {t('teachers')}
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -136,7 +136,7 @@ export default function InteractiveList({ classDetail }) {
                             <Grid container alignItems="center">
                                 <Grid item xs>
                                     <Typography gutterBottom variant="h5" component="div">
-                                        Sinh viên
+                                        {t('students')}
                                     </Typography>
                                 </Grid>
                                 <Grid item>{students.length > 0 ? <>{students.length} sinh viên</> : <></>} </Grid>
@@ -185,7 +185,7 @@ export default function InteractiveList({ classDetail }) {
                             <Grid container alignItems="center">
                                 <Grid item xs>
                                     <Typography gutterBottom variant="h5" component="div">
-                                        Giáo viên
+                                        {t('teachers')}
                                     </Typography>
                                 </Grid>
                                 <Grid item>
@@ -217,10 +217,18 @@ export default function InteractiveList({ classDetail }) {
                             <Grid container alignItems="center">
                                 <Grid item xs>
                                     <Typography gutterBottom variant="h5" component="div">
-                                        Sinh viên
+                                        {t('students')}
                                     </Typography>
                                 </Grid>
-                                <Grid item>{students.length > 0 ? <>{students.length} sinh viên</> : <></>} </Grid>
+                                <Grid item>
+                                    {students.length > 0 ? (
+                                        <>
+                                            {students.length} {students.length > 1 ? t('student') : t('students')}
+                                        </>
+                                    ) : (
+                                        <></>
+                                    )}{' '}
+                                </Grid>
                                 <Grid item>
                                     <Button size="small" onClick={handleStudentModalOpen}>
                                         <PersonAddIcon />

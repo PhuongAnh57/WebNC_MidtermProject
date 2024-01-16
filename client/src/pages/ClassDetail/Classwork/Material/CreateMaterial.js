@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
+
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import { styled } from '@mui/material/styles';
@@ -39,6 +41,22 @@ import useAxiosPrivate from 'hooks/useAxiosPrivate';
 import styles from './CreateMaterial.module.scss';
 import { GoogleDriveImage } from 'assets/images';
 
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemText from '@mui/material/ListItemText';
+import Checkbox from '@mui/material/Checkbox';
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250,
+        },
+    },
+};
+
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -51,7 +69,10 @@ const Item = styled(Paper)(({ theme }) => ({
     color: theme.palette.text.secondary,
 }));
 
+const names = ['Tất cả học sinh', 'Nguyễn Phương Anh', 'Trần Thị Mỹ Trinh', 'Bùi Khánh Duy'];
+
 function CreateMaterial({ classDetail, onUpdateClassworks, onCloseMaterial }) {
+    const { t } = useTranslation();
     const axiosPrivate = useAxiosPrivate();
     const [filesUpload, setFilesUpload] = React.useState([]);
     const [disabled, setDisabled] = React.useState(false);
@@ -62,7 +83,6 @@ function CreateMaterial({ classDetail, onUpdateClassworks, onCloseMaterial }) {
         type: 'material',
         date: new Date(),
     });
-
 
     const handleChange = (event) => {
         setMaterial((prev) => ({
@@ -185,7 +205,6 @@ function CreateMaterial({ classDetail, onUpdateClassworks, onCloseMaterial }) {
 
     let image;
     if (filesUpload.length > 0) {
-        // console.log(filesUpload[0].file);
         const isImage = filesUpload[0].type === 'Image';
         if (isImage) {
             image = URL.createObjectURL(filesUpload[0].file);
@@ -234,6 +253,23 @@ function CreateMaterial({ classDetail, onUpdateClassworks, onCloseMaterial }) {
         );
     };
 
+    const [classes, setClasses] = React.useState('all-classes');
+    const handleChangeClasses = (event) => setClasses(event.target.value);
+
+    const [personName, setPersonName] = React.useState([]);
+    const handleChangeStudents = (event) => {
+        const {
+            target: { value },
+        } = event;
+        setPersonName(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+    };
+
+    const [topic, setTopic] = React.useState('no-topic');
+    const handleChangeTopic = (event) => setTopic(event.target.value);
+
     return (
         <React.Fragment>
             <Dialog fullScreen open={true} onClose={onCloseMaterial} TransitionComponent={Transition}>
@@ -243,15 +279,15 @@ function CreateMaterial({ classDetail, onUpdateClassworks, onCloseMaterial }) {
                             <CloseIcon />
                         </IconButton>
                         <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                            Tài liệu
+                            {t('material')}
                         </Typography>
                         {!disabled ? (
                             <Button autoFocus color="inherit" onClick={handlePostMaterial}>
-                                Đăng
+                                {t('Upload')}
                             </Button>
                         ) : (
                             <Button autoFocus color="success" onClick={handlePostMaterial} disabled>
-                                Đang đăng...
+                                {t('uploading...')}
                             </Button>
                         )}
                     </Toolbar>
@@ -274,22 +310,16 @@ function CreateMaterial({ classDetail, onUpdateClassworks, onCloseMaterial }) {
                                         >
                                             <TextField
                                                 id="filled-basic"
-                                                label="Tiêu đề"
+                                                label={t('title')}
                                                 name="title"
                                                 variant="filled"
                                                 value={material.title}
                                                 onChange={handleChange}
                                             />
-                                            {/* <TextField
-                                                id="filled-basic"
-                                                label="Hướng dẫn (Không bắt buộc)"
-                                                variant="filled"
-                                                multiline
-                                                rows={6}
-                                            /> */}
+
                                             <FormControl sx={{ m: 1, width: '25ch' }} variant="filled">
                                                 <InputLabel htmlFor="filled-adornment-instruction">
-                                                    Hướng dẫn (Không bắt buộc)
+                                                    {t('instructions') + ' (' + t('optional') + ')'}
                                                 </InputLabel>
                                                 <FilledInput
                                                     id="filled-adornment-instruction"
@@ -337,7 +367,7 @@ function CreateMaterial({ classDetail, onUpdateClassworks, onCloseMaterial }) {
                                                 <IconButton aria-label="" className={styles['icon']}>
                                                     <AddIcon />
                                                 </IconButton>
-                                                Tạo
+                                                {t('create')}
                                             </div>
                                             <div className={styles['box']}>
                                                 <IconButton
@@ -347,13 +377,13 @@ function CreateMaterial({ classDetail, onUpdateClassworks, onCloseMaterial }) {
                                                 >
                                                     <CloudUploadIcon />
                                                 </IconButton>
-                                                Tải lên
+                                                {t('upload')}
                                             </div>
                                             <div className={styles['box']}>
                                                 <IconButton aria-label="" className={styles['icon']}>
                                                     <LinkIcon />
                                                 </IconButton>
-                                                Liên kết
+                                                {t('link')}
                                             </div>
                                         </div>
                                     </Item>
@@ -363,7 +393,75 @@ function CreateMaterial({ classDetail, onUpdateClassworks, onCloseMaterial }) {
                         </Grid>
 
                         <Grid item xs={3}>
-                            <Item sx={{ height: 'calc(100vh - 64px)' }}>{/*  */}</Item>
+                            <Item sx={{ height: 'calc(100vh - 64px)' }}>
+                                <div style={{ margin: '16px' }}>
+                                    <div style={{ textAlign: 'left', marginBottom: '8px', fontWeight: 600 }}>
+                                        Dành cho
+                                    </div>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                        <FormControl sx={{ width: 150 }}>
+                                            <Select
+                                                size="small"
+                                                value={classes}
+                                                onChange={handleChangeClasses}
+                                                displayEmpty
+                                                inputProps={{ 'aria-label': 'Without label' }}
+                                            >
+                                                <MenuItem value="all-classes">Web</MenuItem>
+                                                <MenuItem value={10}>Ten</MenuItem>
+                                                <MenuItem value={20}>Twenty</MenuItem>
+                                                <MenuItem value={30}>Thirty</MenuItem>
+                                            </Select>
+                                        </FormControl>
+
+                                        <FormControl sx={{ width: 150 }}>
+                                            <InputLabel
+                                                sx={{
+                                                    position: 'absolute',
+                                                    top: '50%',
+                                                    transform: 'translateY(-50%)',
+                                                    marginLeft: 1, // Điều chỉnh khoảng cách từ viền trái
+                                                }}
+                                                id="demo-multiple-checkbox-label"
+                                            ></InputLabel>
+                                            <Select
+                                                size="small"
+                                                labelId="demo-multiple-checkbox-label"
+                                                id="demo-multiple-checkbox"
+                                                multiple
+                                                value={personName}
+                                                onChange={handleChangeStudents}
+                                                renderValue={(selected) => selected.join(', ')}
+                                                MenuProps={MenuProps}
+                                            >
+                                                {names.map((name) => (
+                                                    <MenuItem key={name} value={name}>
+                                                        <Checkbox checked={personName.indexOf(name) > -1} />
+                                                        <ListItemText primary={name} />
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </div>
+                                </div>
+
+                                <div style={{ margin: '16px' }}>
+                                    <div style={{ textAlign: 'left', marginBottom: '8px', fontWeight: 600 }}>
+                                        Chủ đề
+                                    </div>
+                                    <FormControl fullWidth>
+                                        <Select
+                                            size="small"
+                                            value={topic}
+                                            onChange={handleChangeTopic}
+                                            displayEmpty
+                                            inputProps={{ 'aria-label': 'Without label' }}
+                                        >
+                                            <MenuItem value="no-topic">Không có chủ đề</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </div>
+                            </Item>
                         </Grid>
                     </Grid>
                 </Box>

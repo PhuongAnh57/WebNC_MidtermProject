@@ -10,7 +10,7 @@ export default function Calendar() {
             <Box sx={{ width: '920px', display: 'flex', justifyContent: 'center' }}>
                 <div>
                     <Fab color="primary" aria-label="add">
-                        <AddIcon />
+                        {/* <AddIcon /> */}
                     </Fab>
                 </div>
             </Box>

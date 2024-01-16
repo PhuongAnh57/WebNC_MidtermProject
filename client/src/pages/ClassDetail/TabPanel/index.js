@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -19,7 +20,6 @@ import Grade from '../Grade';
 import useAxiosPrivate from 'hooks/useAxiosPrivate';
 
 import LoadingSpinner from 'components/LoadingSpinner/LoadingSpinner';
-import {useTranslation} from 'react-i18next';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -55,7 +55,6 @@ function a11yProps(index) {
 }
 
 export default function BasicTabs({ classID }) {
-    // const { user } = React.useContext(AuthContext);
     const { t } = useTranslation();
 
     const [value, setValue] = React.useState(0);
@@ -96,9 +95,9 @@ export default function BasicTabs({ classID }) {
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Stack direction="row">
                         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                            <Tab label="Bảng tin" {...a11yProps(0)} />
-                            <Tab label="Bài tập" {...a11yProps(1)} />
-                            <Tab label="Mọi người" {...a11yProps(2)} />
+                            <Tab label={t('stream')} {...a11yProps(0)} />
+                            <Tab label={t('classwork')} {...a11yProps(1)} />
+                            <Tab label={t('people')} {...a11yProps(2)} />
                         </Tabs>
                     </Stack>
                 </Box>
@@ -121,10 +120,10 @@ export default function BasicTabs({ classID }) {
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Stack direction="row">
                         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                            <Tab label="Bảng tin" {...a11yProps(0)} />
-                            <Tab label="Bài tập" {...a11yProps(1)} />
-                            <Tab label="Mọi người" {...a11yProps(2)} />
-                            <Tab label="Điểm" {...a11yProps(3)} />
+                            <Tab label={t('stream')} {...a11yProps(0)} />
+                            <Tab label={t('classwork')} {...a11yProps(1)} />
+                            <Tab label={t('people')} {...a11yProps(2)} />
+                            <Tab label={t('grades')} {...a11yProps(3)} />
                         </Tabs>
                         <IconButton aria-label="delete" onClick={handleOpen}>
                             <SettingsIcon />

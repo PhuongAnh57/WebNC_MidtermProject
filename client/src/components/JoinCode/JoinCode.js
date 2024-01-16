@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
+import { useTranslation } from 'react-i18next';
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -37,6 +38,7 @@ export default function JoinCode({ open, onClose }) {
     const [classCode, setClassCode] = useState('');
     const [errorMsg, setErrorMsg] = useState(null);
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const axiosPrivate = useAxiosPrivate();
 
@@ -76,7 +78,7 @@ export default function JoinCode({ open, onClose }) {
     }
 
     return (
-        <React.Fragment>
+        <div>
             <Dialog fullScreen open={open} onClose={onClose} TransitionComponent={Transition}>
                 <AppBar sx={{ position: 'relative' }}>
                     <Toolbar>
@@ -84,7 +86,7 @@ export default function JoinCode({ open, onClose }) {
                             <CloseIcon />
                         </IconButton>
                         <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                            Tham gia lớp học
+                            {t('join class')}
                         </Typography>
                         <Button
                             autoFocus
@@ -92,7 +94,7 @@ export default function JoinCode({ open, onClose }) {
                             disabled={classCode === '' ? true : false}
                             onClick={handleSubmitJoinClass}
                         >
-                            Tham gia
+                            {t('join')}
                         </Button>
                     </Toolbar>
                 </AppBar>
@@ -102,7 +104,7 @@ export default function JoinCode({ open, onClose }) {
                         <Item sx={{ boxShadow: 'none', border: '0.0625rem solid #dadce0' }}>
                             <div style={{ margin: '12px' }}>
                                 <Typography component="p" sx={{ color: '#7f7f7f' }}>
-                                    Bạn đang đăng nhập với tài khoản
+                                    {t("you're currently signed in as")}
                                 </Typography>
 
                                 <Box
@@ -121,7 +123,7 @@ export default function JoinCode({ open, onClose }) {
                                         </Box>
                                     </Box>
                                     <Button variant="outlined" color="primary" sx={{ textTransform: 'none' }}>
-                                        Switch account
+                                        {t('switch account')}
                                     </Button>
                                 </Box>
                             </div>
@@ -138,14 +140,16 @@ export default function JoinCode({ open, onClose }) {
                                 autoComplete="off"
                             >
                                 <Typography variant="h6" component="h1">
-                                    Mã lớp
+                                    {t('class code')}
                                 </Typography>
-                                <Typography component="p">Vui lòng lấy mã từ giáo viên của bạn.</Typography>
+                                <Typography component="p">
+                                    {t('ask your teacher for the class code, then enter it here.')}
+                                </Typography>
                                 <TextField
                                     error={errorMsg !== null ? true : false}
                                     id="classCode"
                                     name="classCode"
-                                    label="Mã lớp"
+                                    label={t('class code')}
                                     value={classCode}
                                     onChange={handleChange}
                                     variant="outlined"
@@ -156,6 +160,6 @@ export default function JoinCode({ open, onClose }) {
                     </Stack>
                 </Box>
             </Dialog>
-        </React.Fragment>
+        </div>
     );
 }

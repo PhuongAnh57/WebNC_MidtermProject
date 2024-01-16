@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useParams } from 'react-router';
+import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
+
 import { Box, Card, CardContent, Typography, CardActions, Button } from '@mui/material';
 
 import MainLayout from 'layouts/MainLayout';
 import LoadingSpinner from 'components/LoadingSpinner/LoadingSpinner';
-import { useSearchParams } from 'react-router-dom';
 import useAxiosPrivate from 'hooks/useAxiosPrivate';
 
 function JoinedEmail() {
+    const { t } = useTranslation();
     const { classID, token } = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -101,7 +104,6 @@ function JoinedEmail() {
             if (!joined) {
                 await axiosPrivate.post('/api/class/add-member', { data }).then((response) => {
                     if (response.status === 200) {
-                        console.log('added to class');
                         setJoined(true);
                     } else {
                         console.log('someting went wrong');
@@ -126,12 +128,11 @@ function JoinedEmail() {
             >
                 <Card sx={{ maxWidth: 400, textAlign: 'center' }}>
                     <CardContent>
-                        <h3 style={{ margin: 0, textAlign: 'left', fontWeight: 400 }}>Tham gia lớp học?</h3>
+                        <h3 style={{ margin: 0, textAlign: 'left', fontWeight: 400 }}>{t('join class')}?</h3>
                         <Typography style={{ margin: 0, marginTop: 8 }}>
-                            Bạn được mời tham gia lớp <strong>{classData.class_name}</strong>. Bạn đang đăng nhập với
-                            tài khoản
+                            {t("you're invited to") + ' '} <strong>{classData.class_name}</strong>.
+                            {' ' + t("you're currently signed in as") + ' '}
                             <strong>
-                                {' '}
                                 {user.username} ({user.email})
                             </strong>
                             .
@@ -139,7 +140,7 @@ function JoinedEmail() {
                     </CardContent>
                     <CardActions sx={{ justifyContent: 'center', paddingBottom: 2, paddingTop: 0 }}>
                         <Button variant="contained" onClick={handleAddIntoClass}>
-                            Tham gia
+                            {t('join')}
                         </Button>
                     </CardActions>
                 </Card>

@@ -13,11 +13,13 @@ import SchoolIcon from '@mui/icons-material/School';
 
 import styles from './Sidebar.module.scss';
 import classNames from 'classnames/bind';
+import { useTranslation } from 'react-i18next';
 const cx = classNames.bind(styles);
 
 export default function BasicList() {
     const location = useLocation();
-
+    const { t } = useTranslation();
+    
     return (
         <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
             <nav aria-label="main mailbox folders">
@@ -25,13 +27,19 @@ export default function BasicList() {
                     <NavLink to="/manage-accounts" className={cx('btn')}>
                         <ListItem
                             disablePadding
-                            style={{ background: location.pathname === '/manage-accounts' || location.pathname === '/manage-accounts/:userID' ? '#e3eefc' : 'none' }}
+                            style={{
+                                background:
+                                    location.pathname === '/manage-accounts' ||
+                                    location.pathname === '/manage-accounts/:userID'
+                                        ? '#e3eefc'
+                                        : 'none',
+                            }}
                         >
                             <ListItemButton>
                                 <ListItemIcon>
                                     <ManageAccountsIcon />
                                 </ListItemIcon>
-                                <ListItemText primary="Quản lý tài khoản" />
+                                <ListItemText primary={t('manage accounts')} />
                             </ListItemButton>
                         </ListItem>
                     </NavLink>
@@ -39,13 +47,19 @@ export default function BasicList() {
                     <NavLink to="/manage-classes" className={cx('btn')}>
                         <ListItem
                             disablePadding
-                            style={{ background: location.pathname === '/manage-classes' || location.pathname === '/manage-classes/:classID' ? '#e3eefc' : 'none' }}
+                            style={{
+                                background:
+                                    location.pathname === '/manage-classes' ||
+                                    location.pathname === '/manage-classes/:classID'
+                                        ? '#e3eefc'
+                                        : 'none',
+                            }}
                         >
                             <ListItemButton>
                                 <ListItemIcon>
                                     <SchoolIcon />
                                 </ListItemIcon>
-                                <ListItemText primary="Quản lý lớp" />
+                                <ListItemText primary={t('manage classes')} />
                             </ListItemButton>
                         </ListItem>
                     </NavLink>

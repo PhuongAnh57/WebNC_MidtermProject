@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
+
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Fab from '@mui/material/Fab';
@@ -33,6 +35,7 @@ export default function InstructionTeacher() {
         return <span>{filename}</span>;
     };
 
+    const { t } = useTranslation();
     const { classID, classworkID } = useParams();
     const [classwork, setClasswork] = React.useState(null);
     const axiosPrivate = useAxiosPrivate();
@@ -51,6 +54,7 @@ export default function InstructionTeacher() {
         };
 
         loadAssignment();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [classID, classworkID]);
 
     const MoreIcon = () => {
@@ -81,9 +85,9 @@ export default function InstructionTeacher() {
                     onClose={handleClose}
                     sx={{ left: '-100px' }}
                 >
-                    <MenuItem onClick={handleClose}>Chỉnh sửa</MenuItem>
-                    <MenuItem onClick={handleClose}>Xóa</MenuItem>
-                    <MenuItem onClick={handleClose}>Sao chép đường liên kết</MenuItem>
+                    <MenuItem onClick={handleClose}>{t('edit')}</MenuItem>
+                    <MenuItem onClick={handleClose}>{t('delete')}</MenuItem>
+                    <MenuItem onClick={handleClose}>{t('copy link')}</MenuItem>
                 </Menu>
             </div>
         );
@@ -118,8 +122,8 @@ export default function InstructionTeacher() {
                         fontWeight: '600',
                     }}
                 >
-                    <span>100 điểm</span>
-                    <span>Đến hạn 30/12/2023</span>
+                    <span>100 {t('points')}</span>
+                    <span>{t('due')} 30/12/2023</span>
                 </div>
                 <Divider />
 
@@ -164,7 +168,7 @@ export default function InstructionTeacher() {
                     }}
                 >
                     <PeopleAltOutlinedIcon />
-                    <span style={{ alignSelf: 'center', marginLeft: '8px' }}>Nhận xét của lớp học</span>
+                    <span style={{ alignSelf: 'center', marginLeft: '8px' }}>{t('class comments')}</span>
                 </div>
 
                 <div
@@ -178,7 +182,7 @@ export default function InstructionTeacher() {
                     <Fab size="small" sx={{ background: '#4285f4', color: '#ffffff', mr: 2 }}>
                         <AssignmentOutlinedIcon />
                     </Fab>
-                    <TextField size="small" fullWidth label="Thêm nhận xét trong lớp học..." id="fullWidth" />
+                    <TextField size="small" fullWidth label={t('add class comments...')} id="fullWidth" />
                     <SendOutlinedIcon sx={{ ml: 2 }} />
                 </div>
             </Box>

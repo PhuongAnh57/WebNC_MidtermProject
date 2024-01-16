@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
+
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import { styled } from '@mui/material/styles';
@@ -33,7 +35,6 @@ import FormControl from '@mui/material/FormControl';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Fab from '@mui/material/Fab';
 
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -41,6 +42,20 @@ import MenuItem from '@mui/material/MenuItem';
 import styles from './CreateAssignment.module.scss';
 import useAxiosPrivate from 'hooks/useAxiosPrivate';
 import { GoogleDriveImage } from 'assets/images';
+
+import ListItemText from '@mui/material/ListItemText';
+import Checkbox from '@mui/material/Checkbox';
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250,
+        },
+    },
+};
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -55,6 +70,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function CreateAssignment({ classDetail, onUpdateClassworks, onCloseAssignment }) {
+    const { t } = useTranslation();
     const axiosPrivate = useAxiosPrivate();
     const [filesUpload, setFilesUpload] = React.useState([]);
     const [assignment, setAssignment] = React.useState({
@@ -70,6 +86,7 @@ export default function CreateAssignment({ classDetail, onUpdateClassworks, onCl
         rubric: '',
     });
     const [disabled, setDisabled] = React.useState(false);
+    const names = [t('all students')];
 
     const handleChange = (event) => {
         setAssignment((prev) => ({
@@ -241,6 +258,29 @@ export default function CreateAssignment({ classDetail, onUpdateClassworks, onCl
         );
     };
 
+    const [classes, setClasses] = React.useState('all-classes');
+    const handleChangeClasses = (event) => setClasses(event.target.value);
+
+    const [personName, setPersonName] = React.useState([]);
+    const handleChangeStudents = (event) => {
+        const {
+            target: { value },
+        } = event;
+        setPersonName(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+    };
+
+    const [gradeCategory, setGradeCategory] = React.useState('no-category');
+    const handleChangeGradeCategory = (event) => setGradeCategory(event.target.value);
+
+    const [duedate, setDueDate] = React.useState('no-due-date');
+    const handleChangeDueDate = (event) => setDueDate(event.target.value);
+
+    const [topic, setTopic] = React.useState('no-topic');
+    const handleChangeTopic = (event) => setTopic(event.target.value);
+
     return (
         <React.Fragment>
             <Dialog fullScreen open={true} onClose={onCloseAssignment} TransitionComponent={Transition}>
@@ -250,16 +290,16 @@ export default function CreateAssignment({ classDetail, onUpdateClassworks, onCl
                             <CloseIcon />
                         </IconButton>
                         <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                            Bài tập
+                            {t('assignment')}
                         </Typography>
 
                         {!disabled ? (
                             <Button autoFocus color="inherit" onClick={handleAssignAssignment}>
-                                Giao bài tập
+                                {t('assign')}
                             </Button>
                         ) : (
                             <Button autoFocus color="success" onClick={handleAssignAssignment} disabled>
-                                Đang giao...
+                                {t('assigning...')}
                             </Button>
                         )}
                     </Toolbar>
@@ -283,7 +323,7 @@ export default function CreateAssignment({ classDetail, onUpdateClassworks, onCl
                                             <TextField
                                                 name="title"
                                                 id="filled-basic"
-                                                label="Tiêu đề"
+                                                label={t('title')}
                                                 variant="filled"
                                                 value={assignment.title}
                                                 onChange={handleChange}
@@ -291,7 +331,7 @@ export default function CreateAssignment({ classDetail, onUpdateClassworks, onCl
 
                                             <FormControl sx={{ m: 1, width: '25ch' }} variant="filled">
                                                 <InputLabel htmlFor="filled-adornment-instruction">
-                                                    Hướng dẫn (Không bắt buộc)
+                                                    {t('instructions') + ' (' + t('optional') + ')'}
                                                 </InputLabel>
                                                 <FilledInput
                                                     id="filled-adornment-instruction"
@@ -321,7 +361,7 @@ export default function CreateAssignment({ classDetail, onUpdateClassworks, onCl
                                     </Item>
 
                                     <Item>
-                                        <div className={styles['attached']}>Đính kèm</div>
+                                        <div className={styles['attached']}>{t('attach')}</div>
                                         <div className={styles['listTypes']}>
                                             <div className={styles['box']}>
                                                 <IconButton aria-label="" className={styles['icon']}>
@@ -339,7 +379,7 @@ export default function CreateAssignment({ classDetail, onUpdateClassworks, onCl
                                                 <IconButton aria-label="" className={styles['icon']}>
                                                     <AddIcon />
                                                 </IconButton>
-                                                Tạo
+                                                {t('create')}
                                             </div>
                                             <div className={styles['box']}>
                                                 <IconButton
@@ -349,23 +389,148 @@ export default function CreateAssignment({ classDetail, onUpdateClassworks, onCl
                                                 >
                                                     <CloudUploadIcon />
                                                 </IconButton>
-                                                Tải lên
+                                                {t('upload')}
                                             </div>
                                             <div className={styles['box']}>
                                                 <IconButton aria-label="" className={styles['icon']}>
                                                     <LinkIcon />
                                                 </IconButton>
-                                                Liên kết
+                                                {t('link')}
                                             </div>
                                         </div>
                                     </Item>
                                 </Stack>
-                                {/* </Box> */}
                             </Item>
                         </Grid>
 
                         <Grid item xs={3}>
-                            <Item sx={{ height: 'calc(100vh - 64px)' }}>{/*  */}</Item>
+                            <Item sx={{ height: 'calc(100vh - 64px)' }}>
+                                <div style={{ margin: '16px' }}>
+                                    <div style={{ textAlign: 'left', marginBottom: '8px', fontWeight: 600 }}>
+                                        {t('for')}
+                                    </div>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                        <FormControl sx={{ width: 150 }}>
+                                            <Select
+                                                disabled
+                                                size="small"
+                                                value={classes}
+                                                onChange={handleChangeClasses}
+                                                displayEmpty
+                                                inputProps={{ 'aria-label': 'Without label' }}
+                                            >
+                                                <MenuItem value="all-classes">Web</MenuItem>
+                                            </Select>
+                                        </FormControl>
+
+                                        <FormControl sx={{ width: 150 }}>
+                                            <InputLabel
+                                                sx={{
+                                                    position: 'absolute',
+                                                    top: '50%',
+                                                    transform: 'translateY(-50%)',
+                                                    marginLeft: 1, // Điều chỉnh khoảng cách từ viền trái
+                                                }}
+                                                id="demo-multiple-checkbox-label"
+                                            ></InputLabel>
+                                            <Select
+                                                size="small"
+                                                labelId="demo-multiple-checkbox-label"
+                                                id="demo-multiple-checkbox"
+                                                multiple
+                                                value={personName}
+                                                onChange={handleChangeStudents}
+                                                renderValue={(selected) => selected.join(', ')}
+                                                MenuProps={MenuProps}
+                                            >
+                                                {names.map((name) => (
+                                                    <MenuItem key={name} value={name}>
+                                                        <Checkbox checked={personName.indexOf(name) > -1} />
+                                                        <ListItemText primary={name} />
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </div>
+                                </div>
+
+                                <div style={{ margin: '16px', display: 'flex', justifyContent: 'space-between' }}>
+                                    <div>
+                                        <div style={{ textAlign: 'left', marginBottom: '8px', fontWeight: 600 }}>
+                                            {t('grade category')}
+                                        </div>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                            <FormControl sx={{ width: 150 }}>
+                                                <Select
+                                                    size="small"
+                                                    value={gradeCategory}
+                                                    onChange={handleChangeGradeCategory}
+                                                    displayEmpty
+                                                    inputProps={{ 'aria-label': 'Without label' }}
+                                                >
+                                                    <MenuItem value="no-category">{t('no category')}</MenuItem>
+                                                </Select>
+                                            </FormControl>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div style={{ textAlign: 'left', marginBottom: '8px', fontWeight: 600 }}>
+                                            {t('points')}
+                                        </div>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                            <TextField
+                                                sx={{ width: '150px' }}
+                                                hiddenLabel
+                                                id="filled-hidden-label-small"
+                                                defaultValue="100"
+                                                // variant="filled"
+                                                size="small"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style={{ margin: '16px' }}>
+                                    <div style={{ textAlign: 'left', marginBottom: '8px', fontWeight: 600 }}>
+                                        {t('due')}
+                                    </div>
+                                    <FormControl fullWidth>
+                                        <Select
+                                            size="small"
+                                            value={duedate}
+                                            onChange={handleChangeDueDate}
+                                            displayEmpty
+                                            inputProps={{ 'aria-label': 'Without label' }}
+                                        >
+                                            <MenuItem value="no-due-date">{t('no due date')}</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </div>
+
+                                <div style={{ margin: '16px' }}>
+                                    <div style={{ textAlign: 'left', marginBottom: '8px', fontWeight: 600 }}>
+                                        {t('topic')}
+                                    </div>
+                                    <FormControl fullWidth>
+                                        <Select
+                                            size="small"
+                                            value={topic}
+                                            onChange={handleChangeTopic}
+                                            displayEmpty
+                                            inputProps={{ 'aria-label': 'Without label' }}
+                                        >
+                                            <MenuItem value="no-topic">{t('no topic')}</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </div>
+
+                                <div style={{ margin: '16px', textAlign: 'left' }}>
+                                    <div style={{ marginBottom: '8px', fontWeight: 600 }}>{t('rubric')}</div>
+                                    <Button variant="outlined" startIcon={<AddIcon />}>
+                                        {t('rubric')}
+                                    </Button>
+                                </div>
+                            </Item>
                         </Grid>
                     </Grid>
                 </Box>

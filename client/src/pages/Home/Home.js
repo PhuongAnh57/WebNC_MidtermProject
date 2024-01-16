@@ -1,5 +1,6 @@
 import { Navigate } from 'react-router';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import MainLayout from 'layouts/MainLayout';
 import CourseCard from './CourseCard';
@@ -12,9 +13,9 @@ import { Button, Menu, MenuItem } from '@mui/material';
 import JoinCode from 'components/JoinCode/JoinCode';
 
 import ManageUserAccounts from 'pages/ManageUserAccounts/ManageUserAccounts';
-import {useTranslation} from 'react-i18next';
 
 export default function Home() {
+    const { t } = useTranslation();
     const [openCreate, setOpenCreate] = useState(false);
     const [openJoin, setOpenJoin] = useState(false);
 
@@ -91,12 +92,12 @@ export default function Home() {
         >
             <MenuItem onClick={handleMenuClose} style={{ color: 'back' }}>
                 <div onClick={handleJoinOpen} style={{ textDecoration: 'none', color: 'inherit' }}>
-                    Tham gia
+                    {t('join class')}
                 </div>
             </MenuItem>
             <MenuItem onClick={handleMenuClose} style={{ color: 'back' }}>
                 <div onClick={handleCreateOpen} style={{ textDecoration: 'none', color: 'inherit' }}>
-                    Tạo lớp
+                    {t('create class')}
                 </div>
             </MenuItem>
         </Menu>
@@ -117,7 +118,7 @@ export default function Home() {
                     variant="outlined"
                     startIcon={<AddIcon />}
                 >
-                    Lớp
+                    {t('class')}
                 </Button>
 
                 <CreateClass open={openCreate} onClose={handleCreateClose} />
